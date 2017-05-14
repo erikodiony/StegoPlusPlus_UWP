@@ -1,0 +1,310 @@
+﻿<Page
+    x:Class="StegoPlusPlus.Views.Embed_Page"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StegoPlusPlus.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <!--Define Main Row-->
+    <Grid Background="#808080">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="850" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="sc.HorizontalScrollMode" Value="Enabled"/>
+                        <Setter Target="sc.HorizontalScrollBarVisibility" Value="Enabled"/>-->
+                        <Setter Target="stack_embed_file.Orientation" Value="Horizontal"/>
+                        <Setter Target="stack_embed_message.Orientation" Value="Horizontal"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="sc_embed_file.HorizontalScrollMode" Value="Disabled"/>
+                        <Setter Target="sc_embed_file.HorizontalScrollBarVisibility" Value="Disabled"/>
+                        <Setter Target="sc_embed_message.HorizontalScrollMode" Value="Disabled"/>
+                        <Setter Target="sc_embed_message.HorizontalScrollBarVisibility" Value="Disabled"/>
+                        <Setter Target="stack_embed_file.Orientation" Value="Vertical"/>
+                        <Setter Target="stack_embed_message.Orientation" Value="Vertical"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!--Header Menu--><!--Main Row 1-->
+        <StackPanel Grid.Row="0" Margin="18,15,15,15">
+            <Grid Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="&#xEA80;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                </StackPanel>
+                <Rectangle Grid.Column="1" Margin="15,0,15,0" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                <TextBlock x:Name="HeaderInfo" Grid.Column="2" Margin="5,0,5,0" Style="{StaticResource BaseTextBlockStyle}" FontStretch="SemiCondensed">
+                </TextBlock>
+            </Grid>
+        </StackPanel>
+        <!--Header Menu--><!--Main Row 1-->
+
+        <!--Line Horizontal--><!--Main Row 2-->
+        <StackPanel Grid.Row="1" Margin="50,5,50,5">
+            <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+            <Rectangle Margin="50,0,50,0" Width="Auto" Height="1" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+            <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+        </StackPanel>
+        <!--Line Horizontal--><!--Main Row 2-->
+
+        <!--Pivot Menu--><!--Main Row 3-->
+        <Pivot Grid.Row="2">
+            <!--Pivot 1-->
+            <PivotItem Header="Embed File" Margin="0,0,0,0">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Pivot 1 Footer Menu Embed File-->
+                    <RelativePanel Grid.ColumnSpan="3">
+                        <Grid x:Name="embed_file_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
+                                <AppBarButton x:Name="Clear_FooterMenuEmbedFile" Icon="Cancel" Label="Clear All"/>
+                                <AppBarButton x:Name="Exec_FooterMenuEmbedFile" Icon="Play" Label="Execute"/>
+                            </CommandBar>
+                        </Grid>
+                    </RelativePanel>
+                    <!--Pivot 1 Footer Menu Embed File-->
+                    
+                    <!--Pivot 1 Column 1-->
+                    <StackPanel Grid.Column="0" Margin="15,20,0,0">
+                        <TextBlock Text="&#xE8A6;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    </StackPanel>
+                    <!--Pivot 1 Column 1-->
+
+                    <!--Pivot 1 Column 2-->
+                    <Rectangle Grid.Column="1" Margin="15,20,0,65" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                    <!--Pivot 1 Column 2-->
+
+                    <!--Pivot 1 Column 3 (Embed File)-->
+                    <ScrollViewer x:Name="sc_embed_file" Grid.Column="2" Margin="15,20,0,65" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="stack_embed_file" Orientation="Vertical">
+                            <Grid Margin="15,0,15,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
+                                    <Run Text="Choose Image Cover"/><LineBreak/>
+                                    <Run Text="(Format ekstensi file gambar yang didukung *.png)" FontStyle="Italic" FontSize="14"/>
+                                </TextBlock>
+                                <Grid Grid.Row="1">
+                                    <Button Margin="0,15,0,0" x:Name="btn_CoverImage" Content="Choose Image"/>
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
+                                        <Run x:Name="status_picker_cover" Text="No Image" FontStyle="Italic"/>
+                                    </TextBlock>
+                                    
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <Image Margin="0,20,0,0" x:Name="ico_picker_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
+                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover" Text="-" FontStyle="Italic"/>
+                                    </TextBlock>
+                                </Grid>
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
+                                    <Run Text="Insert Password"/><LineBreak/>
+                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                </TextBlock>
+                                <Grid Grid.Row="5" Margin="0,15,25,10">
+                                    <TextBox x:Name="Input_Password_file" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
+                                </Grid>
+                                <Grid Grid.Row="6">
+                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Password_file" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_file_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Password_file" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_file_Click"/>
+                                </Grid>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,0" x:Name="cover_border_vertical">
+                                <Rectangle Margin="25,20,-10,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,0" x:Name="cover_border_horizontal">
+                                <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                            </Grid>
+
+                            <Grid Margin="15,0,15,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
+                                    <Run Text="Choose Hiding File"/><LineBreak/>
+                                    <Run Text="(Format file yang didukung Dokumen, Gambar, dll)" FontStyle="Italic" FontSize="14"/>
+                                </TextBlock>
+                                <Grid Grid.Row="1">
+                                    <Button Margin="0,15,0,0" x:Name="btn_HidingFile" Content="Choose File"/>
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
+                                        <Run x:Name="status_picker_hiding" Text="No File" FontStyle="Italic"/>
+                                    </TextBlock>
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <Image Margin="0,20,0,0" x:Name="ico_picker_hiding" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
+                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_hiding" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_hiding" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Type : "/><Run x:Name="typefile_picker_hiding" Text="-" FontStyle="Italic"/>
+                                    </TextBlock>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <!--Pivot 1 Column 3 (Embed File)-->
+                </Grid>
+            </PivotItem>
+            <!--Pivot 1-->
+
+            <!--Pivot 2-->
+            <PivotItem Header="Embed Message" Margin="0,0,0,0">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Pivot 2 Footer Menu Embed Message-->
+                    <RelativePanel Grid.ColumnSpan="3">
+                        <Grid x:Name="embed_message_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
+                                <AppBarButton x:Name="Clear_FooterMenuEmbedMessage" Icon="Cancel" Label="Clear All" Click="Clear_FooterMenuEmbedMessage_Click"/>
+                                <AppBarButton x:Name="Exec_FooterMenuEmbedMessage" Icon="Play" Label="Execute" Click="Exec_FooterMenuEmbedMessage_Click"/>
+                            </CommandBar>
+                        </Grid>
+                    </RelativePanel>
+                    <!--Pivot 2 Footer Menu Embed Message-->
+
+                    <!--Pivot 2 Column 1-->
+                    <StackPanel Grid.Column="0" Margin="15,20,0,0">
+                        <TextBlock Text="&#xEE3F;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    </StackPanel>
+                    <!--Pivot 2 Column 1-->
+
+                    <!--Pivot 2 Column 2-->
+                    <Rectangle Grid.Column="1" Margin="15,20,0,65" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                    <!--Pivot 2 Column 2-->
+
+                    <!--Pivot 2 Column 3-->
+                    <ScrollViewer x:Name="sc_embed_message" Grid.Column="2" Margin="15,20,0,65" VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto" HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto">
+                        <StackPanel x:Name="stack_embed_message" Orientation="Vertical">
+                            <Grid Margin="15,0,15,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
+                                    <Run Text="Choose Image Cover"/><LineBreak/>
+                                    <Run Text="(Format ekstensi file gambar yang didukung *.png)" FontStyle="Italic" FontSize="14"/>
+                                </TextBlock>
+                                <Grid Grid.Row="1">
+                                    <Button Margin="0,15,0,0" x:Name="btn_CoverImage_2" Content="Choose Image"/>
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
+                                        <Run x:Name="status_picker_cover_2" Text="No Image" FontStyle="Italic"/>
+                                    </TextBlock>
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <Image Margin="0,20,0,0" x:Name="ico_picker_cover_2" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                </Grid>
+                                <Grid Grid.Row="3">
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
+                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover_2" Text="-" FontStyle="Italic"/>
+                                    </TextBlock>
+                                </Grid>
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
+                                    <Run Text="Insert Password"/><LineBreak/>
+                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                </TextBlock>
+                                <Grid Grid.Row="5" Margin="0,15,25,10">
+                                    <TextBox x:Name="Input_Password_msg" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
+                                </Grid>
+                                <Grid Grid.Row="6">
+                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Password_msg" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_msg_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Password_msg" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_msg_Click"/>
+                                </Grid>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,0" x:Name="cover_border_vertical_2">
+                                <Rectangle Margin="25,20,-10,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,0" x:Name="cover_border_horizontal_2">
+                                <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                            </Grid>
+
+                            <Grid Margin="15,0,15,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
+                                    <Run Text="Insert Text / Message"/><LineBreak/>
+                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                </TextBlock>
+                                <Grid Grid.Row="1" Margin="0,15,25,10">
+                                    <TextBox x:Name="InputMessage" Header="Input Text / Message" PlaceholderText="Secret Text / Message" Width="Auto"/>
+                                </Grid>
+                                <TextBlock x:Name="hasil" Style="{StaticResource TitleTextBlockStyle}" Margin="0,30,0,0"/>
+                                <Grid Grid.Row="2">
+                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Message" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Message_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Message" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Message_Click"/>
+                                </Grid>
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <!--Pivot 2 Column 3-->
+                </Grid>
+            </PivotItem>
+            <!--Pivot 2-->
+        </Pivot>
+        <!--Pivot Menu--><!--Main Row 3-->
+    </Grid>
+    <!--Define Main Row-->
+</Page>
