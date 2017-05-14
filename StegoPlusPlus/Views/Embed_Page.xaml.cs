@@ -228,7 +228,6 @@ namespace StegoPlusPlus.Views
                     //lis.Add(new KeyValuePair<string, BitmapTypedValue>("System.Photo.Orientation", art));
                     await encoder.BitmapProperties.SetPropertiesAsync(lis);
                     await encoder.FlushAsync();
-                    //await files.FlushAsync();
                 }
             }
 
