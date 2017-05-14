@@ -143,8 +143,9 @@ namespace StegoPlusPlus.Views
 
 
         byte[] newpx;
-        Stream imgstrm;
         BitmapDecoder dec;
+        IRandomAccessStream files;
+
 
         //Trigger Function From btn_CoverImage_Click
         private async void btn_CoverImage_Click(object sender, RoutedEventArgs e)
@@ -172,30 +173,19 @@ namespace StegoPlusPlus.Views
                 var propSize = extraProperties[propImage.Size];
                 var propDimension = extraProperties[propImage.Dimensions];
 
-                //imgstrm = await file_cover.OpenStreamForReadAsync();
-                //dec = await BitmapDecoder.CreateAsync(imgstrm.AsRandomAccessStream());
-                //var bytes = (await dec.GetPixelDataAsync()).DetachPixelData();
-
                 WriteableBitmap writebmp;
                 using (IRandomAccessStream strm = await file_cover.OpenAsync(FileAccessMode.Read))
                 {
-                    BitmapDecoder decoder = await BitmapDecoder.CreateAsync(strm);
-                    writebmp = new WriteableBitmap((int)decoder.PixelWidth, (int)decoder.PixelHeight);
+                    dec = await BitmapDecoder.CreateAsync(strm);
+                    writebmp = new WriteableBitmap((int)dec.PixelWidth, (int)dec.PixelHeight);
                     writebmp.SetSource(strm);
                     var width = writebmp.PixelWidth;
                     var height = writebmp.PixelHeight;
-                    var stride = writebmp.ToByteArray();
-
-                    int eee = 0;
-                    foreach (byte fd in stride)
-                    {
-                        System.Diagnostics.Debug.WriteLine("{0} RGB : {1} | {2}",++eee, fd, stride.Length);
-                    }
-
+                    newpx = writebmp.ToByteArray();                    
                 }
                 
 
-                    status_picker_cover.Text = file_cover.Name;
+                status_picker_cover.Text = file_cover.Name;
                 pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
                 sizefile_picker_cover.Text = String.Format("{0} bytes", propSize);
                 dimensionfile_picker_cover.Text = String.Format("{0}", propDimension);
@@ -217,21 +207,28 @@ namespace StegoPlusPlus.Views
                     }
                 }
 
-
-
-                //newpx = GetPixel(bytes, 1, 1, dec.PixelWidth, dec.PixelHeight);
-
-
                 FileSavePicker fs = new FileSavePicker();
                 fs.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                fs.FileTypeChoices.Add("Portable Image", new List<string>() { ".jpg" });
+                fs.FileTypeChoices.Add("JPEG Image", new List<string>() { ".jpg" });
+                fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
                 StorageFile sf = await fs.PickSaveFileAsync();
-                using (IRandomAccessStream fileStream = await sf.OpenAsync(FileAccessMode.ReadWrite))
+                using (files = await sf.OpenAsync(FileAccessMode.ReadWrite))
                 {
-                    BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, fileStream);
-                    //encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Straight, dec.PixelWidth, dec.PixelHeight, dec.DpiX, dec.DpiY, bytes);
-                    //await encoder.BitmapProperties
+                    BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.)
+                    encoder.SetPixelData(dec.BitmapPixelFormat, dec.BitmapAlphaMode, (uint)dec.PixelWidth, (uint)dec.PixelHeight, dec.DpiX, dec.DpiY, newpx);
+                    var lis = new List<KeyValuePair<string, BitmapTypedValue>>();
+                    //var art = new BitmapTypedValue("Hello World", PropertyType.String);
+
+
+                    var author = new BitmapTypedValue("Some Author", PropertyType.String);
+                    var title = new BitmapTypedValue("00103 My Company", PropertyType.String);
+                    lis.Add(new KeyValuePair<string, BitmapTypedValue>("System.Author", author));
+                    lis.Add(new KeyValuePair<string, BitmapTypedValue>("System.Title", title));
+
+                    //lis.Add(new KeyValuePair<string, BitmapTypedValue>("System.Photo.Orientation", art));
+                    await encoder.BitmapProperties.SetPropertiesAsync(lis);
                     await encoder.FlushAsync();
+                    //await files.FlushAsync();
                 }
             }
 
@@ -239,49 +236,10 @@ namespace StegoPlusPlus.Views
             {
                 SetStatus_PickerCover();
             }
-
         }
 
 
-        public byte[] GetPixel(byte[] pixels, int x, int y, uint w_img, uint h_img)
-        {
-            int i = x;
-            int j = y;
-            int k = (i * (int)w_img + j) * 3;
-            var r = pixels[k + 0];
-            var g = pixels[k + 1];
-            var b = pixels[k + 2];
-            string rbin = Convert.ToString(pixels[k + 0], 2).PadLeft(8, '0');
-            string gbin = Convert.ToString(pixels[k + 1], 2).PadLeft(8, '0');
-            string bbin = Convert.ToString(pixels[k + 2], 2).PadLeft(8, '0');
 
-            //string zxc = String.Format("R: {0} | G: {1} | B: {2}", r,g,b);
-
-            int full_k = (((int)w_img * (int)w_img + (int)h_img) * 3) + 2;
-            int asd = -1;
-            for (int zx = 0; zx <= full_k; zx++)
-            {
-                //System.Diagnostics.Debug.WriteLine("Array ke - {0} == {1} ||| {2}", ++asd, pixels[zx], full_k);
-            }
-
-            int asas = -1;
-            foreach (var elemen in pixels.Take(full_k + 1))
-            {
-               // System.Diagnostics.Debug.WriteLine("Baris Ke-{0} | {1}", ++asas,  elemen);
-            }
-
-            byte[] newx = new byte[pixels.Length];
-            Array.Copy(pixels, newx, pixels.Length);
-
-            int s = -1;
-            foreach (var el in newx.Take(full_k+1))
-            {
-                newx[++s] = 0;
-            }
-
-            return newx;
-            //return zxc;
-        }
        
         //Trigger Function From btn_HidingImage_Click
         private async void btn_HidingFile_Click(object sender, RoutedEventArgs e)
