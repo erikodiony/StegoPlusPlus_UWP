@@ -14,7 +14,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -85,13 +84,21 @@
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="embed_file_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="Clear_FooterMenuEmbedFile" Icon="Cancel" Label="Clear All"/>
-                                <AppBarButton x:Name="Exec_FooterMenuEmbedFile" Icon="Play" Label="Execute"/>
+                                <AppBarButton x:Name="btn_Clear_FooterMenuEmbedFile" Icon="Cancel" Label="Clear All" Click="btn_Clear_FooterMenuEmbedFile_Click"/>
+                                <AppBarButton x:Name="btn_Exec_FooterMenuEmbedFile" Icon="Play" Label="Execute" Click="btn_Exec_FooterMenuEmbedFile_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 1 Footer Menu Embed File-->
-                    
+
+                    <!--Pivot 2 LoadingBar Menu Embed Message-->
+                    <RelativePanel Grid.ColumnSpan="3">
+                        <Grid x:Name="embed_file_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <ProgressBar x:Name="progBar_file" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                        </Grid>
+                    </RelativePanel>
+                    <!--Pivot 2 LoadingBar Menu Embed Message-->
+
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
                         <TextBlock Text="&#xE8A6;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
@@ -205,12 +212,20 @@
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="embed_message_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="Clear_FooterMenuEmbedMessage" Icon="Cancel" Label="Clear All" Click="Clear_FooterMenuEmbedMessage_Click"/>
-                                <AppBarButton x:Name="Exec_FooterMenuEmbedMessage" Icon="Play" Label="Execute" Click="Exec_FooterMenuEmbedMessage_Click"/>
+                                <AppBarButton x:Name="btn_Clear_FooterMenuEmbedMessage" Icon="Cancel" Label="Clear All" Click="btn_Clear_FooterMenuEmbedMessage_Click"/>
+                                <AppBarButton x:Name="btn_Exec_FooterMenuEmbedMessage" Icon="Play" Label="Execute" Click="btn_Exec_FooterMenuEmbedMessage_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 2 Footer Menu Embed Message-->
+
+                    <!--Pivot 2 LoadingBar Menu Embed Message-->
+                    <RelativePanel Grid.ColumnSpan="3">
+                        <Grid x:Name="embed_message_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <ProgressBar x:Name="progBar_msg" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                        </Grid>
+                    </RelativePanel>
+                    <!--Pivot 2 LoadingBar Menu Embed Message-->
 
                     <!--Pivot 2 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
@@ -271,7 +286,7 @@
                             <Grid Margin="0,0,0,0" x:Name="cover_border_vertical_2">
                                 <Rectangle Margin="25,20,-10,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
-
+                            
                             <Grid Margin="0,0,0,0" x:Name="cover_border_horizontal_2">
                                 <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>

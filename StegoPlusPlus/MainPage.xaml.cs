@@ -29,7 +29,7 @@ namespace StegoPlusPlus
             this.InitializeComponent();
             ShowStatusBar();
         }
-
+                
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             this.MyFrame.Navigate(typeof(Views.Home_Page));

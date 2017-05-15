@@ -31,18 +31,38 @@ namespace StegoPlusPlus
         public static readonly string AboutPage = "Menu yang berisi tentang Detail Aplikasi (App Detail) beserta Info tentang Creator (About Me)";
     }
 
-    class DataProses
+    internal static class NotifyDataText
     {
-        public string KonversiMessage(string push_message)
+        public static readonly string OK_Button = "OK";
+        public static readonly string Cancel_Button = "Cancel";
+        public static readonly string Err_Input_Null_Embed_Msg_msg = "Field ''Insert Text/Message'' is empty !\nCan't Saving Text/Message...";
+        public static readonly string Err_Input_Null_Embed_Msg_pwd = "Field ''Insert Password'' is empty !\nCan't Saving Password...";
+        public static readonly string Err_Input_Null_Embed_File_pwd = "Field ''Insert Password'' is empty !\nCan't Saving Password...";
+        public static readonly string Clear_Input_Embed_Msg_msg = "Field ''Insert Text/Message'' was Cleared !\nProcess Successfully...";
+        public static readonly string Clear_Input_Embed_Msg_pwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
+        public static readonly string Clear_Input_Embed_File_pwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
+        public static readonly string Saving_Header_Notify_Embed_Msg_msg = "Input Text / Message (saved)";
+        public static readonly string Saving_Header_Notify_Embed_Msg_pwd = "Input Password (saved)";
+        public static readonly string Saving_Header_Notify_Embed_File_pwd = "Input Password (saved)";
+        public static readonly string Clearing_Header_Notify_Embed_Msg_msg = "Input Text / Message";
+        public static readonly string Clearing_Header_Notify_Embed_Msg_pwd = "Input Password";
+        public static readonly string Clearing_Header_Notify_Embed_File_pwd = "Input Password";
+        public static readonly string Dialog_Exec_Footer_Menu_Null = "Some field is empty or input not saved !\nPlease check again...";
+    }
+
+    class DataProcess
+    {
+        public char[] KonversiBinary(string push_message)
         {
             string message = string.Empty;
-            var ut8 = Encoding.UTF8;
             foreach(char ch in push_message)
             {
                 message += Convert.ToString(ch,2).PadLeft(8, '0');
             }
-            return message;
-        }
 
+            char[] msg = message.ToCharArray();
+            return msg;
+        }
+              
     }
 }

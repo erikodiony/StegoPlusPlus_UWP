@@ -85,7 +85,7 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Margin="0,0,0,15" Grid.Row="0" Text="Version 1.0 (Build 201704)" Style="{StaticResource BaseTextBlockStyle}"/>
                                 <HyperlinkButton Grid.Row="1" Content="Source Code (Github)" Tag="http://github.com/Erikodiony/StegoPlusPlus" Click="HyperlinkButton_Click"/>
-                                <HyperlinkButton Grid.Row="2" Content="Bug / Support (Facebook)" Tag="http://fb.me/Erikodiony" Click="HyperlinkButton_Click"/>
+                                <HyperlinkButton Grid.Row="2" Content="Bug / Support (Facebook)" Tag="http://fb.com/Erikodiony" Click="HyperlinkButton_Click"/>
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
