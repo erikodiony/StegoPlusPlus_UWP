@@ -38,6 +38,8 @@ namespace StegoPlusPlus.Views
             SetStatus_HidingFile(); 
             SetStatus_PickerCover();
             SetStatus_PickerCover_2();
+            SetStatus_Password();
+            SetStatus_Password_2();
             Input_Password_file.Text = String.Empty;
             Input_Password_msg.Text = String.Empty;
 
@@ -155,6 +157,13 @@ namespace StegoPlusPlus.Views
             ico_picker_hiding.Visibility = Visibility.Collapsed;
         }
 
+        private void SetStatus_Password()
+        {
+            Input_Password_file.Text = String.Empty;
+            Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
+            Input_Password_file.IsReadOnly = false;
+        }
+
         //Trigger Function From btn_CoverImage_Click (Embed File -> Cover Image)
         private async void btn_CoverImage_Click(object sender, RoutedEventArgs e)
         {
@@ -264,24 +273,56 @@ namespace StegoPlusPlus.Views
                 SetStatus_HidingFile();
             }
         }
-
-        //Trigger Function From btn_Clear_Password_file_Click (Embed File -> Insert Password -> Clear)
-        private void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
+        
+        //Trigger Function From btn_Save_Password_file_Click (Embed File -> Insert Password -> Save)
+        private async void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Input_Password_file.Text != String.Empty)
+            {
+                Input_Password_file.IsReadOnly = true;
+                Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
+                msg_encoded = dp.KonversiBinary(Input_Password_file.Text);
+            }
+            else
+            {
+                dlg_embed_file = new ContentDialog()
+                {
+                    Title = NotifyDataText.Err_Input_Null_Embed_File_pwd,
+                    PrimaryButtonText = NotifyDataText.OK_Button
+                };
+                show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+            }
         }
 
-        //Trigger Function From btn_Save_Password_file_Click (Embed File -> Insert Password -> Save)
-        private void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
+        //Trigger Function From btn_Clear_Password_file_Click (Embed File -> Insert Password -> Clear)
+        private async void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
         {
-
+            if (Input_Password_file.Text != String.Empty)
+            {
+                Input_Password_file.IsReadOnly = false;
+                Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
+                Input_Password_file.Text = String.Empty;
+                dlg_embed_file = new ContentDialog()
+                {
+                    Title = NotifyDataText.Clear_Input_Embed_File_pwd,
+                    PrimaryButtonText = NotifyDataText.OK_Button
+                };
+                show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+            }
         }
 
         //Trigger Function From btn_Clear_FooterMenuEmbedFile_Click (Embed File -> Footer Menu -> Clear)
-        private void btn_Clear_FooterMenuEmbedFile_Click(object sender, RoutedEventArgs e)
+        private async void btn_Clear_FooterMenuEmbedFile_Click(object sender, RoutedEventArgs e)
         {
             SetStatus_PickerCover();
             SetStatus_HidingFile();
+            SetStatus_Password();
+            dlg_embed_file = new ContentDialog()
+            {
+                Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
+                PrimaryButtonText = NotifyDataText.OK_Button
+            };
+            show_dlg_embed_file = await dlg_embed_file.ShowAsync();
         }
 
         //Trigger Function From btn_Exec_FooterMenuEmbedFile_Click (Embed File -> Footer Menu -> Exec)
@@ -290,6 +331,7 @@ namespace StegoPlusPlus.Views
             ExecSteg_File();
         }
 
+        //Function of Steg File (From FooterMenu -> Exec)
         private async void ExecSteg_File()
         {
             if (status_picker_cover.Text != "No Image" && Input_Password_file.IsReadOnly == true)
@@ -323,7 +365,7 @@ namespace StegoPlusPlus.Views
 
                 dlg_embed_file = new ContentDialog()
                 {
-                    Title = "Some Field is Empty or Not Saved !\nPlease check again...",
+                    Title = NotifyDataText.Dialog_Exec_Footer_Menu_Null,
                     PrimaryButtonText = NotifyDataText.OK_Button
                 };
                 show_dlg_embed_file = await dlg_embed_file.ShowAsync();
@@ -359,7 +401,18 @@ namespace StegoPlusPlus.Views
             ico_picker_cover_2.Visibility = Visibility.Collapsed;
         }
 
-        //Trigger Function From btn_CoverImage_2_Click
+        private void SetStatus_Password_2()
+        {
+            Input_Password_msg.Text = String.Empty;
+            Input_Password_msg.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
+            Input_Password_msg.IsReadOnly = false;
+
+            InputMessage.Text = String.Empty;
+            InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
+            InputMessage.IsReadOnly = false;
+        }
+
+        //Trigger Function From btn_CoverImage_2_Click (Embed Message -> Choose Image)
         private async void btn_CoverImage_2_Click(object sender, RoutedEventArgs e)
         {
             //Set an Extensions File Cover
@@ -413,6 +466,7 @@ namespace StegoPlusPlus.Views
             }
         }
 
+        //Trigger Function From btn_Save_Message_Click (Embed Message -> Insert Text/Message -> Save)
         private async void btn_Save_Message_Click(object sender, RoutedEventArgs e)
         {
             if (InputMessage.Text != String.Empty)
@@ -426,47 +480,86 @@ namespace StegoPlusPlus.Views
                 dlg_embed_msg = new ContentDialog()
                 {
                     Title = NotifyDataText.Err_Input_Null_Embed_Msg_msg,
-                    PrimaryButtonText = "OK"
+                    PrimaryButtonText = NotifyDataText.OK_Button
                 };
                 show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
             }
         }
 
+        //Trigger Function From btn_Clear_Message_Click (Embed Message -> Insert Text/Message -> Clear)
         private async void btn_Clear_Message_Click(object sender, RoutedEventArgs e)
         {
             if (InputMessage.Text != String.Empty)
             {
                 InputMessage.IsReadOnly = false;
-                InputMessage.Header = "Input Text / Message";
+                InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
                 InputMessage.Text = String.Empty;
-                dlg_embed_msg.Title = NotifyDataText.Clear_Input_Embed_Msg_msg;
-                dlg_embed_msg.PrimaryButtonText = NotifyDataText.OK_Button;
+                dlg_embed_msg = new ContentDialog()
+                {
+                    Title = NotifyDataText.Clear_Input_Embed_Msg_msg,
+                    PrimaryButtonText = NotifyDataText.OK_Button
+                };
                 show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
-            }           
+            }
         }
 
+        //Trigger Function From btn_Save_Password_msg_Click (Embed Message -> Insert Password -> Save)
         private async void btn_Save_Password_msg_Click(object sender, RoutedEventArgs e)
         {
-            Input_Password_msg.IsReadOnly = true;
+            if (Input_Password_msg.Text != String.Empty)
+            {
+                Input_Password_msg.IsReadOnly = true;
+                Input_Password_msg.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_pwd;
+                msg_encoded = dp.KonversiBinary(Input_Password_msg.Text);
+            }
+            else
+            {
+                dlg_embed_msg = new ContentDialog()
+                {
+                    Title = NotifyDataText.Err_Input_Null_Embed_Msg_pwd,
+                    PrimaryButtonText = NotifyDataText.OK_Button
+                };
+                show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
+            }
         }
 
+        //Trigger Function From btn_Clear_Password_msg_Click (Embed Message -> Insert Password -> Clear)
         private async void btn_Clear_Password_msg_Click(object sender, RoutedEventArgs e)
         {
-            Input_Password_msg.IsReadOnly = false;
-            Input_Password_msg.Text = String.Empty;
+            if (Input_Password_msg.Text != String.Empty)
+            {
+                Input_Password_msg.IsReadOnly = false;
+                Input_Password_msg.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
+                Input_Password_msg.Text = String.Empty;
+                dlg_embed_msg = new ContentDialog()
+                {
+                    Title = NotifyDataText.Clear_Input_Embed_Msg_pwd,
+                    PrimaryButtonText = NotifyDataText.OK_Button
+                };
+                show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
+            }
         }
 
+        //Trigger Function From btn_Clear_FooterMenuEmbedMessage_Click (Embed Message -> Footer Menu -> Clear)
         private async void btn_Clear_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
         {
+            SetStatus_Password_2();
             SetStatus_PickerCover_2();
+            dlg_embed_msg = new ContentDialog()
+            {
+                Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
+                PrimaryButtonText = NotifyDataText.OK_Button
+            };
+            show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
         }
 
-        private async void btn_Exec_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
+        //Trigger Function From btn_Exec_FooterMenuEmbedMessage_Click (Embed Message -> Footer Menu -> Save)
+        private void btn_Exec_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
         {
             ExecSteg_Message();
         }
 
-
+        //Function of Steg Message (From FooterMenu -> Exec)
         private async void ExecSteg_Message()
         {
             if (status_picker_cover_2.Text != "No Image" && Input_Password_msg.IsReadOnly == true && InputMessage.IsReadOnly == true)

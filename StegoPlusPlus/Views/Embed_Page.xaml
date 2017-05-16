@@ -60,7 +60,7 @@
             </Grid>
         </StackPanel>
         <!--Header Menu--><!--Main Row 1-->
-
+        
         <!--Line Horizontal--><!--Main Row 2-->
         <StackPanel Grid.Row="1" Margin="50,5,50,5">
             <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
@@ -131,7 +131,6 @@
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="status_picker_cover" Text="No Image" FontStyle="Italic"/>
                                     </TextBlock>
-                                    
                                 </Grid>
                                 <Grid Grid.Row="2">
                                     <Image Margin="0,20,0,0" x:Name="ico_picker_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>

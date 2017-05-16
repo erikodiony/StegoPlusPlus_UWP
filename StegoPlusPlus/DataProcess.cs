@@ -48,6 +48,7 @@ namespace StegoPlusPlus
         public static readonly string Clearing_Header_Notify_Embed_Msg_pwd = "Input Password";
         public static readonly string Clearing_Header_Notify_Embed_File_pwd = "Input Password";
         public static readonly string Dialog_Exec_Footer_Menu_Null = "Some field is empty or input not saved !\nPlease check again...";
+        public static readonly string Dialog_Clear_Footer_Menu_Null = "All field was Cleared !\nProcess Successfully...";
     }
 
     class DataProcess
