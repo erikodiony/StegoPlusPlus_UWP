@@ -60,24 +60,24 @@ namespace StegoPlusPlus
 
     class DataProcess
     {
-        public char[] Convert_Passwd(string passwd)
+        public string[] Convert_Passwd(string passwd)
         {
             string pwd = string.Empty;
-            foreach(char ch in passwd)
+            foreach(char x in passwd)
             {
-                pwd += Convert.ToString(ch,2).PadLeft(8, '0');
+                pwd += Convert.ToString(x,2).PadLeft(8, '0');
             }
 
-            char[] pwd_encoded = pwd.ToCharArray();
+            string[] pwd_encoded = pwd.ToCharArray().Select(x => x.ToString()).ToArray();
             return pwd_encoded;
         }
 
         public char[] Convert_Message_or_Text(string message)
         {
             string msg = string.Empty;
-            foreach (char ch in message)
+            foreach (char x in message)
             {
-                msg += Convert.ToString(ch, 2).PadLeft(8, '0');
+                msg += Convert.ToString(x, 2).PadLeft(8, '0');
             }
 
             char[] msg_encoded = msg.ToCharArray();
@@ -96,13 +96,7 @@ namespace StegoPlusPlus
                     st.CopyTo(memst);
                     bin_array = memst.ToArray();
 
-                    int sx = 0;
-                    foreach(var x in bin_array)
-                    {
-                        System.Diagnostics.Debug.WriteLine(++sx + " | " + x);
-                    }
-
-                    foreach(byte x in bin_array)
+                    foreach (byte x in bin_array)
                     {
                         bin_string += Convert.ToString(x, 2).PadLeft(8, '0');
                     }
@@ -124,9 +118,41 @@ namespace StegoPlusPlus
         }
 
 
-        public string RUN_STEG(char[] fileOrMessage, byte[] coverImage, char[]passwd)
+        public string RUN_STEG(char[] fileOrMessage, byte[] coverImage, string[]passwd)
         {
             string notify = String.Empty;
+            byte[] steg_in = new byte[fileOrMessage.Length];
+
+            for (int i = 0; i < fileOrMessage.Length; i++)
+            {
+                if (fileOrMessage[i] == 0 && coverImage[i] % 2 == 0)
+                {
+                    byte x = 0;
+                    steg_in[i] = (byte)(coverImage[i] + x);
+                }
+
+                if (fileOrMessage[i] == 0 && coverImage[i] % 2 == 1)
+                {
+                    byte x = 1;
+                    steg_in[i] = (byte)(coverImage[i] - x);
+                }
+
+                if (fileOrMessage[i] == 1 && coverImage[i] % 2 == 0)
+                {
+                    byte x = 1;
+                    steg_in[i] = (byte)(coverImage[i] + x);
+                }
+
+                if (fileOrMessage[i] == 1 && coverImage[i] % 2 == 1)
+                {
+                    byte x = 0;
+                    steg_in[i] = (byte)(coverImage[i] + x);
+                }
+            }
+
+            byte[] steg_result = new byte[coverImage.Length];
+            Array.Copy(steg_in, 0, steg_result, 0, steg_in.Length);
+            Array.Copy(coverImage, steg_in.Length, steg_result, steg_in.Length, coverImage.Length - fileOrMessage.Length);
 
             return notify;
         }

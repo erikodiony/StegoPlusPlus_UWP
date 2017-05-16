@@ -128,7 +128,7 @@ namespace StegoPlusPlus.Views
 
         byte[] Binary_embed_file_cover; //FILE COVER
         char[] Binary_embed_file_encoded; //FILE HIDING
-        char[] Binary_pwd_embed_file_encoded; //PASSWORD
+        string[] Binary_pwd_embed_file_encoded; //PASSWORD
 
         byte[] newpx;
         BitmapDecoder dec;
@@ -148,6 +148,7 @@ namespace StegoPlusPlus.Views
             pathfile_picker_cover.Text = "-";
             sizefile_picker_cover.Text = "-";
             dimensionfile_picker_cover.Text = "-";
+            estimatefile_picker_cover.Text = "-";
             ico_picker_cover.Visibility = Visibility.Collapsed;
         }
 
@@ -192,13 +193,7 @@ namespace StegoPlusPlus.Views
                 //Get Property File Picker Selected (await)
                 IDictionary<string, object> extraProperties = await file_cover.Properties.RetrievePropertiesAsync(propImgList);
                 var propSize = extraProperties[propImage.Size];
-                var propDimension = extraProperties[propImage.Dimensions];
-             
-                status_picker_cover.Text = file_cover.Name;
-                pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
-                sizefile_picker_cover.Text = String.Format("{0} bytes", propSize);
-                dimensionfile_picker_cover.Text = String.Format("{0}", propDimension);
-
+                var propDimension = extraProperties[propImage.Dimensions];             
 
                 //Show Thumbnail File Picker
                 using (StorageItemThumbnail thumbnail = await file_cover.GetThumbnailAsync(ThumbnailMode.PicturesView))
@@ -209,6 +204,14 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover.Source = bitmapImage;
+
+                        Binary_embed_file_cover = await dp.Convert_FileCover_to_Byte(file_cover);
+
+                        status_picker_cover.Text = file_cover.Name;
+                        pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
+                        sizefile_picker_cover.Text = String.Format("{0} bytes", propSize);
+                        dimensionfile_picker_cover.Text = String.Format("{0} / ({1} Pixel)", propDimension, Binary_embed_file_cover.Length);
+                        estimatefile_picker_cover.Text = String.Format("{0} bytes", Binary_embed_file_cover.Length / 8);
                     }
                     else
                     {
@@ -264,13 +267,7 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_hiding.Source = bitmapImage;
-                        Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
-                        int xd = 0;
-                        foreach(var x in Binary_embed_file_encoded)
-                        {
-                            System.Diagnostics.Debug.WriteLine(++xd +" | " + x);
-                        }
-
+                        //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
                     else
                     {
@@ -292,7 +289,7 @@ namespace StegoPlusPlus.Views
             {
                 Input_Password_file.IsReadOnly = true;
                 Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                Binary_pwd_embed_msg_encoded = dp.Convert_Passwd(Input_Password_file.Text);
+                Binary_pwd_embed_file_encoded = dp.Convert_Passwd(Input_Password_file.Text);
             }
             else
             {
@@ -363,6 +360,10 @@ namespace StegoPlusPlus.Views
                         Title = "Proses",
                         PrimaryButtonText = NotifyDataText.OK_Button
                     };
+
+                    Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                    string notify = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file_encoded);
+
                     show_dlg_embed_file = await dlg_embed_file.ShowAsync();
                 }
                 else
@@ -395,7 +396,7 @@ namespace StegoPlusPlus.Views
 
         byte[] Binary_embed_file_cover_2;
         char[] Binary_embed_msg_encoded;
-        char[] Binary_pwd_embed_msg_encoded;
+        string[] Binary_pwd_embed_msg_encoded;
         ContentDialog dlg_embed_msg;
         ContentDialogResult show_dlg_embed_msg = new ContentDialogResult();
 
@@ -410,6 +411,7 @@ namespace StegoPlusPlus.Views
             pathfile_picker_cover_2.Text = "-";
             sizefile_picker_cover_2.Text = "-";
             dimensionfile_picker_cover_2.Text = "-";
+            charfile_picker_cover_2.Text = "-";
             ico_picker_cover_2.Visibility = Visibility.Collapsed;
         }
 
@@ -450,11 +452,6 @@ namespace StegoPlusPlus.Views
                 var propSize = extraProperties[propImage.Size];
                 var propDimension = extraProperties[propImage.Dimensions];
 
-                status_picker_cover_2.Text = file_cover_2.Name;
-                pathfile_picker_cover_2.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
-                sizefile_picker_cover_2.Text = String.Format("{0} bytes", propSize);
-                dimensionfile_picker_cover_2.Text = String.Format("{0}", propDimension);
-
                 //Show Thumbnail File Picker
                 using (StorageItemThumbnail thumbnail = await file_cover_2.GetThumbnailAsync(ThumbnailMode.PicturesView))
                 {
@@ -464,7 +461,14 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover_2.Source = bitmapImage;
+
                         Binary_embed_file_cover_2 = await dp.Convert_FileCover_to_Byte(file_cover_2);
+
+                        status_picker_cover_2.Text = file_cover_2.Name;
+                        pathfile_picker_cover_2.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
+                        sizefile_picker_cover_2.Text = String.Format("{0} bytes", propSize);
+                        dimensionfile_picker_cover_2.Text = String.Format("{0} / ({1} Pixel)", propDimension, Binary_embed_file_cover_2.Length);
+                        charfile_picker_cover_2.Text = String.Format("{0} Character", Binary_embed_file_cover_2.Length / 8);
                     }
                     else
                     {

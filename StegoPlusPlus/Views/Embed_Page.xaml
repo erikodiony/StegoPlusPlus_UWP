@@ -139,7 +139,8 @@
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
                                         <Run Text="Path : "/><Run x:Name="pathfile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
                                         <Run Text="Size : "/><Run x:Name="sizefile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover" Text="-" FontStyle="Italic"/>
+                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="File can hide : "/><Run x:Name="estimatefile_picker_cover" Text="-" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
@@ -266,7 +267,8 @@
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
                                         <Run Text="Path : "/><Run x:Name="pathfile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
                                         <Run Text="Size : "/><Run x:Name="sizefile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover_2" Text="-" FontStyle="Italic"/>
+                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run Text="Text/Message can hide : "/><Run x:Name="charfile_picker_cover_2" Text="-" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
