@@ -44,8 +44,8 @@ namespace StegoPlusPlus.Views
             Input_Password_msg.Text = String.Empty;
 
             btn_CoverImage.Click += new RoutedEventHandler(btn_CoverImage_Click); //Fungsi Click Cover ke Sinkron dengan Fungsi File Picker
-            btn_HidingFile.Click += new RoutedEventHandler(btn_HidingFile_Click); //Fungsi Click Hiding ke Sinkron dengan Fungsi Hiding Picker
             btn_CoverImage_2.Click += new RoutedEventHandler(btn_CoverImage_2_Click); //Fungsi Click Cover2 ke Sinkron dengan Fungsi File Picker
+            btn_HidingFile.Click += new RoutedEventHandler(btn_HidingFile_Click); //Fungsi Click Hiding ke Sinkron dengan Fungsi Hiding Picker
         }
 
 
@@ -125,6 +125,10 @@ namespace StegoPlusPlus.Views
 
         //PAGE CONTROL FOR EMBED FILE (EMBED MENU -> EMBED FILE)
         //BEGIN
+
+        byte[] Binary_embed_file_cover; //FILE COVER
+        char[] Binary_embed_file_encoded; //FILE HIDING
+        char[] Binary_pwd_embed_file_encoded; //PASSWORD
 
         byte[] newpx;
         BitmapDecoder dec;
@@ -260,6 +264,13 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_hiding.Source = bitmapImage;
+                        Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                        int xd = 0;
+                        foreach(var x in Binary_embed_file_encoded)
+                        {
+                            System.Diagnostics.Debug.WriteLine(++xd +" | " + x);
+                        }
+
                     }
                     else
                     {
@@ -281,7 +292,7 @@ namespace StegoPlusPlus.Views
             {
                 Input_Password_file.IsReadOnly = true;
                 Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                msg_encoded = dp.KonversiBinary(Input_Password_file.Text);
+                Binary_pwd_embed_msg_encoded = dp.Convert_Passwd(Input_Password_file.Text);
             }
             else
             {
@@ -382,8 +393,9 @@ namespace StegoPlusPlus.Views
         //PAGE CONTROL FOR EMBED MESSAGE (EMBED MENU -> EMBED MESSAGE)
         //BEGIN
 
-        char[] msg_encoded;
-        char[] pwd_msg_encoded;
+        byte[] Binary_embed_file_cover_2;
+        char[] Binary_embed_msg_encoded;
+        char[] Binary_pwd_embed_msg_encoded;
         ContentDialog dlg_embed_msg;
         ContentDialogResult show_dlg_embed_msg = new ContentDialogResult();
 
@@ -452,6 +464,7 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover_2.Source = bitmapImage;
+                        Binary_embed_file_cover_2 = await dp.Convert_FileCover_to_Byte(file_cover_2);
                     }
                     else
                     {
@@ -473,7 +486,7 @@ namespace StegoPlusPlus.Views
             {
                 InputMessage.IsReadOnly = true;
                 InputMessage.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
-                msg_encoded = dp.KonversiBinary(InputMessage.Text);
+                Binary_embed_msg_encoded = dp.Convert_Message_or_Text(InputMessage.Text);
             }
             else
             {
@@ -510,7 +523,7 @@ namespace StegoPlusPlus.Views
             {
                 Input_Password_msg.IsReadOnly = true;
                 Input_Password_msg.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_pwd;
-                msg_encoded = dp.KonversiBinary(Input_Password_msg.Text);
+                Binary_pwd_embed_msg_encoded = dp.Convert_Passwd(Input_Password_msg.Text);
             }
             else
             {
@@ -566,7 +579,7 @@ namespace StegoPlusPlus.Views
             {
                 dlg_embed_msg = new ContentDialog()
                 {
-                    Title = "Apakah yakin akan melanjutkan proses Embedding Message ?",
+                    Title = "Confirm to Execute ?\nClick 'OK' to continue...",
                     PrimaryButtonText = NotifyDataText.OK_Button,
                     SecondaryButtonText = NotifyDataText.Cancel_Button
                 };
@@ -581,6 +594,7 @@ namespace StegoPlusPlus.Views
                         PrimaryButtonText = NotifyDataText.OK_Button
                     };
                     show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
+                    string notify = dp.RUN_STEG(Binary_embed_msg_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg_encoded);                  
                 }
                 else
                 {
@@ -605,8 +619,6 @@ namespace StegoPlusPlus.Views
 
 
         //--------------------------------------------------------------------------------//
-
-
 
 
     }

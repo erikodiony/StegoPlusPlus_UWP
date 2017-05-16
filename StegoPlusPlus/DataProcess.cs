@@ -1,8 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.FileProperties;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace StegoPlusPlus
 {
@@ -53,16 +60,75 @@ namespace StegoPlusPlus
 
     class DataProcess
     {
-        public char[] KonversiBinary(string push_message)
+        public char[] Convert_Passwd(string passwd)
         {
-            string message = string.Empty;
-            foreach(char ch in push_message)
+            string pwd = string.Empty;
+            foreach(char ch in passwd)
             {
-                message += Convert.ToString(ch,2).PadLeft(8, '0');
+                pwd += Convert.ToString(ch,2).PadLeft(8, '0');
             }
 
-            char[] msg = message.ToCharArray();
-            return msg;
+            char[] pwd_encoded = pwd.ToCharArray();
+            return pwd_encoded;
+        }
+
+        public char[] Convert_Message_or_Text(string message)
+        {
+            string msg = string.Empty;
+            foreach (char ch in message)
+            {
+                msg += Convert.ToString(ch, 2).PadLeft(8, '0');
+            }
+
+            char[] msg_encoded = msg.ToCharArray();
+            return msg_encoded;
+        }
+
+        public async Task<char[]> Convert_FileHiding_to_Byte(StorageFile fileHiding)
+        {
+            char[] bin;
+            byte[] bin_array;
+            string bin_string = String.Empty;
+            using (Stream st = await fileHiding.OpenStreamForReadAsync())
+            {
+                using (var memst = new MemoryStream())
+                {
+                    st.CopyTo(memst);
+                    bin_array = memst.ToArray();
+
+                    int sx = 0;
+                    foreach(var x in bin_array)
+                    {
+                        System.Diagnostics.Debug.WriteLine(++sx + " | " + x);
+                    }
+
+                    foreach(byte x in bin_array)
+                    {
+                        bin_string += Convert.ToString(x, 2).PadLeft(8, '0');
+                    }
+                    bin = bin_string.ToCharArray();
+                }
+            }
+            return bin;
+        }
+
+        public async Task<byte[]> Convert_FileCover_to_Byte(StorageFile fileCover)
+        {
+            byte[] bin;
+            using (IRandomAccessStream stream = await fileCover.OpenAsync(FileAccessMode.Read))
+            {
+                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
+                bin = (await decoder.GetPixelDataAsync()).DetachPixelData();
+            }
+            return bin;
+        }
+
+
+        public string RUN_STEG(char[] fileOrMessage, byte[] coverImage, char[]passwd)
+        {
+            string notify = String.Empty;
+
+            return notify;
         }
               
     }
