@@ -208,7 +208,6 @@ namespace StegoPlusPlus.Views
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover.Source = bitmapImage;
 
-                        Binary_ext_embed_file = dp.Convert_FileType(file_cover.FileType);
                         Binary_embed_file_cover = await dp.Convert_FileCover_to_Byte(file_cover);
 
                         status_picker_cover.Text = file_cover.Name;
@@ -271,6 +270,7 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_hiding.Source = bitmapImage;
+                        Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType);
                         //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
                     else

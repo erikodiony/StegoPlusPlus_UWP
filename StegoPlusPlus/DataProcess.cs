@@ -247,16 +247,16 @@ namespace StegoPlusPlus
             steg_result = coverImage;
 
 
-            string xd = new string(all_encrypt);
-            System.Diagnostics.Debug.WriteLine(xd);
+            //string xd = new string(all_encrypt);
+            //System.Diagnostics.Debug.WriteLine(xd);
 
-            List<string> groups = (from Match m in Regex.Matches(xd, @"\d{8}") select m.Value).ToList();
+            //List<string> groups = (from Match m in Regex.Matches(xd, @"\d{8}") select m.Value).ToList();
 
-            int eff = 0;
-            foreach (string v in groups)
-            {
-                System.Diagnostics.Debug.WriteLine("{0} || {1}", ++eff, v);
-            }
+            //int eff = 0;
+            //foreach (string v in groups)
+            //{
+                //System.Diagnostics.Debug.WriteLine("{0} || {1}", ++eff, v);
+            //}
 
             return steg_result;
         }              
