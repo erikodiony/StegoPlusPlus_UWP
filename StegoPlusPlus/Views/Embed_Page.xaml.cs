@@ -129,10 +129,10 @@ namespace StegoPlusPlus.Views
         byte[] Binary_embed_file_cover; //FILE COVER
         char[] Binary_embed_file_encoded; //FILE HIDING
         string[] Binary_pwd_embed_file_encoded; //PASSWORD
+        byte[] Binary_STEG_RESULT_file; //FILE STEG RGB
 
-        byte[] newpx;
-        BitmapDecoder dec;
-        IRandomAccessStream files;
+        IRandomAccessStream strm_Cover_Embed_File;
+
         char[] pwd_file_encoded;
         ContentDialog dlg_embed_file;
         ContentDialogResult show_dlg_embed_file = new ContentDialogResult();
@@ -204,7 +204,7 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover.Source = bitmapImage;
-
+                        //strm_Cover_Embed_File = await file_cover.OpenAsync(FileAccessMode.ReadWrite);
                         Binary_embed_file_cover = await dp.Convert_FileCover_to_Byte(file_cover);
 
                         status_picker_cover.Text = file_cover.Name;
@@ -362,9 +362,28 @@ namespace StegoPlusPlus.Views
                     };
 
                     Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
-                    string notify = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file_encoded);
+                    Binary_STEG_RESULT_file = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file_encoded);
 
                     show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+
+                    FileSavePicker fs = new FileSavePicker();
+                    fs.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                    fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
+                    StorageFile sf = await fs.PickSaveFileAsync();
+                    using (IRandomAccessStream strm_save = await sf.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
+                        encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT_file);
+                        await encoder.FlushAsync();
+                    }
+
+                    int zxc = -1;
+                    foreach (var x in Binary_STEG_RESULT_file)
+                    {
+                       // System.Diagnostics.Debug.WriteLine("BARISAN {0} || {1}", ++zxc, x);
+                    }
+
+
                 }
                 else
                 {
@@ -462,7 +481,7 @@ namespace StegoPlusPlus.Views
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover_2.Source = bitmapImage;
 
-                        Binary_embed_file_cover_2 = await dp.Convert_FileCover_to_Byte(file_cover_2);
+                        //Binary_embed_file_cover_2 = await dp.Convert_FileCover_to_Byte(file_cover_2);
 
                         status_picker_cover_2.Text = file_cover_2.Name;
                         pathfile_picker_cover_2.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
@@ -598,7 +617,7 @@ namespace StegoPlusPlus.Views
                         PrimaryButtonText = NotifyDataText.OK_Button
                     };
                     show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
-                    string notify = dp.RUN_STEG(Binary_embed_msg_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg_encoded);                  
+                    // = dp.RUN_STEG(Binary_embed_msg_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg_encoded);                  
                 }
                 else
                 {

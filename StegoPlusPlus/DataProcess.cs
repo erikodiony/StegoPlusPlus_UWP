@@ -15,7 +15,7 @@ namespace StegoPlusPlus
 {
     internal static class FileExtensions
     {
-        public static readonly string[] Stego = new string[] { ".jpg", ".png" };
+        public static readonly string[] Stego = new string[] { ".png" };
         public static readonly string[] Document = new string[] { ".doc", ".xls", ".ppt", ".docx", ".xlsx", ".pptx", ".pdf", ".txt" };
         public static readonly string[] Image = new string[] { ".jpg", ".gif", ".png" };
         public static readonly string[] Other = new string[] { ".mp3", ".mp4", ".zip", ".rar" };
@@ -60,12 +60,15 @@ namespace StegoPlusPlus
 
     class DataProcess
     {
+        public BitmapDecoder decoder;
+        public IRandomAccessStream strm_Cover;
+
         public string[] Convert_Passwd(string passwd)
         {
             string pwd = string.Empty;
-            foreach(char x in passwd)
+            foreach (char x in passwd)
             {
-                pwd += Convert.ToString(x,2).PadLeft(8, '0');
+                pwd += Convert.ToString(x, 2).PadLeft(8, '0');
             }
 
             string[] pwd_encoded = pwd.ToCharArray().Select(x => x.ToString()).ToArray();
@@ -86,22 +89,22 @@ namespace StegoPlusPlus
 
         public async Task<char[]> Convert_FileHiding_to_Byte(StorageFile fileHiding)
         {
-            char[] bin;
-            byte[] bin_array;
-            string bin_string = String.Empty;
+            char[] bin = null;
+            byte[] bin_array = null;
+            string bin_string = null;
+
             using (Stream st = await fileHiding.OpenStreamForReadAsync())
             {
-                using (var memst = new MemoryStream())
+                using (BinaryReader binaryReader = new BinaryReader(st))
                 {
-                    st.CopyTo(memst);
-                    bin_array = memst.ToArray();
-
-                    foreach (byte x in bin_array)
-                    {
-                        bin_string += Convert.ToString(x, 2).PadLeft(8, '0');
-                    }
-                    bin = bin_string.ToCharArray();
+                    bin_array = binaryReader.ReadBytes((int)st.Length).ToArray();
                 }
+
+                foreach (byte x in bin_array)
+                {
+                    bin_string += Convert.ToString(x, 2).PadLeft(8, '0');
+                }
+                bin = bin_string.ToCharArray();
             }
             return bin;
         }
@@ -109,53 +112,72 @@ namespace StegoPlusPlus
         public async Task<byte[]> Convert_FileCover_to_Byte(StorageFile fileCover)
         {
             byte[] bin;
-            using (IRandomAccessStream stream = await fileCover.OpenAsync(FileAccessMode.Read))
+            using (strm_Cover = await fileCover.OpenAsync(FileAccessMode.ReadWrite))
             {
-                BitmapDecoder decoder = await BitmapDecoder.CreateAsync(stream);
+                decoder = await BitmapDecoder.CreateAsync(strm_Cover);
                 bin = (await decoder.GetPixelDataAsync()).DetachPixelData();
             }
+
+            System.Diagnostics.Debug.WriteLine(bin.Length);
+
+            int zxc = -1;
+            foreach (var x in bin)
+            {
+                System.Diagnostics.Debug.WriteLine("BARIS {0} || {1}", ++zxc, x);
+            }
+
+
             return bin;
         }
 
-
-        public string RUN_STEG(char[] fileOrMessage, byte[] coverImage, string[]passwd)
+        public byte[] RUN_STEG(char[] fileOrMessage, byte[] coverImage, string[] passwd)
         {
-            string notify = String.Empty;
-            byte[] steg_in = new byte[fileOrMessage.Length];
+            byte[] steg_result = new byte[coverImage.Length];
+            char[] nw = new char[coverImage.Length];
+
+            for (int i = 0; i < nw.Length; i++)
+            {
+                nw[i] = (char)49;
+            }
+
+            //fileOrMessage = nw;
+            //var stride_low = (1 * (int)decoder.PixelWidth + 1) * 3;
+            //var stride_high = ((decoder.PixelWidth * (int)decoder.PixelWidth + decoder.PixelHeight) * 3) + 2;
+
+            
 
             for (int i = 0; i < fileOrMessage.Length; i++)
             {
-                if (fileOrMessage[i] == 0 && coverImage[i] % 2 == 0)
+                if (fileOrMessage[i] == 49 && ((byte)(coverImage[i] % 2) == 1))
                 {
-                    byte x = 0;
-                    steg_in[i] = (byte)(coverImage[i] + x);
+                    coverImage[i] = (byte)(coverImage[i]);
                 }
 
-                if (fileOrMessage[i] == 0 && coverImage[i] % 2 == 1)
+                if (fileOrMessage[i] == 49 && ((byte)(coverImage[i] % 2) == 0))
                 {
-                    byte x = 1;
-                    steg_in[i] = (byte)(coverImage[i] - x);
+                    coverImage[i] = (byte)(coverImage[i] + 1);
                 }
 
-                if (fileOrMessage[i] == 1 && coverImage[i] % 2 == 0)
+                if (fileOrMessage[i] == 48 && ((byte)(coverImage[i] % 2) == 1))
                 {
-                    byte x = 1;
-                    steg_in[i] = (byte)(coverImage[i] + x);
+                    coverImage[i] = (byte)(coverImage[i] - 1);
                 }
 
-                if (fileOrMessage[i] == 1 && coverImage[i] % 2 == 1)
+                if (fileOrMessage[i] == 48 && ((byte)(coverImage[i] % 2) == 0))
                 {
-                    byte x = 0;
-                    steg_in[i] = (byte)(coverImage[i] + x);
+                    coverImage[i] = (byte)(coverImage[i]);
                 }
+                //j++;
+                System.Diagnostics.Debug.WriteLine(i);
             }
 
-            byte[] steg_result = new byte[coverImage.Length];
-            Array.Copy(steg_in, 0, steg_result, 0, steg_in.Length);
-            Array.Copy(coverImage, steg_in.Length, steg_result, steg_in.Length, coverImage.Length - fileOrMessage.Length);
+            foreach (var x in fileOrMessage)
+            {
+               System.Diagnostics.Debug.WriteLine("FILE BINARY == {0}", x);
+            }
 
-            return notify;
-        }
-              
+            steg_result = coverImage;
+            return steg_result;
+        }              
     }
 }
