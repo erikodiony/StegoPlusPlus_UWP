@@ -178,10 +178,10 @@ namespace StegoPlusPlus
             byte[] steg_result = new byte[coverImage.Length];
             char[] nw = new char[coverImage.Length];
 
-            for (int i = 0; i < nw.Length; i++)
-            {
-                nw[i] = (char)49;
-            }
+            //for (int i = 0; i < nw.Length; i++)
+            //{
+            //    nw[i] = (char)49;
+            //}
 
             //Structure of Hiding Data {pwd_encoded + [0000] + pwd + [0001] + file||message + [0010] + extention + [0011] + data + [0100]}            
             //pwd_encoded
@@ -201,7 +201,7 @@ namespace StegoPlusPlus
             char[] limiter_4 = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)49, (char)49 };
             char[] limiter_5 = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)49, (char)48, (char)48 };
 
-            int length_encrypt = (pwd_crypt_encoded.Length + 8 + pwd_encoded.Length + 8 + def.Length + 8 + extension.Length + 8 + fileOrMessage.Length + 8 );
+            int length_encrypt = (pwd_crypt_encoded.Length + 8 + pwd_encoded.Length + 8 + def.Length + 8 + extension.Length + 8 + fileOrMessage.Length + 8);
             char[] all_encrypt = new char[length_encrypt];
 
             Array.Copy(pwd_crypt_encoded, all_encrypt, pwd_crypt_encoded.Length);
@@ -238,11 +238,11 @@ namespace StegoPlusPlus
                 }
             }
 
-            int g = -1;
-            foreach (var x in all_encrypt)
-            {
-               System.Diagnostics.Debug.WriteLine("{1} FILE BINARY == {0}", x, ++g);
-            }
+            //int g = -1;
+            //foreach (var x in all_encrypt)
+            //{
+            //    System.Diagnostics.Debug.WriteLine("{1} FILE BINARY == {0}", x, ++g);
+            //}
 
             steg_result = coverImage;
 
@@ -255,10 +255,10 @@ namespace StegoPlusPlus
             //int eff = 0;
             //foreach (string v in groups)
             //{
-                //System.Diagnostics.Debug.WriteLine("{0} || {1}", ++eff, v);
+            //    System.Diagnostics.Debug.WriteLine("{0} || {1}", ++eff, v);
             //}
 
             return steg_result;
-        }              
+        }
     }
 }
