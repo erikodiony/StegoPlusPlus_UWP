@@ -128,10 +128,14 @@ namespace StegoPlusPlus.Views
 
         byte[] Binary_embed_file_cover; //FILE COVER
         char[] Binary_embed_file_encoded; //FILE HIDING
-        string[] Binary_pwd_embed_file_encoded; //PASSWORD
+        char[] Binary_pwd_embed_file; //PASSWORD ASLI
+        char[] Binary_pwd_embed_file_encoded; //PASSWORD
+        char[] Binary_ext_embed_file; //Extension
+        char[] Binary_def = new char[] { (char)48, (char)48, (char)49, (char)49, (char)48, (char)48, (char)48, (char)49 };
+
         byte[] Binary_STEG_RESULT_file; //FILE STEG RGB
 
-        IRandomAccessStream strm_Cover_Embed_File;
+        //IRandomAccessStream strm_Cover_Embed_File;
 
         char[] pwd_file_encoded;
         ContentDialog dlg_embed_file;
@@ -139,8 +143,7 @@ namespace StegoPlusPlus.Views
 
         StorageFile file_cover;
         StorageFile file_hiding;
-        StorageFile file_embed;
-
+        
         //Initial Default Text PickerCover File
         private void SetStatus_PickerCover()
         {
@@ -204,7 +207,8 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover.Source = bitmapImage;
-                        //strm_Cover_Embed_File = await file_cover.OpenAsync(FileAccessMode.ReadWrite);
+
+                        Binary_ext_embed_file = dp.Convert_FileType(file_cover.FileType);
                         Binary_embed_file_cover = await dp.Convert_FileCover_to_Byte(file_cover);
 
                         status_picker_cover.Text = file_cover.Name;
@@ -289,7 +293,8 @@ namespace StegoPlusPlus.Views
             {
                 Input_Password_file.IsReadOnly = true;
                 Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                Binary_pwd_embed_file_encoded = dp.Convert_Passwd(Input_Password_file.Text);
+                Binary_pwd_embed_file = dp.Convert_Passwd(Input_Password_file.Text);
+                Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(Input_Password_file.Text);
             }
             else
             {
@@ -362,7 +367,7 @@ namespace StegoPlusPlus.Views
                     };
 
                     Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
-                    Binary_STEG_RESULT_file = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file_encoded);
+                    Binary_STEG_RESULT_file = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
 
                     show_dlg_embed_file = await dlg_embed_file.ShowAsync();
 
@@ -415,7 +420,7 @@ namespace StegoPlusPlus.Views
 
         byte[] Binary_embed_file_cover_2;
         char[] Binary_embed_msg_encoded;
-        string[] Binary_pwd_embed_msg_encoded;
+        char[] Binary_pwd_embed_msg_encoded;
         ContentDialog dlg_embed_msg;
         ContentDialogResult show_dlg_embed_msg = new ContentDialogResult();
 
