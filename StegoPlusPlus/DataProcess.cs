@@ -118,18 +118,6 @@ namespace StegoPlusPlus
             return ftype_encoded;
         }
 
-        //public char[] Convert_Definition(string definition)
-        //{
-        //    string def = string.Empty;
-        //    foreach (char x in definition)
-        //    {
-        //        def += Convert.ToString(x, 2).PadLeft(8, '0');
-        //    }
-
-        //    char[] def_encoded = def.ToCharArray();
-        //    return def_encoded;
-        //}
-
         public async Task<char[]> Convert_FileHiding_to_Byte(StorageFile fileHiding)
         {
             char[] bin = null;
