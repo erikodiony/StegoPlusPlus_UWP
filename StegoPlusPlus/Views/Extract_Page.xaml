@@ -129,6 +129,7 @@
                                         <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_steg" Text="-" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
+
                             </Grid>
 
                             <Grid Margin="0,0,0,0" x:Name="steg_border_vertical">
@@ -144,24 +145,17 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Choose Extract Location"/><LineBreak/>
-                                    <Run Text="(Pilih Folder untuk menyimpan hasil Ekstrak)" FontStyle="Italic" FontSize="14"/>
+                                    <Run Text="Insert Password"/><LineBreak/>
+                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
-                                <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_StegImage_folder" Content="Choose Folder"/>
-                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_steg_folder" Text="No Folder" FontStyle="Italic"/>
-                                    </TextBlock>
+                                <Grid Grid.Row="1" Margin="0,15,25,10">
+                                    <TextBox x:Name="Input_Password_file" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_steg_folder" Text="-" FontStyle="Italic"/><LineBreak/>
-                                    </TextBlock>
-                                </Grid>
-                                <Grid Grid.Row="3">
+                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Password_Steg" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_Steg_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Password_Steg" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_Steg_Click"/>
                                 </Grid>
                             </Grid>
                         </StackPanel>

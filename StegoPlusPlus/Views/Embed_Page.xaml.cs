@@ -35,12 +35,14 @@ namespace StegoPlusPlus.Views
             InitializingPage();
             check_transition_effect_status();
             check_theme_status();
-            SetStatus_HidingFile(); 
-            SetStatus_PickerCover();
-            SetStatus_PickerCover_2();
-            SetStatus_Password();
-            SetStatus_Password_2();
-            Input_Password_file.Text = String.Empty;
+
+            SetStatus_HidingFile(); //(Embed Menu -> Embed File -> Hiding File)
+            SetStatus_PickerCover(); //(Embed Menu -> Embed File -> Insert Image File)
+            SetStatus_PickerCover_2(); //(Embed Menu -> Embed Text/Message -> Insert Image File)
+            SetStatus_Password(); //(Embed Menu -> Embed File -> Insert Passwd)
+            SetStatus_Password_2(); //(Embed Menu -> Embed Text/Message ->Insert Passwd)
+
+            Input_Password_file.Text = String.Empty; 
             Input_Password_msg.Text = String.Empty;
 
             btn_CoverImage.Click += new RoutedEventHandler(btn_CoverImage_Click); //Fungsi Click Cover ke Sinkron dengan Fungsi File Picker
@@ -54,6 +56,8 @@ namespace StegoPlusPlus.Views
 
         //PAGE CONTROL FOR EMBED MENU
         //BEGIN
+
+        byte[] Binary_STEG_RESULT; //FILE STEG RGB
 
         DataProcess dp = new DataProcess(); //Initializing Object DataProcess.cs
         List<string> propImgList = new List<string>(); //Create List Specific Property For File Cover Picker
@@ -116,6 +120,20 @@ namespace StegoPlusPlus.Views
             HeaderInfo.Text = HeaderPage.EmbedPage;
         }
 
+        //Saving Image Steg
+        public async void SaveImageAsPNG()
+        {
+            FileSavePicker fs = new FileSavePicker();
+            fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
+            StorageFile sf = await fs.PickSaveFileAsync();
+            using (IRandomAccessStream strm_save = await sf.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
+                encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT);
+                await encoder.FlushAsync();
+            }
+        }
+
         //PAGE CONTROL FOR EMBED MENU
         //END
 
@@ -126,22 +144,20 @@ namespace StegoPlusPlus.Views
         //PAGE CONTROL FOR EMBED FILE (EMBED MENU -> EMBED FILE)
         //BEGIN
 
-        byte[] Binary_embed_file_cover; //FILE COVER
-        char[] Binary_embed_file_encoded; //FILE HIDING
-        char[] Binary_pwd_embed_file; //PASSWORD ASLI
-        char[] Binary_pwd_embed_file_encoded; //PASSWORD
-        char[] Binary_ext_embed_file; //Extension
-        char[] Binary_def = new char[] { (char)48, (char)48, (char)49, (char)49, (char)48, (char)48, (char)48, (char)49 };
-
-        byte[] Binary_STEG_RESULT_file; //FILE STEG RGB
+        byte[] Binary_embed_file_cover; //FILE COVER (EMBED MENU -> EMBED FILE)
+        char[] Binary_embed_file_encoded; //FILE HIDING (EMBED MENU -> EMBED FILE)
+        char[] Binary_pwd_embed_file; //PASSWORD ASLI (EMBED MENU -> EMBED FILE)
+        char[] Binary_pwd_embed_file_encoded; //PASSWORD (EMBED MENU -> EMBED FILE)
+        char[] Binary_ext_embed_file; //Extension (EMBED MENU -> EMBED FILE)
+        char[] Binary_def = new char[] { (char)48, (char)48, (char)49, (char)49, (char)48, (char)48, (char)48, (char)49 }; //TextOrFile (EMBED MENU -> EMBED FILE)
 
         ContentDialog dlg_embed_file;
         ContentDialogResult show_dlg_embed_file = new ContentDialogResult();
 
         StorageFile file_cover;
         StorageFile file_hiding;
-        
-        //Initial Default Text PickerCover File
+
+        //Initial Default Text PickerCover File (EMBED MENU -> EMBED FILE)
         private void SetStatus_PickerCover()
         {
             status_picker_cover.Text = "No Image";
@@ -152,7 +168,7 @@ namespace StegoPlusPlus.Views
             ico_picker_cover.Visibility = Visibility.Collapsed;
         }
 
-        //Initial Default Text Hiding File
+        //Initial Default Text Hiding File (EMBED MENU -> EMBED FILE)
         private void SetStatus_HidingFile()
         {
             status_picker_hiding.Text = "No File";
@@ -162,6 +178,7 @@ namespace StegoPlusPlus.Views
             ico_picker_hiding.Visibility = Visibility.Collapsed;
         }
 
+        //Initial Default Text Password (EMBED MENU -> EMBED FILE)
         private void SetStatus_Password()
         {
             Input_Password_file.Text = String.Empty;
@@ -205,7 +222,7 @@ namespace StegoPlusPlus.Views
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover.Source = bitmapImage;
 
-                        Binary_embed_file_cover = await dp.Convert_FileCover_to_Byte(file_cover);
+                        Binary_embed_file_cover = await dp.Convert_FileImage_to_Byte(file_cover);
 
                         status_picker_cover.Text = file_cover.Name;
                         pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
@@ -268,7 +285,7 @@ namespace StegoPlusPlus.Views
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_hiding.Source = bitmapImage;
                         Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType);
-                        //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                        Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
                     else
                     {
@@ -348,7 +365,7 @@ namespace StegoPlusPlus.Views
             {
                 dlg_embed_file = new ContentDialog()
                 {
-                    Title = "Apakah yakin akan melanjutkan proses Embedding Message ?",
+                    Title = NotifyDataText.Dialog_Exec_Footer_Menu_Confirm,
                     PrimaryButtonText = NotifyDataText.OK_Button,
                     SecondaryButtonText = NotifyDataText.Cancel_Button
                 };
@@ -363,28 +380,12 @@ namespace StegoPlusPlus.Views
                         PrimaryButtonText = NotifyDataText.OK_Button
                     };
 
-                    Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
-                    Binary_STEG_RESULT_file = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
+                    //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                    Binary_STEG_RESULT = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
 
                     show_dlg_embed_file = await dlg_embed_file.ShowAsync();
 
-                    FileSavePicker fs = new FileSavePicker();
-                    fs.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-                    fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
-                    StorageFile sf = await fs.PickSaveFileAsync();
-                    using (IRandomAccessStream strm_save = await sf.OpenAsync(FileAccessMode.ReadWrite))
-                    {
-                        BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
-                        encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT_file);
-                        await encoder.FlushAsync();
-                    }
-
-                    int zxc = -1;
-                    foreach (var x in Binary_STEG_RESULT_file)
-                    {
-                       // System.Diagnostics.Debug.WriteLine("BARISAN {0} || {1}", ++zxc, x);
-                    }
-
+                    SaveImageAsPNG();
 
                 }
                 else
@@ -423,9 +424,7 @@ namespace StegoPlusPlus.Views
         char[] Binary_ext_embed_msg = new char[] { (char)48, (char)48, (char)49, (char)49, (char)48, (char)48, (char)48, (char)48 };
         char[] Binary_def_msg = new char[] { (char)48, (char)48, (char)49, (char)49, (char)48, (char)48, (char)48, (char)48 };
 
-        byte[] Binary_STEG_RESULT_msg; //FILE STEG RGB
-
-
+        //byte[] Binary_STEG_RESULT_msg; //FILE STEG RGB
 
         ContentDialog dlg_embed_msg;
         ContentDialogResult show_dlg_embed_msg = new ContentDialogResult();
@@ -490,7 +489,7 @@ namespace StegoPlusPlus.Views
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_cover_2.Source = bitmapImage;
 
-                        Binary_embed_file_cover_2 = await dp.Convert_FileCover_to_Byte(file_cover_2);
+                        Binary_embed_file_cover_2 = await dp.Convert_FileImage_to_Byte(file_cover_2);
 
                         status_picker_cover_2.Text = file_cover_2.Name;
                         pathfile_picker_cover_2.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
@@ -612,7 +611,7 @@ namespace StegoPlusPlus.Views
             {
                 dlg_embed_msg = new ContentDialog()
                 {
-                    Title = "Confirm to Execute ?\nClick 'OK' to continue...",
+                    Title = NotifyDataText.Dialog_Exec_Footer_Menu_Confirm,
                     PrimaryButtonText = NotifyDataText.OK_Button,
                     SecondaryButtonText = NotifyDataText.Cancel_Button
                 };
@@ -628,7 +627,8 @@ namespace StegoPlusPlus.Views
                     };
                     show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
 
-                    Binary_STEG_RESULT_msg = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_msg, Binary_def_msg);
+                    Binary_STEG_RESULT = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_msg, Binary_def_msg);
+                    SaveImageAsPNG();
                 }
                 else
                 {
@@ -638,7 +638,6 @@ namespace StegoPlusPlus.Views
 
             else
             {
-
                 dlg_embed_msg = new ContentDialog()
                 {
                     Title = NotifyDataText.Dialog_Exec_Footer_Menu_Null,
