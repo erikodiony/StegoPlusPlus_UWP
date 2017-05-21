@@ -393,7 +393,7 @@ namespace StegoPlusPlus
         public byte[] passwd_input; //Passwd Input (Raw / Non Encrypt)
         public byte[] def; //Definition Type Stego (text or File)
         public byte[] ext; //Extensions of File Hiding (Non Support on Stego Text or Message)
-        public byte[] data; //Data Hiding
+        public static byte[] data; //Data Hiding
 
         public byte[] Convert_Passwd_to_Byte(string passwd)
         {

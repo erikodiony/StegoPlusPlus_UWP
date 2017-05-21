@@ -149,7 +149,7 @@ namespace StegoPlusPlus.Views
             IStorageFile sf = await fs.PickSaveFileAsync();
             if (sf != null)
             {
-                await FileIO.WriteBytesAsync(sf, dp.data);
+                await FileIO.WriteBytesAsync(sf, DataProcess.data);
             }
         }
 
@@ -363,7 +363,7 @@ namespace StegoPlusPlus.Views
 
                     if (NotifyStegResult == "Steg Message")
                     {
-                        msg_encrypt = System.Text.Encoding.ASCII.GetString(dp.data);
+                       // msg_encrypt = System.Text.Encoding.ASCII.GetString(dp.data);
                         CDialog dlg = new CDialog();                      
                         ContentDialogResult result = await dlg.ShowAsync();
                     }

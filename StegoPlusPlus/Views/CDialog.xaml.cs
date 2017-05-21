@@ -24,18 +24,18 @@ namespace StegoPlusPlus.Views
         public CDialog()
         {
             this.InitializeComponent();
-            txt_DataMessage.Text = Extract_Page.msg_encrypt;
+            txt_DataMessage.Text = System.Text.Encoding.ASCII.GetString(DataProcess.data);
         }
 
         private void Toggle_Data_Toggled(object sender, RoutedEventArgs e)
         {
             if (toggle_Data.IsOn == false)
             {
-                txt_DataMessage.Text = Extract_Page.msg_encrypt;
+                txt_DataMessage.Text = System.Text.Encoding.ASCII.GetString(DataProcess.data);
             }
             else
             {
-                txt_DataMessage.Text = dp.Decrypt_BifidCipher(Extract_Page.msg_encrypt);
+                txt_DataMessage.Text = dp.Decrypt_BifidCipher(System.Text.Encoding.ASCII.GetString(DataProcess.data));
             }
         }
         
