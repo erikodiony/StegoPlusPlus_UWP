@@ -675,7 +675,12 @@ namespace StegoPlusPlus.Views
                     };
                     show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
 
-                    Binary_STEG_RESULT = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_msg, Binary_def_msg);
+                    foreach(var b in Binary_pwd_embed_msg)
+                    {
+                        System.Diagnostics.Debug.WriteLine(b);
+                    }
+
+                    Binary_STEG_RESULT = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg, Binary_pwd_embed_msg_encoded, Binary_ext_embed_msg, Binary_def_msg);
                     SaveImageAsPNG();
                 }
                 else

@@ -168,6 +168,7 @@ namespace StegoPlusPlus.Views
         byte[] Binary_embed_file_steg; //FILE STEG (EXTRACT MENU -> EXTRACT FILE/MESSAGE)
         string Pwd_file_steg; //PASSWORD FILE STEG
         string NotifyStegResult; //Notify Result Extract File Steg
+        public static string msg_encrypt; //Send Value Secret Text/Message to Content Dialog
 
         ContentDialog dlg_extract_file;
         ContentDialogResult show_dlg_extract_file = new ContentDialogResult();
@@ -357,12 +358,14 @@ namespace StegoPlusPlus.Views
 
                     if (NotifyStegResult == "Steg File")
                     {
-                        SaveStegoAsFile();
+                        SaveStegoAsFile();                        
                     }
 
                     if (NotifyStegResult == "Steg Message")
                     {
-
+                        msg_encrypt = System.Text.Encoding.ASCII.GetString(dp.data);
+                        CDialog dlg = new CDialog();                      
+                        ContentDialogResult result = await dlg.ShowAsync();
                     }
 
                 }

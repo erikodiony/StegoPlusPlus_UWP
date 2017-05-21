@@ -42,7 +42,8 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!--Header Menu--><!--Main Row 1-->
+        <!--Header Menu-->
+        <!--Main Row 1-->
         <StackPanel Grid.Row="0" Margin="18,15,15,15">
             <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
@@ -57,17 +58,21 @@
                 <TextBlock x:Name="HeaderInfo" Grid.Column="2" Margin="5,0,5,0" Style="{StaticResource BaseTextBlockStyle}" FontStretch="SemiCondensed"/>
             </Grid>
         </StackPanel>
-        <!--Header Menu--><!--Main Row 1-->
+        <!--Header Menu-->
+        <!--Main Row 1-->
 
-        <!--Line Horizontal--><!--Main Row 2-->
+        <!--Line Horizontal-->
+        <!--Main Row 2-->
         <StackPanel Grid.Row="1" Margin="50,5,50,5">
             <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
             <Rectangle Margin="50,0,50,0" Width="Auto" Height="1" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
             <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
         </StackPanel>
-        <!--Line Horizontal--><!--Main Row 2-->
+        <!--Line Horizontal-->
+        <!--Main Row 2-->
 
-        <!--Pivot Menu--><!--Main Row 3-->
+        <!--Pivot Menu-->
+        <!--Main Row 3-->
         <Pivot Grid.Row="2">
             <!--Pivot 1-->
             <PivotItem Header="Extract File / Message" Margin="0,0,0,0">
@@ -88,7 +93,7 @@
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 1 Footer Menu Extract File/Message-->
-                    
+
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
                         <TextBlock Text="&#xE8E5;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
@@ -233,7 +238,8 @@
             </PivotItem>
             <!--Pivot 2-->
         </Pivot>
-        <!--Pivot Menu--><!--Main Row 3-->
+        <!--Pivot Menu-->
+        <!--Main Row 3-->
     </Grid>
     <!--Define Main Row-->
 </Page>

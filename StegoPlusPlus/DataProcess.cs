@@ -373,13 +373,7 @@ namespace StegoPlusPlus
                 {
                     coverImage[i] = (byte)(coverImage[i]);
                 }
-            }
-
-            int g = -1;
-            foreach (var x in all_encrypt)
-            {
-                //System.Diagnostics.Debug.WriteLine("{1} FILE BINARY == {0}", x, ++g);
-            }
+            }            
 
             steg_result = coverImage;
             return steg_result;
@@ -503,23 +497,14 @@ namespace StegoPlusPlus
             {
                 notify = "Invalid File Steg";
             }
+
+            foreach(var f in data)
+            {
+                System.Diagnostics.Debug.WriteLine(f);
+            }
+
             return notify;
         }
-
-        //public byte[] Notify_Steg_Result(string notify)
-        //{
-        //    if (notify == "Steg File")
-        //    {
-
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //    byte[] data_steg;
-        //    return data_steg;
-        //}
-
 
         //CONTROL FOR DECRYPT
         //END
