@@ -55,6 +55,7 @@ namespace StegoPlusPlus.Views
         List<string> propImgList = new List<string>(); //Create List Specific Property For File Picker Stego
         TransitionCollection collection = new TransitionCollection(); //Initializing Effect Transition Page
         NavigationThemeTransition theme = new NavigationThemeTransition(); //Initializing Theme Color Page
+        string typefile = String.Empty;
 
         //Function to Check Effect Transition
         private void check_transition_effect_status()
@@ -112,23 +113,54 @@ namespace StegoPlusPlus.Views
             HeaderInfo.Text = HeaderPage.ExtractPage;
         }
 
+        //Initial Check FileType Known
+        public void CheckingFileType()
+        {
+            foreach (var x in FileExtensions.Image)
+            {
+                if (System.Text.Encoding.ASCII.GetString(dp.ext).Contains(x))
+                {
+                    typefile = "Image Files";
+                }
+            }
+            foreach (var x in FileExtensions.Document)
+            {
+                if (System.Text.Encoding.ASCII.GetString(dp.ext).Contains(x))
+                {
+                    typefile = "Document Files";
+                }
+            }
+            foreach (var x in FileExtensions.Other)
+            {
+                if (System.Text.Encoding.ASCII.GetString(dp.ext).Contains(x))
+                {
+                    typefile = "Other Files";
+                }
+            }
+        }
+
         //Saving Image Steg
         public async void SaveStegoAsFile()
         {
+            CheckingFileType();
+
             FileSavePicker fs = new FileSavePicker();
-            fs.FileTypeChoices.Add("All Files", new List<string>() { System.Text.Encoding.ASCII.GetString(dp.ext) });
+            fs.FileTypeChoices.Add(typefile, new List<string>() { System.Text.Encoding.ASCII.GetString(dp.ext) });
             IStorageFile sf = await fs.PickSaveFileAsync();
-            await FileIO.WriteBytesAsync(sf, dp.data);
+            if (sf != null)
+            {
+                await FileIO.WriteBytesAsync(sf, dp.data);
+            }
         }
 
         //--------------------------------------------------------------------------------//
         //PAGE CONTROL FOR EXTRACT MENU
         //END
 
-
+        
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
 
-
+        
         //BEGIN
         //PAGE CONTROL FOR EXTRACT FILE (EXTRACT MENU -> EXTRACT FILE)
         //--------------------------------------------------------------------------------//
@@ -141,7 +173,6 @@ namespace StegoPlusPlus.Views
         ContentDialogResult show_dlg_extract_file = new ContentDialogResult();
 
         StorageFile file_steg;
-        StorageFolder steg_folder;
 
         //Initial Default Text PickerStego (EXTRACT MENU -> EXTRACT FILE)
         private void SetStatus_PickerSteg()
@@ -238,11 +269,25 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Save_Password_Steg_Click (Extract File/Message -> Insert Password -> Save)
         private async void btn_Save_Password_Steg_Click(object sender, RoutedEventArgs e)
         {
+            string notify = String.Empty;
             if (Input_Password_file.Text != String.Empty)
             {
-                Input_Password_file.IsReadOnly = true;
-                Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Extract_File_pwd;
-                Pwd_file_steg = Input_Password_file.Text; //Get Value as Public
+                notify = dp.validatePasswdOrMessageInput(Input_Password_file.Text);
+                if (notify == "Password Invalid")
+                {
+                    dlg_extract_file = new ContentDialog()
+                    {
+                        Title = NotifyDataText.Notify_Input_Passwd_Invalid,
+                        PrimaryButtonText = NotifyDataText.OK_Button
+                    };
+                    show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+                }
+                else
+                {
+                    Input_Password_file.IsReadOnly = true;
+                    Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Extract_File_pwd;
+                    Pwd_file_steg = dp.Encrypt_BifidCipher(Input_Password_file.Text); //Get Value as Public
+                }
             }
             else
             {

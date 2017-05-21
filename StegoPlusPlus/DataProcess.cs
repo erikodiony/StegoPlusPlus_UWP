@@ -46,6 +46,8 @@ namespace StegoPlusPlus
         public static readonly string Dialog_Exec_Footer_Menu_Confirm = "Confirm to Execute ?\nClick 'OK' to continue...";
         public static readonly string Dialog_Exec_Footer_Menu_Null = "Some field is empty or input not saved !\nPlease check again...";
         public static readonly string Dialog_Clear_Footer_Menu_Null = "All field was Cleared !\nProcess Successfully...";
+        public static readonly string Notify_Input_Passwd_Invalid = "Password Invalid !\nCan't Saving Password...";
+        public static readonly string Notify_Input_Message_Invalid = "Text/Message Invalid !\nCan't Saving Text/Message...";
 
         //EMBED MENU
         public static readonly string Err_Input_Null_Embed_Msg_msg = "Field ''Insert Text/Message'' is empty !\nCan't Saving Text/Message...";
@@ -74,10 +76,25 @@ namespace StegoPlusPlus
     {
         public BitmapDecoder decoder;
         public IRandomAccessStream strm_Cover;
-        char[] pwd_encoded; //Password Input
-        char[] pwd_crypt_encoded; // Password Crypt
-        char[] msg_encoded; //Text/Message
-
+        public int[] secretData; //Save Specific Length of Byte Stego for Extract Data
+        public int length_pwd_encoded; //Length of passwd (array)
+        public int length_pwd_crypt_encoded; //Length of passwd encrypt (array)
+        public int length_def_encoded; //Length of Definition/Type Stego (Text or File) (array)
+        public int length_ext_encoded; //Length of Extension (array)
+        public int length_data_encoded; //Length of Data Stego (array)
+        public char[] validate = { 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', ',', '.', '@', '<', ')', '(', '?', '!', '&', '/', '*', '+', '-', ':', '^', '_', '=', '>' };
+        public char[,] matrix = new char[,]
+        {
+            {'A' , 'a' , 'B' , 'b' , 'C' , 'c' , 'D' , 'd' , 'E'},
+            {'e' , 'F' , 'f' , 'G' , 'g' , 'H' , 'h' , 'I' , 'i'},
+            {'J' , 'j' , 'K' , 'k' , 'L' , 'l' , 'M' , 'm' , 'N'},
+            {'n' , 'O' , 'o' , 'P' , 'p' , 'Q' , 'q' , 'R' , 'r'},
+            {'S' , 's' , 'T' , 't' , 'U' , 'u' , 'V' , 'v' , 'W'},
+            {'w' , 'X' , 'x' , 'Y' , 'y' , 'Z' , 'z' , '0' , '1'},
+            {'2' , '3' , '4' , '5' , '6' , '7' , '8' , '9' , ' '},
+            {',' , '.' , '@' , '<' , ')' , '(' , '?' , '!' , '&'},
+            {'/' , '*' , '+' , '-' , ':' , '^' , '_' , '=' , '>'}
+        };
 
 
         //BEGIN
@@ -87,16 +104,28 @@ namespace StegoPlusPlus
         public async Task<byte[]> Convert_FileImage_to_Byte(StorageFile fileCover_or_fileSteg)
         {
             byte[] bin;
+            string Val = String.Empty;
             using (strm_Cover = await fileCover_or_fileSteg.OpenAsync(FileAccessMode.ReadWrite))
             {
                 decoder = await BitmapDecoder.CreateAsync(strm_Cover);
                 bin = (await decoder.GetPixelDataAsync()).DetachPixelData();
-            }
-
-            int zxc = -1;
-            foreach (var x in bin)
-            {
-                //System.Diagnostics.Debug.WriteLine("BARIS {0} || {1}", ++zxc, x);
+                BitmapPropertySet props = await decoder.BitmapProperties.GetPropertiesAsync(
+                    new string[]
+                    {
+                        "/tEXt/{str=Description}"
+                    });
+                BitmapTypedValue data;
+                if (props.TryGetValue("/tEXt/{str=Description}", out data))
+                {
+                    Val = (string)data.Value;
+                    string[] sData = Val.Split('|');
+                    secretData = new int[sData.Length];
+                    int xx = -1;
+                    foreach (var x in sData)
+                    {
+                        secretData[++xx] = int.Parse(x);
+                    }
+                }
             }
             return bin;
         }
@@ -109,6 +138,124 @@ namespace StegoPlusPlus
         //CONTROL FOR ENCRYPT
         //BEGIN
 
+        public string Encrypt_BifidCipher(string MessageOrPasswdToEncrypt)
+        {
+            char[] input_char = MessageOrPasswdToEncrypt.ToCharArray();
+            List<int> list_x = new List<int>();
+            List<int> list_y = new List<int>();
+            List<int> list_xy = new List<int>();
+            int[] x_y; //From list_xy Convert to Array
+            string[] crypt_x;
+            string[] crypt_y;
+            string result = String.Empty; //Encrypt of Passwd
+
+            foreach (var xx in input_char)
+            {
+                for (int x = 0; x < matrix.GetLength(0); ++x) //Width
+                {
+                    for (int y = 0; y < matrix.GetLength(1); ++y) //Height
+                    {
+                        if (matrix[x, y].Equals(xx))
+                        {
+                            list_x.Add(x);
+                            list_y.Add(y);
+                        }
+                    }
+                }
+            }
+           
+
+            list_xy = list_x;
+            list_xy.AddRange(list_y);
+            x_y = list_xy.ToArray();
+
+            crypt_x = new string[x_y.Length / 2];
+            crypt_y = new string[x_y.Length / 2];
+
+            int tt = 0;
+            for (int i = 0; i < x_y.Length; i += 2)
+            {
+                crypt_x[tt] = x_y[i].ToString();
+                crypt_y[tt] = x_y[i + 1].ToString();
+                ++tt;
+            }
+
+            for (int i = 0; i < crypt_x.Length; i++)
+            {
+                result += matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])].ToString();
+            }
+            return result;
+        }
+
+        public string Decrypt_BifidCipher(string MessageOrPasswdToDecrypt)
+        {
+            char[] input_char = MessageOrPasswdToDecrypt.ToCharArray();
+            List<int> list_x = new List<int>();
+            List<int> list_y = new List<int>();
+            int[] arr_x;
+            int[] arr_y;
+            string xy = String.Empty;
+            string result = String.Empty;
+
+            foreach (var xx in input_char)
+            {
+                for (int x = 0; x < matrix.GetLength(0); ++x)
+                {
+                    for (int y = 0; y < matrix.GetLength(1); ++y)
+                    {
+                        if (matrix[x, y].Equals(xx))
+                        {
+                            list_x.Add(x);
+                            list_y.Add(y);
+                        }
+                    }
+                }
+            }
+
+            arr_x = new int[list_x.Capacity];
+            arr_y = new int[list_y.Capacity];
+
+            arr_x = list_x.ToArray();
+            arr_y = list_y.ToArray();
+
+            for (int i = 0; i < arr_x.Length; i++)
+            {
+                xy += arr_x[i].ToString() + arr_y[i].ToString();
+            }
+
+            char[] char_xy = xy.ToCharArray();
+            string[] str_x = new string[char_xy.Length / 2];
+            string[] str_y = new string[char_xy.Length / 2];
+
+            int tt = 0;
+
+            for (int i = 0; i < char_xy.Length / 2; i++)
+            {
+                str_x[i] = char_xy[i].ToString();
+                str_y[i] = char_xy[i + char_xy.Length / 2].ToString();
+                ++tt;
+            }
+
+            for (int i = 0; i < str_x.Length; i++)
+            {
+                result += matrix[Convert.ToInt32(str_x[i]), Convert.ToInt32(str_y[i])].ToString();
+            }
+            return result;
+        }
+
+        public string validatePasswdOrMessageInput(string passwd)
+        {
+            string notify_result = String.Empty;
+            foreach (char c in passwd)
+            {
+                if (validate.Contains(c) != true)
+                {
+                  notify_result   = "Password Invalid";
+                }
+            }
+            return notify_result;
+        }
+
         public char[] Convert_Passwd(string passwd)
         {
             string pwd = string.Empty;
@@ -117,8 +264,7 @@ namespace StegoPlusPlus
                 pwd += Convert.ToString(x, 2).PadLeft(8, '0');
             }
 
-            //string[] pwd_encoded = pwd.ToCharArray().Select(x => x.ToString()).ToArray();
-            pwd_encoded = pwd.ToCharArray();
+            char[] pwd_encoded = pwd.ToCharArray();
             return pwd_encoded;
         }
 
@@ -130,7 +276,7 @@ namespace StegoPlusPlus
                 pwd_crypt += Convert.ToString(x, 2).PadLeft(8, '0');
             }
 
-            pwd_crypt_encoded = pwd_crypt.ToCharArray();
+            char[] pwd_crypt_encoded = pwd_crypt.ToCharArray();
             return pwd_crypt_encoded;
         }
 
@@ -142,7 +288,7 @@ namespace StegoPlusPlus
                 msg += Convert.ToString(x, 2).PadLeft(8, '0');
             }
 
-            msg_encoded = msg.ToCharArray();
+            char[] msg_encoded = msg.ToCharArray();
             return msg_encoded;
         }
 
@@ -159,11 +305,11 @@ namespace StegoPlusPlus
         }
 
         public async Task<char[]> Convert_FileHiding_to_Byte(StorageFile fileHiding)
-        {            
+        {
+            byte[] bin_array;
+            string bin_string = String.Empty;
             using (Stream st = await fileHiding.OpenStreamForReadAsync())
             {
-                byte[] bin_array;
-                string bin_string = String.Empty;
                 using (BinaryReader binaryReader = new BinaryReader(st))
                 {
                     bin_array = binaryReader.ReadBytes((int)st.Length).ToArray();
@@ -174,12 +320,6 @@ namespace StegoPlusPlus
                     bin_string += Convert.ToString(x, 2).PadLeft(8, '0');
                 }
                 char[] bin = bin_string.ToCharArray();
-
-                foreach(var t in bin_array)
-                {
-                    //System.Diagnostics.Debug.WriteLine(t);
-                }
-
                 return bin;
             }
         }
@@ -188,38 +328,30 @@ namespace StegoPlusPlus
         {
             byte[] steg_result = new byte[coverImage.Length];
 
-            //Structure of Hiding Data {pwd_encoded + [0000] + pwd + [0001] + file||message + [0010] + extention + [0011] + data + [0100]}            
+            //Structure of Hiding Data {pwd_encoded + pwd + file||message + extention + data}            
             //pwd_encoded
-            //[0000]
             //pwd
-            //[0001]
             //file||message
-            //[0010]
             //extention
-            //[0011]
             //data
-            //[0100]
 
-            char[] limiter = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)48 };
-            char[] limiter_2 = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)49 };
-            char[] limiter_3 = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)49, (char)48 };
-            char[] limiter_4 = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)48, (char)49, (char)49 };
-            char[] limiter_5 = new char[] { (char)48, (char)48, (char)48, (char)48, (char)48, (char)49, (char)48, (char)48 };
+            //Initialize length of Data Array
+            length_pwd_crypt_encoded = passwd_encrypt.Length;
+            length_pwd_encoded = passwd.Length;
+            length_def_encoded = def.Length;
+            length_ext_encoded = extension.Length;
+            length_data_encoded = fileOrMessage.Length;
 
-            int length_encrypt = (pwd_crypt_encoded.Length + 8 + pwd_encoded.Length + 8 + def.Length + 8 + extension.Length + 8 + fileOrMessage.Length + 8);
+            int length_encrypt = (passwd_encrypt.Length + passwd.Length + def.Length + extension.Length + fileOrMessage.Length);
             char[] all_encrypt = new char[length_encrypt];
 
-            Array.Copy(pwd_crypt_encoded, all_encrypt, pwd_crypt_encoded.Length);
-            Array.Copy(limiter, 0, all_encrypt, pwd_crypt_encoded.Length, limiter.Length);
-            Array.Copy(pwd_encoded, 0, all_encrypt, limiter.Length + pwd_crypt_encoded.Length, pwd_encoded.Length);
-            Array.Copy(limiter_2, 0, all_encrypt, pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, limiter_2.Length);
-            Array.Copy(def, 0, all_encrypt, limiter_2.Length + pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, def.Length);
-            Array.Copy(limiter_3, 0, all_encrypt, def.Length + limiter_2.Length + pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, limiter_3.Length);
-            Array.Copy(extension, 0, all_encrypt, limiter_3.Length + def.Length + limiter_2.Length + pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, extension.Length);
-            Array.Copy(limiter_4, 0, all_encrypt, extension.Length + limiter_3.Length + def.Length + limiter_2.Length + pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, limiter_4.Length);
-            Array.Copy(fileOrMessage, 0, all_encrypt, limiter_4.Length + extension.Length + limiter_3.Length + def.Length + limiter_2.Length + pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, fileOrMessage.Length);
-            Array.Copy(limiter_5, 0, all_encrypt, fileOrMessage.Length + limiter_4.Length + extension.Length + limiter_3.Length + def.Length + limiter_2.Length + pwd_encoded.Length + limiter.Length + pwd_crypt_encoded.Length, limiter_5.Length);
-
+            Array.Copy(passwd_encrypt, all_encrypt, passwd_encrypt.Length);
+            Array.Copy(passwd, 0, all_encrypt, length_pwd_crypt_encoded, passwd.Length);
+            Array.Copy(def, 0, all_encrypt, length_pwd_crypt_encoded + length_pwd_encoded, def.Length);
+            Array.Copy(extension, 0, all_encrypt, length_pwd_crypt_encoded + length_pwd_encoded + length_def_encoded, extension.Length);
+            Array.Copy(fileOrMessage, 0, all_encrypt, length_pwd_crypt_encoded + length_pwd_encoded + length_def_encoded + length_ext_encoded, fileOrMessage.Length);
+ 
+            //Inserting Hiding File/Message to Stego Image
             for (int i = 0; i < all_encrypt.Length; i++)
             {
                 if (all_encrypt[i] == 49 && ((byte)(coverImage[i] % 2) == 1))
@@ -243,26 +375,13 @@ namespace StegoPlusPlus
                 }
             }
 
-            //int g = -1;
-            //foreach (var x in all_encrypt)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("{1} FILE BINARY == {0}", x, ++g);
-            //}
+            int g = -1;
+            foreach (var x in all_encrypt)
+            {
+                //System.Diagnostics.Debug.WriteLine("{1} FILE BINARY == {0}", x, ++g);
+            }
 
             steg_result = coverImage;
-
-
-            //string xd = new string(all_encrypt);
-            //System.Diagnostics.Debug.WriteLine(xd);
-
-            //List<string> groups = (from Match m in Regex.Matches(xd, @"\d{8}") select m.Value).ToList();
-
-            //int eff = 0;
-            //foreach (string v in groups)
-            //{
-            //    System.Diagnostics.Debug.WriteLine("{0} || {1}", ++eff, v);
-            //}
-
             return steg_result;
         }
 
@@ -276,12 +395,11 @@ namespace StegoPlusPlus
         //CONTROL FOR DECRYPT
         //BEGIN
 
-        public byte[] passwd_encrypt;
-        public byte[] passwd_input;
-        public byte[] def;
-        public byte[] ext;
-        public byte[] data;
-
+        public byte[] passwd_encrypt; //Passwd Input (Encrypt with Bifid Cipher)
+        public byte[] passwd_input; //Passwd Input (Raw / Non Encrypt)
+        public byte[] def; //Definition Type Stego (text or File)
+        public byte[] ext; //Extensions of File Hiding (Non Support on Stego Text or Message)
+        public byte[] data; //Data Hiding
 
         public byte[] Convert_Passwd_to_Byte(string passwd)
         {
@@ -296,9 +414,8 @@ namespace StegoPlusPlus
             {
                 passwd_Byte[i] = Convert.ToByte(msg.Substring(8 * i, 8), 2);
             }
-            return passwd_Byte;
-        }
-
+            return passwd_Byte;            
+        }        
 
         public string RUN_UN_STEG(byte[] fileSteg, string passSteg)
         {
@@ -313,17 +430,12 @@ namespace StegoPlusPlus
             List<byte> ext_l = new List<byte>();
             List<byte> data_l = new List<byte>();
 
-            //Structure of Hiding Data {pwd_encoded + [0000] + pwd + [0001] + file||message + [0010] + extention + [0011] + data + [0100]}            
+            //Structure of Hiding Data {pwd_encoded + pwd + file||message + extention + data}            
             //pwd_encoded
-            //[0000]
             //pwd
-            //[0001]
             //file||message
-            //[0010]
             //extention
-            //[0011]
             //data
-            //[0100]
 
             //GET LSB VALUE from RGB (0 or 1) to CHAR Array
             for (int i = 0; i < fileSteg.Length; i++)
@@ -336,7 +448,7 @@ namespace StegoPlusPlus
                 {
                     fileSteg_Char[i] = (char)49;
                 }
-            } 
+            }
 
             //LSB VALUE to STRING
             fileSteg_String = new string(fileSteg_Char);
@@ -349,64 +461,23 @@ namespace StegoPlusPlus
                 fileSteg_Byte[i] = Convert.ToByte(fileSteg_String.Substring(8 * i, 8), 2);
             }
 
-
-
-            foreach(var g in fileSteg_Byte)
-            {
-                //System.Diagnostics.Debug.WriteLine(g);
-            }
-
             //SPLIT LSB Value
-            if (fileSteg_Byte.Contains( (byte)0 ) == true)
+            if (secretData != null)
             {
-                for (int i = 0; i < fileSteg_Byte.Length; i++)
-                {
-                    if (fileSteg_Byte[i] == 0)
-                    {
-                        byte[] bin = new byte[i];
-                        Array.Copy(fileSteg_Byte, 0, bin, 0, i);
-                        pwd_enc_l = bin.ToList();
-                    }
-                    if (fileSteg_Byte[i] == 1)
-                    {
-                        byte[] bin = new byte[i - pwd_enc_l.Capacity - 1];
-                        Array.Copy(fileSteg_Byte, pwd_enc_l.Capacity + 1, bin, 0, i - pwd_enc_l.Capacity - 1);
-                        pwd_inp_l = bin.ToList();
-                    }
-                    if (fileSteg_Byte[i] == 2)
-                    {
-                        byte[] bin = new byte[i - pwd_enc_l.Capacity - pwd_inp_l.Capacity - 2];
-                        Array.Copy(fileSteg_Byte, pwd_enc_l.Capacity + pwd_inp_l.Capacity + 2, bin, 0, i - pwd_enc_l.Capacity - pwd_inp_l.Capacity - 2);
-                        def_l = bin.ToList();
-                    }
-                    if (fileSteg_Byte[i] == 3)
-                    {
-                        byte[] bin = new byte[i - pwd_enc_l.Capacity - pwd_inp_l.Capacity - def_l.Capacity - 3];
-                        Array.Copy(fileSteg_Byte, pwd_enc_l.Capacity + pwd_inp_l.Capacity + def_l.Capacity + 3, bin, 0, i - pwd_enc_l.Capacity - pwd_inp_l.Capacity - def_l.Capacity - 3);
-                        ext_l = bin.ToList();
-                    }
-                    if (fileSteg_Byte[i] == 4)
-                    {
-                        byte[] bin = new byte[i - pwd_enc_l.Capacity - pwd_inp_l.Capacity - def_l.Capacity - ext_l.Capacity - 4];
-                        Array.Copy(fileSteg_Byte, pwd_enc_l.Capacity + pwd_inp_l.Capacity + def_l.Capacity + ext_l.Capacity + 4, bin, 0, i - pwd_enc_l.Capacity - pwd_inp_l.Capacity - def_l.Capacity - ext_l.Capacity - 4);
-                        data_l = bin.ToList();
-                    }
-                }
-                notify = "Valid File Steg";
-            }
-            else
-            {
-                notify = "Invalid File Steg";
-            }
+                //Inizialize Array Data
+                passwd_encrypt = new byte[secretData[0] / 8];
+                passwd_input = new byte[secretData[1] / 8];
+                def = new byte[secretData[2] / 8];
+                ext = new byte[secretData[3] / 8];
+                data = new byte[secretData[4] / 8];
 
-            passwd_encrypt = pwd_enc_l.ToArray();
-            passwd_input = pwd_inp_l.ToArray();
-            def = def_l.ToArray();
-            ext = ext_l.ToArray();
-            data = data_l.ToArray();
+                //Spliting LSB Value to Array Byte
+                Array.Copy(fileSteg_Byte, 0, passwd_encrypt, 0, secretData[0] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8), passwd_input, 0, secretData[1] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8) + (secretData[1] / 8), def, 0, secretData[2] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8) + (secretData[1] / 8) + (secretData[2] / 8), ext, 0, secretData[3] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8) + (secretData[1] / 8) + (secretData[2] / 8) + (secretData[3] / 8), data, 0, secretData[4] / 8);
 
-            if(notify == "Valid File Steg")
-            {
                 //Check Password Encrypt is Same
                 if (passwd_encrypt.SequenceEqual(passwd_Byte) == true)
                 {
@@ -428,15 +499,11 @@ namespace StegoPlusPlus
                     notify = "Password Incorrect";
                 }
             }
-
-            System.Diagnostics.Debug.WriteLine(notify);
-            foreach (var g in passwd_encrypt)
+            else
             {
-                //System.Diagnostics.Debug.WriteLine(g);
+                notify = "Invalid File Steg";
             }
             return notify;
-
-
         }
 
         //public byte[] Notify_Steg_Result(string notify)

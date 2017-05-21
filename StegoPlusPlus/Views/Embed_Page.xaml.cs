@@ -123,6 +123,7 @@ namespace StegoPlusPlus.Views
         //Saving Image Steg
         public async void SaveImageAsPNG()
         {
+            
             FileSavePicker fs = new FileSavePicker();
             fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
             StorageFile sf = await fs.PickSaveFileAsync();
@@ -130,6 +131,12 @@ namespace StegoPlusPlus.Views
             {
                 BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
                 encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT);
+                var lis = new List<KeyValuePair<string, BitmapTypedValue>>();
+
+                var desc = new BitmapTypedValue(String.Format("{0}|{1}|{2}|{3}|{4}", dp.length_pwd_crypt_encoded, dp.length_pwd_encoded, dp.length_def_encoded, dp.length_ext_encoded, dp.length_data_encoded), PropertyType.String);
+                lis.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
+
+                await encoder.BitmapProperties.SetPropertiesAsync(lis);
                 await encoder.FlushAsync();
             }
         }
@@ -217,6 +224,7 @@ namespace StegoPlusPlus.Views
                 {
                     if (thumbnail != null)
                     {
+                       
                         ico_picker_cover.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
@@ -285,7 +293,7 @@ namespace StegoPlusPlus.Views
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_hiding.Source = bitmapImage;
                         Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType);
-                        Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                        //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
                     else
                     {
@@ -303,12 +311,26 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Save_Password_file_Click (Embed File -> Insert Password -> Save)
         private async void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
         {
+            string notify = String.Empty;
             if (Input_Password_file.Text != String.Empty)
             {
-                Input_Password_file.IsReadOnly = true;
-                Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                Binary_pwd_embed_file = dp.Convert_Passwd(Input_Password_file.Text);
-                Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(Input_Password_file.Text);
+                notify = dp.validatePasswdOrMessageInput(Input_Password_file.Text);
+                if (notify == "Password Invalid")
+                {
+                    dlg_embed_file = new ContentDialog()
+                    {
+                        Title = NotifyDataText.Notify_Input_Passwd_Invalid,
+                        PrimaryButtonText = NotifyDataText.OK_Button
+                    };
+                    show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+                }
+                else
+                {
+                    Input_Password_file.IsReadOnly = true;
+                    Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
+                    Binary_pwd_embed_file = dp.Convert_Passwd(Input_Password_file.Text);
+                    Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(Input_Password_file.Text));
+                }
             }
             else
             {
@@ -380,13 +402,11 @@ namespace StegoPlusPlus.Views
                         PrimaryButtonText = NotifyDataText.OK_Button
                     };
 
-                    //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                    Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     Binary_STEG_RESULT = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
 
                     show_dlg_embed_file = await dlg_embed_file.ShowAsync();
-
                     SaveImageAsPNG();
-
                 }
                 else
                 {
@@ -513,11 +533,25 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Save_Message_Click (Embed Message -> Insert Text/Message -> Save)
         private async void btn_Save_Message_Click(object sender, RoutedEventArgs e)
         {
+            string notify = String.Empty;
             if (InputMessage.Text != String.Empty)
             {
-                InputMessage.IsReadOnly = true;
-                InputMessage.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
-                Binary_msg_embed_encoded = dp.Convert_Message_or_Text(InputMessage.Text); //Crypt with Bifid Cipher
+                notify = dp.validatePasswdOrMessageInput(InputMessage.Text);
+                if (notify == "Password Invalid")
+                {
+                    dlg_embed_msg = new ContentDialog()
+                    {
+                        Title = NotifyDataText.Notify_Input_Message_Invalid,
+                        PrimaryButtonText = NotifyDataText.OK_Button
+                    };
+                    show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
+                }
+                else
+                {
+                    InputMessage.IsReadOnly = true;
+                    InputMessage.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
+                    Binary_msg_embed_encoded = dp.Convert_Message_or_Text(dp.Encrypt_BifidCipher(InputMessage.Text));
+                }
             }
             else
             {
@@ -550,12 +584,26 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Save_Password_msg_Click (Embed Message -> Insert Password -> Save)
         private async void btn_Save_Password_msg_Click(object sender, RoutedEventArgs e)
         {
+            string notify = String.Empty;
             if (Input_Password_msg.Text != String.Empty)
             {
-                Input_Password_msg.IsReadOnly = true;
-                Input_Password_msg.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_pwd;
-                Binary_pwd_embed_msg_encoded = dp.Convert_Passwd(Input_Password_msg.Text); //Uncrypt
-                Binary_pwd_embed_msg = dp.Convert_Passwd_Encrypt(Input_Password_msg.Text); //Crypt with Bifid Cipher
+                notify = dp.validatePasswdOrMessageInput(Input_Password_msg.Text);
+                if (notify == "Password Invalid")
+                {
+                    dlg_embed_msg = new ContentDialog()
+                    {
+                        Title = NotifyDataText.Notify_Input_Passwd_Invalid,
+                        PrimaryButtonText = NotifyDataText.OK_Button
+                    };
+                    show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
+                }
+                else
+                {
+                    Input_Password_msg.IsReadOnly = true;
+                    Input_Password_msg.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_pwd;
+                    Binary_pwd_embed_msg = dp.Convert_Passwd(Input_Password_msg.Text); //Uncrypt
+                    Binary_pwd_embed_msg_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(Input_Password_msg.Text)); //Crypt with Bifid Cipher
+                }
             }
             else
             {
