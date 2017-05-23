@@ -17,11 +17,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace StegoPlusPlus.Views
 {
-    public sealed partial class CDialog : ContentDialog
+    public sealed partial class CSecretMessage : ContentDialog
     {
         DataProcess dp = new DataProcess();
 
-        public CDialog()
+        public CSecretMessage()
         {
             this.InitializeComponent();
             txt_DataMessage.Text = System.Text.Encoding.ASCII.GetString(DataProcess.data);

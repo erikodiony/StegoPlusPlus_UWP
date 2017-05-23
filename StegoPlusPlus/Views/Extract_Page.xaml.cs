@@ -118,21 +118,21 @@ namespace StegoPlusPlus.Views
         {
             foreach (var x in FileExtensions.Image)
             {
-                if (System.Text.Encoding.ASCII.GetString(dp.ext).Contains(x))
+                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(x))
                 {
                     typefile = "Image Files";
                 }
             }
             foreach (var x in FileExtensions.Document)
             {
-                if (System.Text.Encoding.ASCII.GetString(dp.ext).Contains(x))
+                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(x))
                 {
                     typefile = "Document Files";
                 }
             }
             foreach (var x in FileExtensions.Other)
             {
-                if (System.Text.Encoding.ASCII.GetString(dp.ext).Contains(x))
+                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(x))
                 {
                     typefile = "Other Files";
                 }
@@ -145,7 +145,7 @@ namespace StegoPlusPlus.Views
             CheckingFileType();
 
             FileSavePicker fs = new FileSavePicker();
-            fs.FileTypeChoices.Add(typefile, new List<string>() { System.Text.Encoding.ASCII.GetString(dp.ext) });
+            fs.FileTypeChoices.Add(typefile, new List<string>() { System.Text.Encoding.ASCII.GetString(DataProcess.ext) });
             IStorageFile sf = await fs.PickSaveFileAsync();
             if (sf != null)
             {
@@ -168,8 +168,7 @@ namespace StegoPlusPlus.Views
         byte[] Binary_embed_file_steg; //FILE STEG (EXTRACT MENU -> EXTRACT FILE/MESSAGE)
         string Pwd_file_steg; //PASSWORD FILE STEG
         string NotifyStegResult; //Notify Result Extract File Steg
-        public static string msg_encrypt; //Send Value Secret Text/Message to Content Dialog
-
+        
         ContentDialog dlg_extract_file;
         ContentDialogResult show_dlg_extract_file = new ContentDialogResult();
 
@@ -358,14 +357,46 @@ namespace StegoPlusPlus.Views
 
                     if (NotifyStegResult == "Steg File")
                     {
-                        SaveStegoAsFile();                        
+                        try
+                        {
+                            dlg_extract_file.Hide();
+                            progBar_extract.Visibility = Visibility.Visible;
+                        }
+                        finally
+                        {
+                            dlg_extract_file = new ContentDialog()
+                            {
+                                Title = NotifyDataText.Process_Complete_ExtractFile,
+                                PrimaryButtonText = NotifyDataText.OK_Button,
+                            };
+
+                            show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+                            SaveStegoAsFile();
+                            progBar_extract.Visibility = Visibility.Collapsed;
+                        }
+
                     }
 
                     if (NotifyStegResult == "Steg Message")
                     {
-                       // msg_encrypt = System.Text.Encoding.ASCII.GetString(dp.data);
-                        CDialog dlg = new CDialog();                      
-                        ContentDialogResult result = await dlg.ShowAsync();
+                        try
+                        {
+                            dlg_extract_file.Hide();
+                            progBar_extract.Visibility = Visibility.Visible;
+                        }
+                        finally
+                        {
+                            dlg_extract_file = new ContentDialog()
+                            {
+                                Title = NotifyDataText.Process_Complete_ExtractMessage,
+                                PrimaryButtonText = NotifyDataText.OK_Button,
+                            };
+
+                            show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+                            CSecretMessage dlg = new CSecretMessage();
+                            ContentDialogResult result = await dlg.ShowAsync();
+                            progBar_extract.Visibility = Visibility.Collapsed;
+                        }
                     }
 
                 }

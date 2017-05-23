@@ -48,6 +48,10 @@ namespace StegoPlusPlus
         public static readonly string Dialog_Clear_Footer_Menu_Null = "All field was Cleared !\nProcess Successfully...";
         public static readonly string Notify_Input_Passwd_Invalid = "Password Invalid !\nCan't Saving Password...";
         public static readonly string Notify_Input_Message_Invalid = "Text/Message Invalid !\nCan't Saving Text/Message...";
+        public static readonly string Process_Complete_EmbedFile_File = "Embedding File was Completed !\nClick 'OK' to saving Stego Image...";
+        public static readonly string Process_Complete_EmbedFile_Message = "Embedding Text/Message was Completed !\nClick 'OK' to saving Stego Image...";
+        public static readonly string Process_Complete_ExtractFile = "Extracting File was Completed !\nClick 'OK' to saving Secret File...";
+        public static readonly string Process_Complete_ExtractMessage = "Extracting Message was Completed !\nClick 'OK' to view Secret Text/Message...";
 
         //EMBED MENU
         public static readonly string Err_Input_Null_Embed_Msg_msg = "Field ''Insert Text/Message'' is empty !\nCan't Saving Text/Message...";
@@ -391,8 +395,8 @@ namespace StegoPlusPlus
 
         public byte[] passwd_encrypt; //Passwd Input (Encrypt with Bifid Cipher)
         public byte[] passwd_input; //Passwd Input (Raw / Non Encrypt)
-        public byte[] def; //Definition Type Stego (text or File)
-        public byte[] ext; //Extensions of File Hiding (Non Support on Stego Text or Message)
+        public static byte[] def; //Definition Type Stego (text or File)
+        public static byte[] ext; //Extensions of File Hiding (Non Support on Stego Text or Message)
         public static byte[] data; //Data Hiding
 
         public byte[] Convert_Passwd_to_Byte(string passwd)
@@ -496,11 +500,6 @@ namespace StegoPlusPlus
             else
             {
                 notify = "Invalid File Steg";
-            }
-
-            foreach(var f in data)
-            {
-                System.Diagnostics.Debug.WriteLine(f);
             }
 
             return notify;

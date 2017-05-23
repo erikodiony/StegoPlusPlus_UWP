@@ -127,17 +127,20 @@ namespace StegoPlusPlus.Views
             FileSavePicker fs = new FileSavePicker();
             fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
             StorageFile sf = await fs.PickSaveFileAsync();
-            using (IRandomAccessStream strm_save = await sf.OpenAsync(FileAccessMode.ReadWrite))
+            if (sf != null)
             {
-                BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
-                encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT);
-                var lis = new List<KeyValuePair<string, BitmapTypedValue>>();
+                using (IRandomAccessStream strm_save = await sf.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
+                    encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT);
+                    var lis = new List<KeyValuePair<string, BitmapTypedValue>>();
 
-                var desc = new BitmapTypedValue(String.Format("{0}|{1}|{2}|{3}|{4}", dp.length_pwd_crypt_encoded, dp.length_pwd_encoded, dp.length_def_encoded, dp.length_ext_encoded, dp.length_data_encoded), PropertyType.String);
-                lis.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
+                    var desc = new BitmapTypedValue(String.Format("{0}|{1}|{2}|{3}|{4}", dp.length_pwd_crypt_encoded, dp.length_pwd_encoded, dp.length_def_encoded, dp.length_ext_encoded, dp.length_data_encoded), PropertyType.String);
+                    lis.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
 
-                await encoder.BitmapProperties.SetPropertiesAsync(lis);
-                await encoder.FlushAsync();
+                    await encoder.BitmapProperties.SetPropertiesAsync(lis);
+                    await encoder.FlushAsync();
+                }
             }
         }
 
@@ -396,17 +399,25 @@ namespace StegoPlusPlus.Views
 
                 if (show_dlg_embed_file == ContentDialogResult.Primary)
                 {
-                    dlg_embed_file = new ContentDialog()
+                    try
                     {
-                        Title = "Proses",
-                        PrimaryButtonText = NotifyDataText.OK_Button
-                    };
+                        dlg_embed_file.Hide();
+                        progBar_file.Visibility = Visibility.Visible;
+                        Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
+                        Binary_STEG_RESULT = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
+                    }
+                    finally
+                    {
+                        dlg_embed_file = new ContentDialog()
+                        {
+                            Title = NotifyDataText.Process_Complete_EmbedFile_File,
+                            PrimaryButtonText = NotifyDataText.OK_Button,
+                        };
 
-                    Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
-                    Binary_STEG_RESULT = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
-
-                    show_dlg_embed_file = await dlg_embed_file.ShowAsync();
-                    SaveImageAsPNG();
+                        show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+                        SaveImageAsPNG();
+                        progBar_file.Visibility = Visibility.Collapsed;
+                    }
                 }
                 else
                 {
@@ -668,20 +679,24 @@ namespace StegoPlusPlus.Views
 
                 if (show_dlg_embed_msg == ContentDialogResult.Primary)
                 {
-                    dlg_embed_msg = new ContentDialog()
+                    try
                     {
-                        Title = "Proses",
-                        PrimaryButtonText = NotifyDataText.OK_Button
-                    };
-                    show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
-
-                    foreach(var b in Binary_pwd_embed_msg)
-                    {
-                        System.Diagnostics.Debug.WriteLine(b);
+                        dlg_embed_msg.Hide();
+                        progBar_msg.Visibility = Visibility.Visible;
+                        Binary_STEG_RESULT = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg, Binary_pwd_embed_msg_encoded, Binary_ext_embed_msg, Binary_def_msg);
                     }
+                    finally
+                    {
+                        dlg_embed_msg = new ContentDialog()
+                        {
+                            Title = NotifyDataText.Process_Complete_EmbedFile_Message,
+                            PrimaryButtonText = NotifyDataText.OK_Button,
+                        };
 
-                    Binary_STEG_RESULT = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg, Binary_pwd_embed_msg_encoded, Binary_ext_embed_msg, Binary_def_msg);
-                    SaveImageAsPNG();
+                        show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
+                        SaveImageAsPNG();
+                        progBar_msg.Visibility = Visibility.Collapsed;
+                    }
                 }
                 else
                 {

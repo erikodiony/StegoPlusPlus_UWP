@@ -94,6 +94,14 @@
                     </RelativePanel>
                     <!--Pivot 1 Footer Menu Extract File/Message-->
 
+                    <!--Pivot 2 LoadingBar Menu Embed Message-->
+                    <RelativePanel Grid.ColumnSpan="3">
+                        <Grid x:Name="embed_extract_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <ProgressBar x:Name="progBar_extract" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                        </Grid>
+                    </RelativePanel>
+                    <!--Pivot 2 LoadingBar Menu Embed Message-->
+
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
                         <TextBlock Text="&#xE8E5;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
