@@ -132,10 +132,7 @@ namespace StegoPlusPlus.Views
             }
             foreach (var x in FileExtensions.Other)
             {
-                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(x))
-                {
-                    typefile = "Other Files";
-                }
+                typefile = "Other Files";
             }
         }
 
