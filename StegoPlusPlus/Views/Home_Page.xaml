@@ -150,7 +150,7 @@
                                     <Run Text="  Citra Digital berkedalaman warna 32bit" FontStretch="SemiCondensed" FontWeight="SemiBold"/>
                                 </TextBlock>
                                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="3">
-                                    Adapun untuk Data (File/Message) yang bakal disisipkan ke dalam Media Citra Digital harus memiliki ketentuan berikut:
+                                    Adapun untuk Data (File/Message) yang dapat disisipkan ke dalam Media Citra Digital harus memiliki ketentuan berikut:
                                 </TextBlock>
                                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="4">
                                     <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
