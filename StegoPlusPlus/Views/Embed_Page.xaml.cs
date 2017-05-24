@@ -220,14 +220,15 @@ namespace StegoPlusPlus.Views
                 //Get Property File Picker Selected (await)
                 IDictionary<string, object> extraProperties = await file_cover.Properties.RetrievePropertiesAsync(propImgList);
                 var propSize = extraProperties[propImage.Size];
-                var propDimension = extraProperties[propImage.Dimensions];             
+                var propDimension = extraProperties[propImage.Dimensions];
+                var propBitDepth = extraProperties[propImage.BitDepth];
+
 
                 //Show Thumbnail File Picker
                 using (StorageItemThumbnail thumbnail = await file_cover.GetThumbnailAsync(ThumbnailMode.PicturesView))
                 {
-                    if (thumbnail != null)
-                    {
-                       
+                    if (thumbnail != null && propBitDepth.ToString() == "32")
+                    {                       
                         ico_picker_cover.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
@@ -238,12 +239,18 @@ namespace StegoPlusPlus.Views
                         status_picker_cover.Text = file_cover.Name;
                         pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
                         sizefile_picker_cover.Text = String.Format("{0} bytes", propSize);
-                        dimensionfile_picker_cover.Text = String.Format("{0} / ({1} Pixel)", propDimension, Binary_embed_file_cover.Length);
-                        estimatefile_picker_cover.Text = String.Format("{0} bytes", Binary_embed_file_cover.Length / 8);
+                        dimensionfile_picker_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover.Length);
+                        estimatefile_picker_cover.Text = String.Format("± {0} bytes", Binary_embed_file_cover.Length / 8);
                     }
                     else
                     {
-                        ico_picker_cover.Visibility = Visibility.Collapsed;
+                        dlg_embed_file = new ContentDialog()
+                        {
+                            Title = NotifyDataText.Err_Input_32bitDepth,
+                            PrimaryButtonText = NotifyDataText.OK_Button,
+                        };
+
+                        show_dlg_embed_file = await dlg_embed_file.ShowAsync();
                     }
                 }
 
@@ -281,16 +288,16 @@ namespace StegoPlusPlus.Views
                 IDictionary<string, object> extraProperties = await file_hiding.Properties.RetrievePropertiesAsync(propImgList);
                 var propSize = extraProperties[propImage.Size];
 
-                status_picker_hiding.Text = file_hiding.Name;
-                pathfile_picker_hiding.Text = file_hiding.Path.Replace("\\" + file_hiding.Name, String.Empty);
-                sizefile_picker_hiding.Text = String.Format("{0} bytes", propSize);
-                typefile_picker_hiding.Text = file_hiding.DisplayType;
-
                 //Show Thumbnail File Picker
                 using (StorageItemThumbnail thumbnail = await file_hiding.GetThumbnailAsync(ThumbnailMode.PicturesView))
                 {
-                    if (thumbnail != null)
+                    if (thumbnail != null && int.Parse(propSize.ToString()) < Binary_embed_file_cover.Length / 8)
                     {
+                        status_picker_hiding.Text = file_hiding.Name;
+                        pathfile_picker_hiding.Text = file_hiding.Path.Replace("\\" + file_hiding.Name, String.Empty);
+                        sizefile_picker_hiding.Text = String.Format("{0} bytes", propSize);
+                        typefile_picker_hiding.Text = file_hiding.DisplayType;
+
                         ico_picker_hiding.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
@@ -300,7 +307,13 @@ namespace StegoPlusPlus.Views
                     }
                     else
                     {
-                        ico_picker_hiding.Visibility = Visibility.Collapsed;
+                        dlg_embed_file = new ContentDialog()
+                        {
+                            Title = NotifyDataText.Err_FileHiding_Overload_Size,
+                            PrimaryButtonText = NotifyDataText.OK_Button,
+                        };
+
+                        show_dlg_embed_file = await dlg_embed_file.ShowAsync();
                     }
                 }
             }
@@ -509,11 +522,12 @@ namespace StegoPlusPlus.Views
                 IDictionary<string, object> extraProperties = await file_cover_2.Properties.RetrievePropertiesAsync(propImgList);
                 var propSize = extraProperties[propImage.Size];
                 var propDimension = extraProperties[propImage.Dimensions];
+                var propBitDepth = extraProperties[propImage.BitDepth];
 
                 //Show Thumbnail File Picker
                 using (StorageItemThumbnail thumbnail = await file_cover_2.GetThumbnailAsync(ThumbnailMode.PicturesView))
                 {
-                    if (thumbnail != null)
+                    if (thumbnail != null && propBitDepth.ToString() == "32")
                     {
                         ico_picker_cover_2.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
@@ -525,12 +539,17 @@ namespace StegoPlusPlus.Views
                         status_picker_cover_2.Text = file_cover_2.Name;
                         pathfile_picker_cover_2.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
                         sizefile_picker_cover_2.Text = String.Format("{0} bytes", propSize);
-                        dimensionfile_picker_cover_2.Text = String.Format("{0} / ({1} Pixel)", propDimension, Binary_embed_file_cover_2.Length);
-                        charfile_picker_cover_2.Text = String.Format("{0} Character", Binary_embed_file_cover_2.Length / 8);
+                        dimensionfile_picker_cover_2.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover_2.Length);
+                        charfile_picker_cover_2.Text = String.Format("± {0} Character", Binary_embed_file_cover_2.Length / 8);
                     }
                     else
                     {
-                        ico_picker_cover_2.Visibility = Visibility.Collapsed;
+                        dlg_embed_msg = new ContentDialog()
+                        {
+                            Title = NotifyDataText.Err_Input_32bitDepth,
+                            PrimaryButtonText = NotifyDataText.OK_Button,
+                        };
+                        show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
                     }
                 }
             }

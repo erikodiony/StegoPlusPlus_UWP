@@ -145,7 +145,7 @@
                                 </Grid>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
                                     <Run Text="Insert Password"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="5" Margin="0,15,25,10">
                                     <TextBox x:Name="Input_Password_file" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
@@ -273,7 +273,7 @@
                                 </Grid>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
                                     <Run Text="Insert Password"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="5" Margin="0,15,25,10">
                                     <TextBox x:Name="Input_Password_msg" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
@@ -302,7 +302,7 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
                                     <Run Text="Insert Text / Message"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1" Margin="0,15,25,10">
                                     <TextBox x:Name="InputMessage" Header="Input Text / Message" PlaceholderText="Secret Text / Message" Width="Auto"/>

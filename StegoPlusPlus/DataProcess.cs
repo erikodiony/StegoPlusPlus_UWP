@@ -27,7 +27,8 @@ namespace StegoPlusPlus
     {
         public static readonly string Size = "System.Size";
         public static readonly string Dimensions = "System.Image.Dimensions";
-        public static readonly string[] All = new string[] { Size, Dimensions };
+        public static readonly string BitDepth = "System.Image.BitDepth";
+        public static readonly string[] All = new string[] { Size, Dimensions, BitDepth };
     }
 
     internal static class HeaderPage
@@ -54,6 +55,8 @@ namespace StegoPlusPlus
         public static readonly string Process_Complete_ExtractMessage = "Extracting Message was Completed !\nClick 'OK' to view Secret Text/Message...";
 
         //EMBED MENU
+        public static readonly string Err_Input_32bitDepth = "Only Image Cover 32BitDepth was supported !\nPlease check again...";
+        public static readonly string Err_FileHiding_Overload_Size = "Overload size quota of File Hiding !\nCan't Saving File Hiding...";
         public static readonly string Err_Input_Null_Embed_Msg_msg = "Field ''Insert Text/Message'' is empty !\nCan't Saving Text/Message...";
         public static readonly string Err_Input_Null_Embed_Msg_pwd = "Field ''Insert Password'' is empty !\nCan't Saving Password...";
         public static readonly string Err_Input_Null_Embed_File_pwd = "Field ''Insert Password'' is empty !\nCan't Saving Password...";
@@ -393,8 +396,8 @@ namespace StegoPlusPlus
         //CONTROL FOR DECRYPT
         //BEGIN
 
-        public byte[] passwd_encrypt; //Passwd Input (Encrypt with Bifid Cipher)
-        public byte[] passwd_input; //Passwd Input (Raw / Non Encrypt)
+        public static byte[] passwd_encrypt; //Passwd Input (Encrypt with Bifid Cipher)
+        public static byte[] passwd_input; //Passwd Input (Raw / Non Encrypt)
         public static byte[] def; //Definition Type Stego (text or File)
         public static byte[] ext; //Extensions of File Hiding (Non Support on Stego Text or Message)
         public static byte[] data; //Data Hiding
@@ -505,14 +508,82 @@ namespace StegoPlusPlus
             return notify;
         }
 
-        //CONTROL FOR DECRYPT
-        //END
+
+        public string RUN_UN_STEG_CHECKINFO(byte[] fileStegCheck)
+        {
+            string notify = String.Empty;
+            string fileSteg_String;
+            char[] fileSteg_Char = new char[fileStegCheck.Length];
+
+            List<byte> pwd_enc_l = new List<byte>();
+            List<byte> pwd_inp_l = new List<byte>();
+            List<byte> def_l = new List<byte>();
+            List<byte> ext_l = new List<byte>();
+            List<byte> data_l = new List<byte>();
+
+            //Structure of Hiding Data {pwd_encoded + pwd + file||message + extention + data}            
+            //pwd_encoded
+            //pwd
+            //file||message
+            //extention
+            //data
+
+            //GET LSB VALUE from RGB (0 or 1) to CHAR Array
+            for (int i = 0; i < fileStegCheck.Length; i++)
+            {
+                if (fileStegCheck[i] % 2 == 0)
+                {
+                    fileSteg_Char[i] = (char)48;
+                }
+                else
+                {
+                    fileSteg_Char[i] = (char)49;
+                }
+            }
+
+            //LSB VALUE to STRING
+            fileSteg_String = new string(fileSteg_Char);
+
+            //LSB Value to Byte
+            int num = fileSteg_String.Length / 8;
+            byte[] fileSteg_Byte = new byte[num];
+            for (int i = 0; i < num; ++i)
+            {
+                fileSteg_Byte[i] = Convert.ToByte(fileSteg_String.Substring(8 * i, 8), 2);
+            }
+
+            //SPLIT LSB Value
+            if (secretData != null)
+            {
+                //Inizialize Array Data
+                passwd_encrypt = new byte[secretData[0] / 8];
+                passwd_input = new byte[secretData[1] / 8];
+                def = new byte[secretData[2] / 8];
+                ext = new byte[secretData[3] / 8];
+                data = new byte[secretData[4] / 8];
+
+                //Spliting LSB Value to Array Byte
+                Array.Copy(fileSteg_Byte, 0, passwd_encrypt, 0, secretData[0] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8), passwd_input, 0, secretData[1] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8) + (secretData[1] / 8), def, 0, secretData[2] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8) + (secretData[1] / 8) + (secretData[2] / 8), ext, 0, secretData[3] / 8);
+                Array.Copy(fileSteg_Byte, (secretData[0] / 8) + (secretData[1] / 8) + (secretData[2] / 8) + (secretData[3] / 8), data, 0, secretData[4] / 8);
+            }
+            else
+            {
+                notify = "Invalid File Steg";
+            }
+            return notify;
+        }
+
+            //CONTROL FOR DECRYPT
+            //END
 
 
-        //--------------------------------------------------------------------------------//
+            //--------------------------------------------------------------------------------//
 
 
 
 
-    }
+        }
 }

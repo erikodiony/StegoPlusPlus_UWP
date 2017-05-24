@@ -161,7 +161,7 @@
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
                                     <Run Text="Insert Password"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka)" FontStyle="Italic" FontSize="14"/>
+                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1" Margin="0,15,25,10">
                                     <TextBox x:Name="Input_Password_file" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
@@ -179,7 +179,7 @@
             <!--Pivot 1-->
 
             <!--Pivot 2-->
-            <PivotItem Header="Check Stego Healthy" Margin="0,0,0,0">
+            <PivotItem Header="Check Stego Info" Margin="0,0,0,0">
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

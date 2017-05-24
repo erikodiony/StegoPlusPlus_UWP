@@ -431,7 +431,7 @@ namespace StegoPlusPlus.Views
         //--------------------------------------------------------------------------------//
 
         byte[] Binary_embed_file_steg_check; //FILE STEG (EXTRACT MENU -> EXTRACT FILE/MESSAGE)
-
+        string NotifyStegResultCheck;
         ContentDialog dlg_extract_file_check;
         ContentDialogResult show_dlg_extract_file_check = new ContentDialogResult();
 
@@ -473,16 +473,16 @@ namespace StegoPlusPlus.Views
                 var propSize = extraProperties[propImage.Size];
                 var propDimension = extraProperties[propImage.Dimensions];
 
-                status_picker_steg_check.Text = file_steg_check.Name;
-                pathfile_picker_steg_check.Text = file_steg_check.Path.Replace("\\" + file_steg_check.Name, String.Empty);
-                sizefile_picker_steg_check.Text = String.Format("{0} bytes", propSize);
-                dimensionfile_picker_steg_check.Text = String.Format("{0}", propDimension);
-
                 //Show Thumbnail File Picker
                 using (StorageItemThumbnail thumbnail = await file_steg_check.GetThumbnailAsync(ThumbnailMode.PicturesView))
                 {
                     if (thumbnail != null)
                     {
+                        status_picker_steg_check.Text = file_steg_check.Name;
+                        pathfile_picker_steg_check.Text = file_steg_check.Path.Replace("\\" + file_steg_check.Name, String.Empty);
+                        sizefile_picker_steg_check.Text = String.Format("{0} bytes", propSize);
+                        dimensionfile_picker_steg_check.Text = String.Format("{0}", propDimension);
+
                         ico_picker_steg_check.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
@@ -534,13 +534,24 @@ namespace StegoPlusPlus.Views
 
                 if (show_dlg_extract_file_check == ContentDialogResult.Primary)
                 {
-                    dlg_extract_file_check = new ContentDialog()
+                    NotifyStegResultCheck = dp.RUN_UN_STEG_CHECKINFO(Binary_embed_file_steg_check);
+
+                    if (NotifyStegResultCheck == "Invalid File Steg")
                     {
-                        Title = "Proses",
-                        PrimaryButtonText = NotifyDataText.OK_Button
-                    };
-                    show_dlg_extract_file_check = await dlg_extract_file_check.ShowAsync();
+                        dlg_extract_file_check = new ContentDialog()
+                        {
+                            Title = NotifyDataText.Notify_Extract_Menu_Invalid_File,
+                            PrimaryButtonText = NotifyDataText.OK_Button
+                        };
+                        show_dlg_extract_file_check = await dlg_extract_file_check.ShowAsync();
+                    }
+                    else
+                    {
+                        CInfoStego dlg_info = new CInfoStego();
+                        show_dlg_extract_file_check = await dlg_info.ShowAsync();
+                    }
                 }
+
                 else
                 {
                     dlg_extract_file_check.Hide();

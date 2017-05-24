@@ -110,6 +110,9 @@
     <Compile Include="Views\About_Page.xaml.cs">
       <DependentUpon>About_Page.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CInfoStego.xaml.cs">
+      <DependentUpon>CInfoStego.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CSecretMessage.xaml.cs">
       <DependentUpon>CSecretMessage.xaml</DependentUpon>
     </Compile>
@@ -195,6 +198,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\About_Page.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CInfoStego.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

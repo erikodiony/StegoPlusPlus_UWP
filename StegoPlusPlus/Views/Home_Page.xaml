@@ -66,23 +66,25 @@
                     <!--Pivot 1 Column 3-->
                     <ScrollViewer Grid.Column="2" Margin="15,20,0,20" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
                         <StackPanel>
-                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,15,10">
-                            <Run FontWeight="SemiBold">Stego++ with Password</Run> merupakan aplikasi yang berfungsi untuk menyembunyikan suatu <Run FontWeight="SemiBold" FontStyle="Italic" Text="File/Message"/> ke dalam suatu Object Citra 2D berformat PNG. 
-                        Untuk penyisipannya menggunakan teknik <Run FontWeight="SemiBold" FontStyle="Italic" Text="Steganografi Least Significant Bit (LSB)"/>. Adapun untuk keamanannya mengunakan teknik <Run FontWeight="SemiBold" FontStyle="Italic" Text="Kriptografi Bifid Cipher"/> pada susunan Karakter Password + Message yang akan disembunyikan.
-                            </TextBlock>
-                            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Margin="10,5,15,5" >
-                        <Run Text="&#xE1A6;" FontFamily="Segoe MDL2 Assets"/>
-                        <Run Text="Feature + Benefit"/>
-                            </TextBlock>
-                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="10,10,15,10">                            
-                        <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
-                            <Run Text="  Fast Embedding File/Message" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
-                        <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
-                            <Run Text="  Fast Extracting File/Message" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
-                        <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
-                            <Run Text="  Secure with Password" FontWeight="SemiBold" FontStretch="SemiCondensed"/><LineBreak/>    
-                        <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
-                            <Run Text="  Build with C# Windows UWP now support on All Windows 10 Platform" FontWeight="SemiBold" FontStretch="SemiCondensed"/><LineBreak/>
+                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="15,0,15,10" FontSize="18">
+                        <Run FontWeight="SemiBold">Stego++ with Password</Run> merupakan aplikasi yang berfungsi untuk menyembunyikan suatu <Run FontWeight="SemiBold" FontStyle="Italic" Text="File/Message"/> ke dalam suatu Citra Digital 2D berformat PNG dengan kedalaman warna 32bit. 
+                    Untuk penyisipannya menggunakan teknik <Run FontWeight="SemiBold" FontStyle="Italic" Text="Steganografi Least Significant Bit (LSB)"/>. Adapun untuk keamanannya mengunakan teknik <Run FontWeight="SemiBold" FontStyle="Italic" Text="Kriptografi Bifid Cipher"/> pada susunan Karakter Password + Message yang akan disembunyikan.
+                        </TextBlock>
+                        <TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="15,5,15,5" >
+                    <Run Text="&#xE1A6;" FontFamily="Segoe MDL2 Assets"/>
+                    <Run Text="Feature + Benefit"/>
+                        </TextBlock>
+                            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="10,10,15,10" FontSize="18">                            
+                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                        <Run Text="  Fast Embedding File/Message" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                        <Run Text="  Fast Extracting File/Message" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                        <Run Text="  Secure with Password" FontWeight="SemiBold" FontStretch="SemiCondensed"/><LineBreak/>    
+                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                        <Run Text="  Build with C# Windows UWP (Universal Windows Platform)" FontWeight="SemiBold" FontStretch="SemiCondensed"/><LineBreak/>
+                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                        <Run Text="  Support on All Windows 10 Platform (PC / Mobile)" FontWeight="SemiBold" FontStretch="SemiCondensed"/>
                             </TextBlock>
                         </StackPanel>
                     </ScrollViewer>
@@ -92,7 +94,7 @@
             <!--Pivot 1-->
 
             <!--Pivot 2-->
-            <PivotItem Header="Recent File" Margin="0,0,0,0">
+            <PivotItem Header="Getting Started" Margin="0,0,0,0">
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -102,7 +104,7 @@
 
                     <!--Pivot 2 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
-                        <TextBlock Text="&#xEC25;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                        <TextBlock Text="&#xE128;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     </StackPanel>
                     <!--Pivot 2 Column 1-->
 
@@ -112,8 +114,81 @@
 
                     <!--Pivot 2 Column 3-->
                     <ScrollViewer Grid.Column="2" Margin="15,20,0,20" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                        <StackPanel>
+                        <StackPanel x:Name="stack_embed_file" Orientation="Vertical">
+                            <TextBlock Margin="15,0,15,15" Style="{StaticResource TitleTextBlockStyle}" FontSize="18">
+                                Terdapat 2 Fitur yang menjadi fungsi dasar dari aplikasi ini antara lain <Run Text="Embedding Data" FontWeight="SemiBold" FontStretch="SemiCondensed"/>  dan <Run Text="Extracting Data" FontWeight="SemiBold" FontStretch="SemiCondensed"/>
+                            </TextBlock>
+                            <StackPanel Margin="-10,5,0,15">
+                                <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                                <Rectangle Margin="50,0,50,0" Width="Auto" Height="1" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                                <Rectangle Margin="125,0,125,0" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                            </StackPanel>
+                            <Grid Margin="15,0,15,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
 
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
+                                    <Run Text="&#xE944;" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="Embedding Data"/>
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="1">
+                                        Merupakan Fitur yang berfungsi untuk menyembunyikan sebuah data (File/Message) ke dalam suatu Media Citra Digital dengan ketentuan berikut :
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="2">
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Citra Digital berformat *.png" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Citra Digital berkedalaman warna 32bit" FontStretch="SemiCondensed" FontWeight="SemiBold"/>
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="3">
+                                    Adapun untuk Data (File/Message) yang bakal disisipkan ke dalam Media Citra Digital harus memiliki ketentuan berikut:
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="4">
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Mendukung semua jenis file, namun disarankan yang berformat umum (Dokumen / Gambar)" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Ukuran file disarankan &lt;150KB untuk mempercepat proses Embedding" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Karakter Data Message/Password hanya mendukung Alfabet dan Angka serta beberapa simbol berikut   ,.@&lt;=>)(?!}{/*+-:^(spasi)" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                                </TextBlock>
+                            </Grid>
+
+                            <Grid Margin="0,0,0,0" x:Name="cover_border_horizontal">
+                                <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                            </Grid>
+
+                            <Grid Margin="15,0,15,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
+                                    <Run Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="Extracting Data"/>
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="1">
+                                        Merupakan Fitur yang berfungsi untuk mengekstrak data (File/Message) tersembunyi yang disisipkan sebelumnya pada sebuah Media Citra Digital (Stego Image), Adapun kriteria Citra Digital yang dapat dilakukan proses ekstraksi yakni yang memiliki ketentuan berikut :
+                                </TextBlock>
+                                <TextBlock Style="{StaticResource BodyTextBlockStyle}" FontSize="18" Grid.Row="2">
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Stego Image yang tidak mengalami kerusakan struktur file (corrupt/virus)" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                                    <Run Text="&#xE001;" FontSize="22" FontWeight="SemiBold" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="  Stego Image yang belum pernah dilakukan pengeditan (Cropping / Change Brightness / ChangePixel Color, dll)" FontStretch="SemiCondensed" FontWeight="SemiBold"/><LineBreak/>
+                                </TextBlock>
+                            </Grid>
                         </StackPanel>
                     </ScrollViewer>
                     <!--Pivot 2 Column 3-->
