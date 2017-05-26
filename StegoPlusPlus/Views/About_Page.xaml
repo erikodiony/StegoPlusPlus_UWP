@@ -72,7 +72,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Grid.Column="0" Grid.Row="0" Width="Auto" Source="../Assets/Square150x150Logo.scale-150.png" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <Image Grid.Column="0" Grid.Row="0" Width="Auto" Source="../Assets/MyLogo.png" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                                 <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="0" Grid.Column="1"  Margin="15,0,0,0">
                                     <Run Text="Stego++ with Password"/>
                                 </TextBlock>
