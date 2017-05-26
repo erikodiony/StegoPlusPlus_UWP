@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="ErikodionyAW-StegoPlusPlus" Publisher="CN=Erikodiony Ariessa Wahyudi" Version="1.1.3.0" />
+  <Identity Name="ErikodionyAW-StegoPlusPlus" Publisher="CN=Erikodiony Ariessa Wahyudi" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="eb276beb-6e93-4dec-b9d6-f3763d87a693" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>StegoPlusPlus</DisplayName>
