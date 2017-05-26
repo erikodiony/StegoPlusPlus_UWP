@@ -123,16 +123,21 @@ namespace StegoPlusPlus.Views
                     typefile = "Image Files";
                 }
             }
-            foreach (var x in FileExtensions.Document)
+
+            foreach (var xx in FileExtensions.Document)
             {
-                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(x))
+                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(xx))
                 {
                     typefile = "Document Files";
                 }
             }
-            foreach (var x in FileExtensions.Other)
+
+            foreach (var xxx in FileExtensions.Other)
             {
-                typefile = "Other Files";
+                if (System.Text.Encoding.ASCII.GetString(DataProcess.ext).Contains(xxx))
+                {
+                    typefile = "Other Files";
+                }
             }
         }
 

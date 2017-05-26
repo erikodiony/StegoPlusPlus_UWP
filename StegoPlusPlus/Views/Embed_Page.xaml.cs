@@ -133,14 +133,18 @@ namespace StegoPlusPlus.Views
                 {
                     BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, strm_save);
                     encoder.SetPixelData(dp.decoder.BitmapPixelFormat, dp.decoder.BitmapAlphaMode, (uint)dp.decoder.PixelWidth, (uint)dp.decoder.PixelHeight, dp.decoder.DpiX, dp.decoder.DpiY, Binary_STEG_RESULT);
-                    var lis = new List<KeyValuePair<string, BitmapTypedValue>>();
+                    var listProp = new List<KeyValuePair<string, BitmapTypedValue>>();
 
                     var desc = new BitmapTypedValue(String.Format("{0}|{1}|{2}|{3}|{4}", dp.length_pwd_crypt_encoded, dp.length_pwd_encoded, dp.length_def_encoded, dp.length_ext_encoded, dp.length_data_encoded), PropertyType.String);
-                    lis.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
+                    listProp.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
 
-                    await encoder.BitmapProperties.SetPropertiesAsync(lis);
-                    await encoder.FlushAsync();
+                    await encoder.BitmapProperties.SetPropertiesAsync(listProp);
+                    await encoder.FlushAsync().AsTask();
                 }
+            }
+            else
+            {
+
             }
         }
 
@@ -240,7 +244,7 @@ namespace StegoPlusPlus.Views
                         pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
                         sizefile_picker_cover.Text = String.Format("{0} bytes", propSize);
                         dimensionfile_picker_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover.Length);
-                        estimatefile_picker_cover.Text = String.Format("± {0} bytes", Binary_embed_file_cover.Length / 8);
+                        estimatefile_picker_cover.Text = String.Format("± {0} bytes", (Binary_embed_file_cover.Length / 8));
                     }
                     else
                     {
@@ -302,7 +306,7 @@ namespace StegoPlusPlus.Views
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
                         ico_picker_hiding.Source = bitmapImage;
-                        Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType);
+                        Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType.ToLower());
                         //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
                     else
