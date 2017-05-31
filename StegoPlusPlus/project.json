@@ -1,8 +1,5 @@
 ﻿{
   "dependencies": {
-    "libpng": "1.6.28.1",
-    "Microsoft.ApplicationInsights": "2.3.0",
-    "Microsoft.ApplicationInsights.WindowsApps": "1.1.1",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.3",
     "WriteableBitmapEx": "1.5.1"
   },
