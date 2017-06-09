@@ -26,7 +26,7 @@ namespace StegoPlusPlus
     {
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             ShowStatusBar();
         }
                 
