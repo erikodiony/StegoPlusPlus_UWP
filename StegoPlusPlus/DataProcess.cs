@@ -36,7 +36,7 @@ namespace StegoPlusPlus
         public static readonly string HomePage = "WELCOME";
         public static readonly string EmbedPage = "Menu yang berfungsi untuk menjalankan fungsi Embed untuk penyisipan File (Embed File) beserta Embed untuk penyisipan Pesan Rahasia (Embed Message)";
         public static readonly string ExtractPage = "Menu yang berfungsi untuk menjalankan fungsi Ekstrak untuk File / Pesan Rahasia (Extract File / Message) beserta untuk pengecekan File Stego yang masih baik / bisa digunakan (Check Stego Healthy)";
-        public static readonly string SettingsPage = "Menu yang berfungsi untuk mengganti Warna Latar Belakang (Change Background / Theme) beserta mengganti Efek Transisi Halaman (Change Effect Transition)";
+        public static readonly string SettingsPage = "Menu yang berfungsi untuk mengganti Warna Latar Belakang (Change Background / Theme) beserta mengganti Efek Transisi Halaman (Change Transition Effect)";
         public static readonly string AboutPage = "Menu yang berisi tentang Detail Aplikasi (App Detail) beserta Info tentang Creator (About Me)";
     }
 
@@ -415,8 +415,8 @@ namespace StegoPlusPlus
             {
                 passwd_Byte[i] = Convert.ToByte(msg.Substring(8 * i, 8), 2);
             }
-            return passwd_Byte;            
-        }        
+            return passwd_Byte;
+        }
 
         public string RUN_UN_STEG(byte[] fileSteg, string passSteg)
         {

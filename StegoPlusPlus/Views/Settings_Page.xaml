@@ -80,7 +80,7 @@
             <!--Pivot 1-->
 
             <!--Pivot 2-->
-            <PivotItem Header="Change Effect Transition" Margin="0,0,0,0">
+            <PivotItem Header="Change Transition Effect" Margin="0,0,0,0">
                 <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

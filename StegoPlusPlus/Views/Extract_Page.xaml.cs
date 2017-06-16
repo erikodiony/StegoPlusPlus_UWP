@@ -259,6 +259,7 @@ namespace StegoPlusPlus.Views
                 Input_Password_file.IsReadOnly = false;
                 Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Extract_File_pwd;
                 Input_Password_file.Text = String.Empty;
+                btn_Save_Password_Steg.IsEnabled = true;
                 dlg_extract_file = new ContentDialog()
                 {
                     Title = NotifyDataText.Clear_Input_Extract_File_pwd,
@@ -286,9 +287,12 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
+                    string enc = Input_Password_file.Text;
                     Input_Password_file.IsReadOnly = true;
                     Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Extract_File_pwd;
                     Pwd_file_steg = dp.Encrypt_BifidCipher(Input_Password_file.Text); //Get Value as Public
+                    Input_Password_file.Text = dp.Encrypt_BifidCipher(enc);
+                    btn_Save_Password_Steg.IsEnabled = false;
                 }
             }
             else

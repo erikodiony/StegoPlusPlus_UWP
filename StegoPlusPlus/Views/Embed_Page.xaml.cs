@@ -346,10 +346,13 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    Input_Password_file.IsReadOnly = true;
+                    string enc = Input_Password_file.Text;
+                    Input_Password_file.IsReadOnly = true;                    
                     Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
                     Binary_pwd_embed_file = dp.Convert_Passwd(Input_Password_file.Text);
                     Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(Input_Password_file.Text));
+                    Input_Password_file.Text = dp.Encrypt_BifidCipher(enc);
+                    btn_Save_Password_file.IsEnabled = false;
                 }
             }
             else
@@ -371,6 +374,7 @@ namespace StegoPlusPlus.Views
                 Input_Password_file.IsReadOnly = false;
                 Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
                 Input_Password_file.Text = String.Empty;
+                btn_Save_Password_file.IsEnabled = true;
                 dlg_embed_file = new ContentDialog()
                 {
                     Title = NotifyDataText.Clear_Input_Embed_File_pwd,
@@ -582,9 +586,12 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
+                    string enc = InputMessage.Text;
                     InputMessage.IsReadOnly = true;
                     InputMessage.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
                     Binary_msg_embed_encoded = dp.Convert_Message_or_Text(dp.Encrypt_BifidCipher(InputMessage.Text));
+                    InputMessage.Text = dp.Encrypt_BifidCipher(enc);
+                    btn_Save_Message.IsEnabled = false;
                 }
             }
             else
@@ -606,6 +613,7 @@ namespace StegoPlusPlus.Views
                 InputMessage.IsReadOnly = false;
                 InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
                 InputMessage.Text = String.Empty;
+                btn_Save_Message.IsEnabled = true;
                 dlg_embed_msg = new ContentDialog()
                 {
                     Title = NotifyDataText.Clear_Input_Embed_Msg_msg,
@@ -633,10 +641,13 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
+                    string enc = Input_Password_msg.Text;
                     Input_Password_msg.IsReadOnly = true;
                     Input_Password_msg.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_pwd;
                     Binary_pwd_embed_msg = dp.Convert_Passwd(Input_Password_msg.Text); //Uncrypt
                     Binary_pwd_embed_msg_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(Input_Password_msg.Text)); //Crypt with Bifid Cipher
+                    Input_Password_msg.Text = dp.Encrypt_BifidCipher(enc);
+                    btn_Save_Password_msg.IsEnabled = false;
                 }
             }
             else
@@ -658,6 +669,7 @@ namespace StegoPlusPlus.Views
                 Input_Password_msg.IsReadOnly = false;
                 Input_Password_msg.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
                 Input_Password_msg.Text = String.Empty;
+                btn_Save_Password_msg.IsEnabled = true;
                 dlg_embed_msg = new ContentDialog()
                 {
                     Title = NotifyDataText.Clear_Input_Embed_Msg_pwd,
