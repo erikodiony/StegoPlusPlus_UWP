@@ -39,7 +39,7 @@ namespace StegoPlusPlus.Views
         //Function Check Effect Transition
         TransitionCollection collection = new TransitionCollection();
         NavigationThemeTransition theme = new NavigationThemeTransition();
-
+        
         private void check_transition_effect_status()
         {
             if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Continuum")

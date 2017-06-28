@@ -63,6 +63,10 @@ namespace StegoPlusPlus
                         break;
                 }
                 Header.Text = button.Content.ToString();
+                if (int.Parse(((Frame)Window.Current.Content).ActualWidth.ToString()) < 1024)
+                {
+                    MenuList.IsPaneOpen = false;
+                }
             }
         }
 

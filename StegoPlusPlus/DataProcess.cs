@@ -10,10 +10,13 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace StegoPlusPlus
 {
+ 
     internal static class FileExtensions
     {
         public static readonly string[] Stego = new string[] { ".png" };

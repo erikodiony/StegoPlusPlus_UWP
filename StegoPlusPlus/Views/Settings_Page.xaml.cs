@@ -49,7 +49,7 @@ namespace StegoPlusPlus.Views
                 var info = new ContinuumNavigationTransitionInfo();
                 theme.DefaultNavigationTransitionInfo = info;
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
                 cb_effect.SelectedValue = "Effect 1";
             }
 
@@ -58,7 +58,7 @@ namespace StegoPlusPlus.Views
                 var info = new CommonNavigationTransitionInfo();
                 theme.DefaultNavigationTransitionInfo = info;
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
                 cb_effect.SelectedValue = "Effect 2";
             }
 
@@ -67,7 +67,7 @@ namespace StegoPlusPlus.Views
                 var info = new SlideNavigationTransitionInfo();
                 theme.DefaultNavigationTransitionInfo = info;
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
                 cb_effect.SelectedValue = "Effect 3";
             }
 
@@ -76,7 +76,7 @@ namespace StegoPlusPlus.Views
                 var info = new SuppressNavigationTransitionInfo();
                 theme.DefaultNavigationTransitionInfo = info;
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
                 cb_effect.SelectedValue = "None";
             }
 
@@ -88,12 +88,12 @@ namespace StegoPlusPlus.Views
             if ((string)ApplicationData.Current.LocalSettings.Values["BG_set"] == "Dark")
             {
                 Toggle_BG.IsOn = true;
-                this.RequestedTheme = ElementTheme.Dark;
+                RequestedTheme = ElementTheme.Dark;
             }
             else
             {
                 Toggle_BG.IsOn = false;
-                this.RequestedTheme = ElementTheme.Light;
+                RequestedTheme = ElementTheme.Light;
             }
         }
 
@@ -103,12 +103,12 @@ namespace StegoPlusPlus.Views
             if (Toggle_BG.IsOn == true)
             {
                 ApplicationData.Current.LocalSettings.Values["BG_set"] = "Dark";
-                this.RequestedTheme = ElementTheme.Dark;
+                RequestedTheme = ElementTheme.Dark;
             }
             else
             {
                 ApplicationData.Current.LocalSettings.Values["BG_set"] = "Light";
-                this.RequestedTheme = ElementTheme.Light;
+                RequestedTheme = ElementTheme.Light;
             }
         }
 
