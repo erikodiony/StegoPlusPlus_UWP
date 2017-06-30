@@ -499,10 +499,12 @@ namespace StegoPlusPlus.Views
             Input_Password_msg.Text = String.Empty;
             Input_Password_msg.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
             Input_Password_msg.IsReadOnly = false;
+            btn_Save_Password_msg.IsEnabled = true;
 
             InputMessage.Text = String.Empty;
             InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
             InputMessage.IsReadOnly = false;
+            btn_Save_Message.IsEnabled = true;
         }
 
         //Trigger Function From btn_CoverImage_2_Click (Embed Message -> Choose Image)

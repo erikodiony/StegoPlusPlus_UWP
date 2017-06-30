@@ -16,7 +16,8 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace StegoPlusPlus
 {
- 
+    
+    #region Property of App
     internal static class FileExtensions
     {
         public static readonly string[] Stego = new string[] { ".png" };
@@ -66,21 +67,22 @@ namespace StegoPlusPlus
         public static readonly string Clear_Input_Embed_Msg_msg = "Field ''Insert Text/Message'' was Cleared !\nProcess Successfully...";
         public static readonly string Clear_Input_Embed_Msg_pwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
         public static readonly string Clear_Input_Embed_File_pwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
-        public static readonly string Saving_Header_Notify_Embed_Msg_msg = "Input Text / Message (saved)";
-        public static readonly string Saving_Header_Notify_Embed_Msg_pwd = "Input Password (saved)";
-        public static readonly string Saving_Header_Notify_Embed_File_pwd = "Input Password (saved)";
+        public static readonly string Saving_Header_Notify_Embed_Msg_msg = "Input Text / Message (Saved & Encrypted)";
+        public static readonly string Saving_Header_Notify_Embed_Msg_pwd = "Input Password (Saved & Encrypted)";
+        public static readonly string Saving_Header_Notify_Embed_File_pwd = "Input Password (Saved & Encrypted)";
         public static readonly string Clearing_Header_Notify_Embed_Msg_msg = "Input Text / Message";
         public static readonly string Clearing_Header_Notify_Embed_Msg_pwd = "Input Password";
         public static readonly string Clearing_Header_Notify_Embed_File_pwd = "Input Password";
 
         //EXTRACT MENU
-        public static readonly string Saving_Header_Notify_Extract_File_pwd = "Input Password (saved)";
+        public static readonly string Saving_Header_Notify_Extract_File_pwd = "Input Password (Saved & Encrypted)";
         public static readonly string Err_Input_Null_Extract_File_pwd = "Field ''Insert Password'' is empty !\nCan't Saving Password...";
         public static readonly string Clearing_Header_Notify_Extract_File_pwd = "Input Password";
         public static readonly string Clear_Input_Extract_File_pwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
         public static readonly string Notify_Extract_Menu_Invalid_File = "Invalid Image Stego !\nCan't Extract File / Message...";
         public static readonly string Notify_Extract_Menu_Invalid_Passwd = "Password Incorrect !\nCan't Extract File / Message...";
     }
+    #endregion
 
     class DataProcess
     {
@@ -107,10 +109,8 @@ namespace StegoPlusPlus
         };
 
 
-        //BEGIN
-        //GET PIXEL DATA
-        //--------------------------------------------------------------------------------//
-
+        //CONTROL FOR ALL EMBED & EXTRACT -- START
+        #region Get Data Pixel -> Array Byte[]
         public async Task<byte[]> Convert_FileImage_to_Byte(StorageFile fileCover_or_fileSteg)
         {
             byte[] bin;
@@ -139,15 +139,12 @@ namespace StegoPlusPlus
             }
             return bin;
         }
-
-        //--------------------------------------------------------------------------------//
-        //GET PIXEL DATA
-        //END
+        #endregion
+        //CONTROL FOR ALL EMBED & EXTRACT -- END
 
         
-        //CONTROL FOR ENCRYPT
-        //BEGIN
-
+        //CONTROL FOR ALL BIFID CIPHER -- START
+        #region Encrypt Text
         public string Encrypt_BifidCipher(string MessageOrPasswdToEncrypt)
         {
             char[] input_char = MessageOrPasswdToEncrypt.ToCharArray();
@@ -196,7 +193,8 @@ namespace StegoPlusPlus
             }
             return result;
         }
-
+        #endregion
+        #region Decrypt Text
         public string Decrypt_BifidCipher(string MessageOrPasswdToDecrypt)
         {
             char[] input_char = MessageOrPasswdToDecrypt.ToCharArray();
@@ -252,7 +250,11 @@ namespace StegoPlusPlus
             }
             return result;
         }
+        #endregion
+        //CONTROL FOR ALL BIFID CIPHER -- END
 
+        //CONTROL FOR EMBED
+        #region Validate Input User Text (Passwd / Secret Message)
         public string validatePasswdOrMessageInput(string passwd)
         {
             string notify_result = String.Empty;
@@ -265,7 +267,7 @@ namespace StegoPlusPlus
             }
             return notify_result;
         }
-
+        #endregion
         public char[] Convert_Passwd(string passwd)
         {
             string pwd = string.Empty;
