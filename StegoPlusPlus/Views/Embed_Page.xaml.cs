@@ -12,6 +12,7 @@ using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
 using Windows.UI;
 using Windows.UI.Popups;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -501,7 +502,7 @@ namespace StegoPlusPlus.Views
             Input_Password_msg.IsReadOnly = false;
             btn_Save_Password_msg.IsEnabled = true;
 
-            InputMessage.Text = String.Empty;
+            InputMessage.DataContext = String.Empty;
             InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
             InputMessage.IsReadOnly = false;
             btn_Save_Message.IsEnabled = true;
@@ -574,9 +575,12 @@ namespace StegoPlusPlus.Views
         private async void btn_Save_Message_Click(object sender, RoutedEventArgs e)
         {
             string notify = String.Empty;
-            if (InputMessage.Text != String.Empty)
+            string temp_msg = String.Empty;
+            InputMessage.Document.GetText(TextGetOptions.None, out temp_msg);
+            temp_msg = temp_msg.TrimEnd('\r');
+            if (temp_msg.Length > 0)
             {
-                notify = dp.validatePasswdOrMessageInput(InputMessage.Text);
+                notify = dp.validatePasswdOrMessageInput(temp_msg);
                 if (notify == "Password Invalid")
                 {
                     dlg_embed_msg = new ContentDialog()
@@ -588,11 +592,12 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    string enc = InputMessage.Text;
-                    InputMessage.IsReadOnly = true;
+
                     InputMessage.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
-                    Binary_msg_embed_encoded = dp.Convert_Message_or_Text(dp.Encrypt_BifidCipher(InputMessage.Text));
-                    InputMessage.Text = dp.Encrypt_BifidCipher(enc);
+                    Binary_msg_embed_encoded = dp.Convert_Message_or_Text(dp.Encrypt_BifidCipher(temp_msg));
+                    InputMessage.Document.SetText(TextSetOptions.None, dp.Encrypt_BifidCipher(temp_msg));
+                    InputMessage.Header = dp.Encrypt_BifidCipher(temp_msg).Length;
+                    InputMessage.IsReadOnly = true;
                     btn_Save_Message.IsEnabled = false;
                 }
             }
@@ -610,11 +615,16 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Clear_Message_Click (Embed Message -> Insert Text/Message -> Clear)
         private async void btn_Clear_Message_Click(object sender, RoutedEventArgs e)
         {
-            if (InputMessage.Text != String.Empty)
+            string temp_msg = String.Empty;
+            InputMessage.Document.GetText(TextGetOptions.None, out temp_msg);
+            temp_msg = temp_msg.TrimEnd('\r');
+            if (temp_msg.Length > 0)
             {
+
                 InputMessage.IsReadOnly = false;
                 InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
-                InputMessage.Text = String.Empty;
+                InputMessage.Document.SetText(TextSetOptions.None, dp.Decrypt_BifidCipher(temp_msg));
+                //InputMessage.Document.SetText(TextSetOptions.None, String.Empty);
                 btn_Save_Message.IsEnabled = true;
                 dlg_embed_msg = new ContentDialog()
                 {
@@ -750,6 +760,14 @@ namespace StegoPlusPlus.Views
                 };
                 show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
             }
+        }
+
+        private void InputMessage_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            string count_msg = String.Empty;
+            InputMessage.Document.GetText(TextGetOptions.None, out count_msg);
+            count_msg = count_msg.TrimEnd('\r');
+            picker_count_text.Text = count_msg.Length.ToString();
         }
 
         //PAGE CONTROL FOR EMBED MESSAGE (EMBED MENU -> EMBED MESSAGE)
