@@ -22,11 +22,11 @@ namespace StegoPlusPlus.Views
     {
         public Embed_Page()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             InitializingPage();
-            check_transition_effect_status();
-            check_theme_status();
+            Init_Transition();
+            Init_Theme();
 
             SetStatus_HidingFile(); //(Embed Menu -> Embed File -> Hiding File)
             SetStatus_PickerCover(); //(Embed Menu -> Embed File -> Insert Image File)
@@ -157,56 +157,21 @@ namespace StegoPlusPlus.Views
         NavigationThemeTransition theme = new NavigationThemeTransition(); //Initializing Theme Color Page
 
         //Function to Check Effect Transition
-        private void check_transition_effect_status()
+        private void Init_Transition()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
-
-            if (value == "Continuum")
-            {
-                theme.DefaultNavigationTransitionInfo = new ContinuumNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
-            else if (value == "Common")
-            {
-                theme.DefaultNavigationTransitionInfo = new CommonNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
-            else if (value == "Slide")
-            {
-                theme.DefaultNavigationTransitionInfo = new SlideNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
-            else
-            {
-                theme.DefaultNavigationTransitionInfo = new SuppressNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
+            collection.Add(Process.Transition.GetTransition(value));
+            Transitions = collection;
+            Process.Transition.SetTransition(value);
         }
 
         //Function Check Theme Status
-        private void check_theme_status()
+        private void Init_Theme()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
-
-            if (value == "Dark")
-            {
-                RequestedTheme = ElementTheme.Dark;
-            }
-            else
-            {
-                RequestedTheme = ElementTheme.Light;
-            }
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            Process.Theme.SetTheme(setTheme.ToString());
         }
-
-
 
         //Saving Image Steg
         public async void SaveImageAsPNG()
@@ -417,7 +382,7 @@ namespace StegoPlusPlus.Views
         }
 
         //Trigger Function From btn_Save_Password_file_Click (Embed File -> Insert Password -> Save)
-        private void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
+        private async void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
         {
             string notify = String.Empty;
             if (F_textbox_passwd.Text != String.Empty)
@@ -425,7 +390,7 @@ namespace StegoPlusPlus.Views
                 notify = dp.validatePasswdOrMessageInput(F_textbox_passwd.Text);
                 if (notify == "Password Invalid")
                 {
-                    PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd, Icon.Sad);
+                    await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd, Icon.Sad);
                 }
                 else
                 {
@@ -440,12 +405,22 @@ namespace StegoPlusPlus.Views
             }
             else
             {
-                PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
+                //PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
+                bool result = await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_File, Confirm.isExecute, Icon.Flat);
+                if (result == true)
+                {
+                    System.Diagnostics.Debug.WriteLine("PrimaryClicked");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("SecondaryClicked");
+                }
+
             }
         }
 
         //Trigger Function From btn_Clear_Password_file_Click (Embed File -> Insert Password -> Clear)
-        private void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
+        private async void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
         {
             if (F_textbox_passwd.Text != String.Empty)
             {
@@ -453,7 +428,7 @@ namespace StegoPlusPlus.Views
                 F_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
                 F_textbox_passwd.Text = String.Empty;
                 F_btn_save_passwd.IsEnabled = true;
-                PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
+                await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
 
@@ -482,12 +457,15 @@ namespace StegoPlusPlus.Views
         {
             if (F_picker_status_cover.Text != "No Image" && F_textbox_passwd.IsReadOnly == true)
             {
-                dlg_embed_file = new ContentDialog()
+                var dlg = await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_File, Confirm.isExecute, Icon.Flat);
+                if (dlg == true)
                 {
-                    Title = NotifyDataText.Dialog_Exec_Footer_Menu_Confirm,
-                    PrimaryButtonText = NotifyDataText.OK_Button,
-                    SecondaryButtonText = NotifyDataText.Cancel_Button
-                };
+                    System.Diagnostics.Debug.WriteLine("PrimaryClicked");
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("SecondaryClicked");
+                }
 
                 show_dlg_embed_file = await dlg_embed_file.ShowAsync();
 
