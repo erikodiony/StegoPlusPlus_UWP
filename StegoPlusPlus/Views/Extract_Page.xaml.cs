@@ -55,41 +55,44 @@ namespace StegoPlusPlus.Views
         List<string> propImgList = new List<string>(); //Create List Specific Property For File Picker Stego
         TransitionCollection collection = new TransitionCollection(); //Initializing Effect Transition Page
         NavigationThemeTransition theme = new NavigationThemeTransition(); //Initializing Theme Color Page
-        string typefile = String.Empty;
+        string typefile = String.Empty;        
+
+        public void setTransition()
+        {
+
+        }
 
         //Function to Check Effect Transition
         private void check_transition_effect_status()
         {
-            if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Continuum")
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+
+            if (value == "Continuum")
             {
-                var info = new ContinuumNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new ContinuumNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Common")
+            else if (value == "Common")
             {
-                var info = new CommonNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new CommonNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Slide")
+            else if (value == "Slide")
             {
-                var info = new SlideNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new SlideNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
             else
             {
-                var info = new SuppressNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new SuppressNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
         }
@@ -97,13 +100,15 @@ namespace StegoPlusPlus.Views
         //Function Check Theme Status
         private void check_theme_status()
         {
-            if ((string)ApplicationData.Current.LocalSettings.Values["BG_set"] == "Dark")
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+
+            if (value == "Dark")
             {
-                this.RequestedTheme = ElementTheme.Dark;
+                RequestedTheme = ElementTheme.Dark;
             }
             else
             {
-                this.RequestedTheme = ElementTheme.Light;
+                RequestedTheme = ElementTheme.Light;
             }
         }
 

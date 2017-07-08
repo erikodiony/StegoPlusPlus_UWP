@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StegoPlusPlus.Views.Popup;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -21,6 +23,7 @@ namespace StegoPlusPlus
     internal static class FileExtensions
     {
         public static readonly string[] Stego = new string[] { ".png" };
+        public static readonly string[] SecretMessage = new string[] { ".txt" };
         public static readonly string[] Document = new string[] { ".doc", ".xls", ".ppt", ".docx", ".xlsx", ".pptx", ".pdf", ".txt" };
         public static readonly string[] Image = new string[] { ".jpg", ".gif", ".png" };
         public static readonly string[] Other = new string[] { ".mp3", ".mp4", ".zip", ".rar" };
@@ -81,6 +84,90 @@ namespace StegoPlusPlus
         public static readonly string Clear_Input_Extract_File_pwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
         public static readonly string Notify_Extract_Menu_Invalid_File = "Invalid Image Stego !\nCan't Extract File / Message...";
         public static readonly string Notify_Extract_Menu_Invalid_Passwd = "Password Incorrect !\nCan't Extract File / Message...";
+    }
+
+    internal static class DataText_prop
+    {
+        #region Property Button
+        public static class Button
+        {
+            public static readonly string OK = "OK";
+            public static readonly string Cancel = "Cancel";
+            public static readonly string Save = "Save";
+            public static readonly string Clear = "Clear";
+            public static readonly string ClearAll = "Clear All";
+            public static readonly string Execute = "Execute";
+        }
+        #endregion
+
+        #region Property Passwd
+        public static class Passwd
+        {
+            public static readonly string title = "Insert Password";
+            public static readonly string subtitle = "(Mendukung Input huruf / angka dan beberapa simbol)";
+            public static readonly string placeholder = "Secret Password";
+            public static readonly string head_default = "Input Password";
+            public static readonly string head_save = "Input Password (Saved & Encrypted)";
+        }
+        #endregion
+
+        #region Property SecretMessage
+        public static class Secret_Message
+        {
+            public static readonly string title = "Choose Text / Message";
+            public static readonly string subtitle = "(Mendukung Input huruf / angka dan beberapa simbol)";
+            public static readonly string subtitle2 = "(Mendukung Input dari File / Input secara Manual)";
+            public static readonly string placeholder = "Secret Text / Message";
+            public static readonly string head_default = "Input Text / Message";
+            public static readonly string head_save = "Input Text / Message (Saved & Encrypted)";
+            public static readonly string button = "Choose Text";
+            public static readonly string counter = "Counter : ";
+            public static readonly string picker_status = "No Text";
+            public static readonly string picker_path = "Path : ";
+            public static readonly string picker_size = "Size : ";
+            public static readonly string picker_type = "Type : ";
+        }
+        #endregion
+
+        #region Property SecretFile
+        public static class Secret_File
+        {
+            public static readonly string title = "Choose File";
+            public static readonly string subtitle = "(Mendukung format File Dokumen, Gambar, dll)";
+            public static readonly string picker_status = "No File";
+            public static readonly string picker_path = "Path : ";
+            public static readonly string picker_size = "Size : ";
+            public static readonly string picker_type = "Type : ";
+            public static readonly string button = "Choose File";
+        }
+        #endregion
+
+        #region Property CoverImage
+        public static class CoverImage
+        {
+            public static readonly string title = "Choose Image Cover";
+            public static readonly string subtitle = "(Format ekstensi file gambar yang didukung *.png)";
+            public static readonly string button = "Choose Image";
+            public static readonly string picker_status = "No Image";
+            public static readonly string picker_path = "Path : ";
+            public static readonly string picker_size = "Size : ";
+            public static readonly string picker_dimension = "Dimension : ";
+            public static readonly string picker_eta_msg = "Text/Message can hide : ";
+            public static readonly string picker_eta_file = "File can hide : ";
+        }
+        #endregion
+
+        #region Property StegoImage
+        public static class StegoImage
+        {
+            public static readonly string title = "";
+            public static readonly string subtitle = "";
+            public static readonly string placeholder = "";
+            public static readonly string head_default = "";
+            public static readonly string head_save = "";
+        }
+        #endregion
+
     }
     #endregion
 

@@ -82,10 +82,10 @@
 
                     <!--Pivot 1 Footer Menu Embed File-->
                     <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="embed_file_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                        <Grid x:Name="F_FooterMenu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="btn_Clear_FooterMenuEmbedFile" Icon="Cancel" Label="Clear All" Click="btn_Clear_FooterMenuEmbedFile_Click"/>
-                                <AppBarButton x:Name="btn_Exec_FooterMenuEmbedFile" Icon="Play" Label="Execute" Click="btn_Exec_FooterMenuEmbedFile_Click"/>
+                                <AppBarButton x:Name="F_btn_ClearAll_FooterMenu" Icon="Cancel" Click="btn_Clear_FooterMenuEmbedFile_Click"/>
+                                <AppBarButton x:Name="F_btn_Execute_FooterMenu" Icon="Play" Click="btn_Exec_FooterMenuEmbedFile_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
@@ -93,8 +93,8 @@
 
                     <!--Pivot 2 LoadingBar Menu Embed Message-->
                     <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="embed_file_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <ProgressBar x:Name="progBar_file" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                        <Grid x:Name="F_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <ProgressBar x:Name="F_progBar" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 2 LoadingBar Menu Embed Message-->
@@ -123,44 +123,44 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Choose Image Cover"/><LineBreak/>
-                                    <Run Text="(Format ekstensi file gambar yang didukung *.png)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="F_lbl_title_cover"/><LineBreak/>
+                                    <Run x:Name="F_lbl_subtitle_cover" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_CoverImage" Content="Choose Image"/>
+                                    <Button Margin="0,15,0,0" x:Name="F_btn_input_cover"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_cover" Text="No Image" FontStyle="Italic"/>
+                                        <Run x:Name="F_picker_status_cover" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="ico_picker_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="F_ico_picker_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="File can hide : "/><Run x:Name="estimatefile_picker_cover" Text="-" FontStyle="Italic"/>
+                                        <Run x:Name="F_lbl_path_cover"/><Run x:Name="F_picker_path_cover" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="F_lbl_size_cover"/><Run x:Name="F_picker_size_cover" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="F_lbl_dimension_cover"/><Run x:Name="F_picker_dimension_cover" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="F_lbl_eta_cover"/><Run x:Name="F_picker_eta_cover" Text="-" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
-                                    <Run Text="Insert Password"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="F_lbl_title_passwd"/><LineBreak/>
+                                    <Run x:Name="F_lbl_subtitle_passwd" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="5" Margin="0,15,25,10">
-                                    <TextBox x:Name="Input_Password_file" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
+                                    <TextBox x:Name="F_textbox_passwd" Width="Auto"/>
                                 </Grid>
                                 <Grid Grid.Row="6">
-                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Password_file" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_file_Click"/>
-                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Password_file" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_file_Click"/>
+                                    <AppBarButton Margin="0,0,0,0" x:Name="F_btn_save_passwd" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_file_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="F_btn_clear_passwd" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_file_Click"/>
                                 </Grid>
                             </Grid>
 
-                            <Grid Margin="0,0,0,0" x:Name="cover_border_vertical">
+                            <Grid Margin="0,0,0,0" x:Name="F_border_vertical">
                                 <Rectangle Margin="25,20,-10,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
 
-                            <Grid Margin="0,0,0,0" x:Name="cover_border_horizontal">
+                            <Grid Margin="0,0,0,0" x:Name="F_border_horizontal">
                                 <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
 
@@ -172,23 +172,23 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Choose Hiding File"/><LineBreak/>
-                                    <Run Text="(Format file yang didukung Dokumen, Gambar, dll)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="F_lbl_title_file"/><LineBreak/>
+                                    <Run x:Name="F_lbl_subtitle_file" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_HidingFile" Content="Choose File"/>
+                                    <Button Margin="0,15,0,0" x:Name="F_btn_input_file"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_hiding" Text="No File" FontStyle="Italic"/>
+                                        <Run x:Name="F_picker_status_file" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="ico_picker_hiding" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="F_ico_picker_file" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_hiding" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_hiding" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Type : "/><Run x:Name="typefile_picker_hiding" Text="-" FontStyle="Italic"/>
+                                        <Run x:Name="F_lbl_path_file" /><Run x:Name="F_picker_path_file" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="F_lbl_size_file" /><Run x:Name="F_picker_size_file" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="F_lbl_type_file" /><Run x:Name="F_picker_type_file" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>
@@ -210,10 +210,10 @@
 
                     <!--Pivot 2 Footer Menu Embed Message-->
                     <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="embed_message_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                        <Grid x:Name="MSG_FooterMenu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="btn_Clear_FooterMenuEmbedMessage" Icon="Cancel" Label="Clear All" Click="btn_Clear_FooterMenuEmbedMessage_Click"/>
-                                <AppBarButton x:Name="btn_Exec_FooterMenuEmbedMessage" Icon="Play" Label="Execute" Click="btn_Exec_FooterMenuEmbedMessage_Click"/>
+                                <AppBarButton x:Name="MSG_btn_ClearAll_FooterMenu" Icon="Cancel" Click="btn_Clear_FooterMenuEmbedMessage_Click"/>
+                                <AppBarButton x:Name="MSG_btn_Execute_FooterMenu" Icon="Play" Click="btn_Exec_FooterMenuEmbedMessage_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
@@ -221,8 +221,8 @@
 
                     <!--Pivot 2 LoadingBar Menu Embed Message-->
                     <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="embed_message_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <ProgressBar x:Name="progBar_msg" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                        <Grid x:Name="MSG_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
+                            <ProgressBar x:Name="MSG_progBar" Width="Auto" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 2 LoadingBar Menu Embed Message-->
@@ -251,44 +251,44 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Choose Image Cover"/><LineBreak/>
-                                    <Run Text="(Format ekstensi file gambar yang didukung *.png)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="MSG_lbl_title_cover"/><LineBreak/>
+                                    <Run x:Name="MSG_lbl_subtitle_cover" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_CoverImage_2" Content="Choose Image"/>
+                                    <Button Margin="0,15,0,0" x:Name="MSG_btn_input_cover"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_cover_2" Text="No Image" FontStyle="Italic"/>
+                                        <Run x:Name="MSG_picker_status_cover" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="ico_picker_cover_2" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
+                                    <Image Margin="0,20,0,0" x:Name="MSG_picker_ico_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"/>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_cover_2" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Text/Message can hide : "/><Run x:Name="charfile_picker_cover_2" Text="-" FontStyle="Italic"/>
+                                        <Run x:Name="MSG_lbl_path_cover"/><Run x:Name="MSG_picker_path_cover" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="MSG_lbl_size_cover"/><Run x:Name="MSG_picker_size_cover" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="MSG_lbl_dimension_cover"/><Run x:Name="MSG_picker_dimension_cover" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="MSG_lbl_eta_cover"/><Run x:Name="MSG_picker_eta_cover" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="4" Margin="0,30,0,0">
-                                    <Run Text="Insert Password"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="MSG_lbl_title_passwd"/><LineBreak/>
+                                    <Run x:Name="MSG_lbl_subtitle_passwd" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="5" Margin="0,15,25,10">
-                                    <TextBox x:Name="Input_Password_msg" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
+                                    <TextBox x:Name="MSG_textbox_passwd" Width="Auto"/>
                                 </Grid>
                                 <Grid Grid.Row="6">
-                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Password_msg" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_msg_Click"/>
-                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Password_msg" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_msg_Click"/>
+                                    <AppBarButton Margin="0,0,0,0" x:Name="MSG_btn_save_passwd" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_msg_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="MSG_btn_clear_passwd" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_msg_Click"/>
                                 </Grid>
                             </Grid>
 
-                            <Grid Margin="0,0,0,0" x:Name="cover_border_vertical_2">
+                            <Grid Margin="0,0,0,0" x:Name="MSG_border_vertical">
                                 <Rectangle Margin="25,20,-10,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
                             
-                            <Grid Margin="0,0,0,0" x:Name="cover_border_horizontal_2">
+                            <Grid Margin="0,0,0,0" x:Name="MSG_border_horizontal">
                                 <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
 
@@ -304,44 +304,44 @@
                                 </Grid.RowDefinitions>
                                 
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Insert Text / Message"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="MSG_lbl_title_message"/><LineBreak/>
+                                    <Run x:Name="MSG_lbl_subtitle_message" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
 
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_HidingText" Content="Choose Text"/>
+                                    <Button Margin="0,15,0,0" x:Name="MSG_btn_input_message"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_text" Text="No Text" FontStyle="Italic"/>
+                                        <Run x:Name="MSG_picker_status_message" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="ico_picker_text" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="MSG_picker_ico_message" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left" Visibility="Collapsed"></Image>
                                 </Grid>
                                 
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_text" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_text" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Type : "/><Run x:Name="dimensionfile_picker_text" Text="-" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="MSG_lbl_path_message"/><Run x:Name="MSG_picker_path_message" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="MSG_lbl_size_message"/><Run x:Name="MSG_picker_size_message" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="MSG_lbl_type_message"/><Run x:Name="MSG_picker_type_message" FontStyle="Italic"/><LineBreak/>
                                     </TextBlock>
                                 </Grid>
 
                                 <Grid Grid.Row="4" Margin="-20,0,0,0">
                                     <TextBlock Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center">
-                                        <Run Text="(Mendukung Input dari File / Input secara Manual)" FontStyle="Italic" FontSize="14"/>
+                                        <Run x:Name="MSG_lbl_subtitle2_message" FontStyle="Italic" FontSize="14"/>
                                     </TextBlock>
                                 </Grid>
                                 
                                 <Grid Grid.Row="5" Margin="0,15,25,10">
-                                    <RichEditBox x:Name="InputMessage" Header="Input Text / Message" PlaceholderText="Secret Text / Message" Width="Auto" Height="130" ClipboardCopyFormat="PlainText" KeyUp="InputMessage_KeyUp"/>
+                                    <RichEditBox x:Name="MSG_richeditbox_message" Width="Auto" Height="130" ClipboardCopyFormat="PlainText" KeyUp="InputMessage_KeyUp"/>
                                 </Grid>
 
                                 <Grid Grid.Row="6">
-                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Message" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Message_Click"/>
-                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Message" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Message_Click"/>
-                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="180,0,0,0">
-                                        <Run Text="Character Counter : "/><Run x:Name="picker_count_text" Text="0" />
+                                    <AppBarButton Margin="0,0,0,0" x:Name="MSG_btn_save_message" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Message_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="MSG_btn_clear_message" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Message_Click"/>
+                                    <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,0,25,0" HorizontalAlignment="Right">
+                                        <Run x:Name="MSG_lbl_counter_message"/><Run x:Name="MSG_picker_count_message" Text="0" />
                                     </TextBlock>
                                 </Grid>
                             </Grid>

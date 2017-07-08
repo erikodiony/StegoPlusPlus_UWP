@@ -38,13 +38,13 @@ namespace StegoPlusPlus
             Object val = localSettings.Values["BG_set"];
             if ((string)val == "Dark")
             {
-                this.RequestedTheme = ApplicationTheme.Dark;
+                RequestedTheme = ApplicationTheme.Dark;
             }
             else
             {
-                this.RequestedTheme = ApplicationTheme.Light;
-            }
-
+                RequestedTheme = ApplicationTheme.Light;
+            }           
+                        
         }
 
         /// <summary>
@@ -118,5 +118,6 @@ namespace StegoPlusPlus
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
     }
 }

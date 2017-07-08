@@ -1,29 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
-using System.Text;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
-using Windows.UI;
-using Windows.UI.Popups;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
-using System.Threading.Tasks;
 using Windows.Storage.Streams;
+
+using static StegoPlusPlus.Data.Prop_Popup;
+using static StegoPlusPlus.Data.Prop_Popup.Title;
 
 namespace StegoPlusPlus.Views
 {
@@ -43,12 +34,13 @@ namespace StegoPlusPlus.Views
             SetStatus_Password(); //(Embed Menu -> Embed File -> Insert Passwd)
             SetStatus_Password_2(); //(Embed Menu -> Embed Text/Message ->Insert Passwd)
 
-            Input_Password_file.Text = String.Empty; 
-            Input_Password_msg.Text = String.Empty;
+            F_textbox_passwd.Text = String.Empty; 
+            MSG_textbox_passwd.Text = String.Empty;
 
-            btn_CoverImage.Click += new RoutedEventHandler(btn_CoverImage_Click); //Fungsi Click Cover ke Sinkron dengan Fungsi File Picker
-            btn_CoverImage_2.Click += new RoutedEventHandler(btn_CoverImage_2_Click); //Fungsi Click Cover2 ke Sinkron dengan Fungsi File Picker
-            btn_HidingFile.Click += new RoutedEventHandler(btn_HidingFile_Click); //Fungsi Click Hiding ke Sinkron dengan Fungsi Hiding Picker
+            F_btn_input_cover.Click += new RoutedEventHandler(btn_CoverImage_Click); //Fungsi Click Cover ke Sinkron dengan Fungsi File Picker
+            F_btn_input_file.Click += new RoutedEventHandler(btn_HidingFile_Click); //Fungsi Click Hiding ke Sinkron dengan Fungsi Hiding Picker
+            MSG_btn_input_cover.Click += new RoutedEventHandler(btn_CoverImage_2_Click); //Fungsi Click Cover2 ke Sinkron dengan Fungsi File Picker
+            MSG_btn_input_message.Click += new RoutedEventHandler(btn_HidingText_Click);
         }
 
 
@@ -58,68 +50,163 @@ namespace StegoPlusPlus.Views
         //PAGE CONTROL FOR EMBED MENU
         //BEGIN
 
+
+        //Initialize DataText Property of Embed Menu
+        private void InitializingPage()
+        {
+            HeaderInfo.Text = HeaderPage.EmbedPage;
+            MSG_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
+            MSG_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
+            F_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
+            F_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
+
+            #region MSG_CoverImage
+            MSG_lbl_title_cover.Text = DataText_prop.CoverImage.title;
+            MSG_lbl_subtitle_cover.Text = DataText_prop.CoverImage.subtitle;
+            MSG_picker_status_cover.Text = DataText_prop.CoverImage.picker_status;
+            MSG_lbl_path_cover.Text = DataText_prop.CoverImage.picker_path;
+            MSG_picker_path_cover.Text = Data.Prop_Button.OK;
+            MSG_lbl_size_cover.Text = DataText_prop.CoverImage.picker_size;
+            MSG_picker_size_cover.Text = "-";
+            MSG_lbl_dimension_cover.Text = DataText_prop.CoverImage.picker_dimension;
+            MSG_picker_dimension_cover.Text = "-";
+            MSG_lbl_eta_cover.Text = DataText_prop.CoverImage.picker_eta_msg;
+            MSG_picker_eta_cover.Text = "-";
+            MSG_btn_input_cover.Content = DataText_prop.CoverImage.button;
+            #endregion
+
+            #region MSG_Passwd
+            MSG_lbl_title_passwd.Text = DataText_prop.Passwd.title;
+            MSG_lbl_subtitle_passwd.Text = DataText_prop.Passwd.subtitle;
+            MSG_textbox_passwd.PlaceholderText = DataText_prop.Passwd.placeholder;
+            MSG_textbox_passwd.Header = DataText_prop.Passwd.head_default;
+            MSG_btn_save_passwd.Label = DataText_prop.Button.Save;
+            MSG_btn_clear_passwd.Label = DataText_prop.Button.Clear;
+            #endregion
+
+            #region MSG_Message
+            //SUB 1
+            MSG_lbl_title_message.Text = DataText_prop.Secret_Message.title;
+            MSG_lbl_subtitle_message.Text = DataText_prop.Secret_Message.subtitle;
+            MSG_lbl_subtitle2_message.Text = DataText_prop.Secret_Message.subtitle2;
+            //SUB 2
+            MSG_btn_input_message.Content = DataText_prop.Secret_Message.button;
+            MSG_picker_status_message.Text = DataText_prop.Secret_Message.picker_status;
+            //SUB 3
+            MSG_lbl_path_message.Text = DataText_prop.Secret_Message.picker_path;
+            MSG_picker_path_message.Text = "-";
+            MSG_lbl_size_message.Text = DataText_prop.Secret_Message.picker_size;
+            MSG_picker_size_message.Text = "-";
+            MSG_lbl_type_message.Text = DataText_prop.Secret_Message.picker_type;
+            MSG_picker_type_message.Text = "-";
+            //SUB 4
+            MSG_richeditbox_message.Header = DataText_prop.Secret_Message.head_default;
+            MSG_richeditbox_message.PlaceholderText = DataText_prop.Secret_Message.placeholder;
+            MSG_lbl_counter_message.Text = DataText_prop.Secret_Message.counter;
+            //SUB 5
+            MSG_btn_save_message.Label = DataText_prop.Button.Save;
+            MSG_btn_clear_message.Label = DataText_prop.Button.Clear;
+            #endregion
+
+            #region F_CoverImage
+            F_lbl_title_cover.Text = DataText_prop.CoverImage.title;
+            F_lbl_subtitle_cover.Text = DataText_prop.CoverImage.subtitle;
+            F_picker_status_cover.Text = DataText_prop.CoverImage.picker_status;
+            F_lbl_path_cover.Text = DataText_prop.CoverImage.picker_path;
+            F_picker_path_cover.Text = "-";
+            F_lbl_size_cover.Text = DataText_prop.CoverImage.picker_size;
+            F_picker_size_cover.Text = "-";
+            F_lbl_dimension_cover.Text = DataText_prop.CoverImage.picker_dimension;
+            F_picker_dimension_cover.Text = "-";
+            F_lbl_eta_cover.Text = DataText_prop.CoverImage.picker_eta_file;
+            F_picker_eta_cover.Text = "-";
+            F_btn_input_cover.Content = DataText_prop.CoverImage.button;
+            #endregion
+
+            #region F_File
+            F_lbl_title_file.Text = DataText_prop.Secret_File.title;
+            F_lbl_subtitle_file.Text = DataText_prop.Secret_File.subtitle;
+            F_picker_status_file.Text = DataText_prop.Secret_File.picker_status;
+            F_lbl_path_file.Text = DataText_prop.Secret_File.picker_path;
+            F_picker_path_file.Text = "-";
+            F_lbl_size_file.Text = DataText_prop.Secret_File.picker_size;
+            F_picker_size_file.Text = "-";
+            F_lbl_type_file.Text = DataText_prop.Secret_File.picker_type;
+            F_picker_type_file.Text = "-";
+            F_btn_input_file.Content = DataText_prop.Secret_File.button;
+            #endregion
+
+            #region F_Passwd
+            F_lbl_title_passwd.Text = DataText_prop.Passwd.title;
+            F_lbl_subtitle_passwd.Text = DataText_prop.Passwd.subtitle;
+            F_textbox_passwd.PlaceholderText = DataText_prop.Passwd.placeholder;
+            F_textbox_passwd.Header = DataText_prop.Passwd.head_default;
+            F_btn_save_passwd.Label = DataText_prop.Button.Save;
+            F_btn_clear_passwd.Label = DataText_prop.Button.Clear;
+            #endregion
+
+        }
+
+
         byte[] Binary_STEG_RESULT; //FILE STEG RGB
 
         DataProcess dp = new DataProcess(); //Initializing Object DataProcess.cs
         List<string> propImgList = new List<string>(); //Create List Specific Property For File Cover Picker
+        List<string> propMsgList = new List<string>(); //Create List Specific Property For File Text Picker
         TransitionCollection collection = new TransitionCollection(); //Initializing Effect Transition Page
         NavigationThemeTransition theme = new NavigationThemeTransition(); //Initializing Theme Color Page
 
         //Function to Check Effect Transition
         private void check_transition_effect_status()
         {
-            if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Continuum")
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+
+            if (value == "Continuum")
             {
-                var info = new ContinuumNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new ContinuumNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Common")
+            else if (value == "Common")
             {
-                var info = new CommonNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new CommonNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Slide")
+            else if (value == "Slide")
             {
-                var info = new SlideNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new SlideNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
             else
             {
-                var info = new SuppressNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
+                theme.DefaultNavigationTransitionInfo = new SuppressNavigationTransitionInfo();
                 collection.Add(theme);
-                this.Transitions = collection;
+                Transitions = collection;
             }
 
         }
 
-        //Function to Check Theme Status
+        //Function Check Theme Status
         private void check_theme_status()
         {
-            if ((string)ApplicationData.Current.LocalSettings.Values["BG_set"] == "Dark")
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+
+            if (value == "Dark")
             {
-                this.RequestedTheme = ElementTheme.Dark;
+                RequestedTheme = ElementTheme.Dark;
             }
             else
             {
-                this.RequestedTheme = ElementTheme.Light;
+                RequestedTheme = ElementTheme.Light;
             }
         }
 
-        //Initial Text Header Page
-        private void InitializingPage()
-        {
-            HeaderInfo.Text = HeaderPage.EmbedPage;
-        }
+
 
         //Saving Image Steg
         public async void SaveImageAsPNG()
@@ -175,30 +262,30 @@ namespace StegoPlusPlus.Views
         //Initial Default Text PickerCover File (EMBED MENU -> EMBED FILE)
         private void SetStatus_PickerCover()
         {
-            status_picker_cover.Text = "No Image";
-            pathfile_picker_cover.Text = "-";
-            sizefile_picker_cover.Text = "-";
-            dimensionfile_picker_cover.Text = "-";
-            estimatefile_picker_cover.Text = "-";
-            ico_picker_cover.Visibility = Visibility.Collapsed;
+            F_picker_status_cover.Text = "No Image";
+            F_picker_path_cover.Text = "-";
+            F_picker_size_cover.Text = "-";
+            F_picker_dimension_cover.Text = "-";
+            F_picker_eta_cover.Text = "-";
+            F_ico_picker_cover.Visibility = Visibility.Collapsed;
         }
 
         //Initial Default Text Hiding File (EMBED MENU -> EMBED FILE)
         private void SetStatus_HidingFile()
         {
-            status_picker_hiding.Text = "No File";
-            pathfile_picker_hiding.Text = "-";
-            sizefile_picker_hiding.Text = "-";
-            typefile_picker_hiding.Text = "-";
-            ico_picker_hiding.Visibility = Visibility.Collapsed;
+            F_picker_status_file.Text = "No File";
+            F_picker_path_file.Text = "-";
+            F_picker_size_file.Text = "-";
+            F_picker_type_file.Text = "-";
+            F_ico_picker_file.Visibility = Visibility.Collapsed;
         }
 
         //Initial Default Text Password (EMBED MENU -> EMBED FILE)
         private void SetStatus_Password()
         {
-            Input_Password_file.Text = String.Empty;
-            Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
-            Input_Password_file.IsReadOnly = false;
+            F_textbox_passwd.Text = String.Empty;
+            F_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
+            F_textbox_passwd.IsReadOnly = false;
         }
 
         //Trigger Function From btn_CoverImage_Click (Embed File -> Cover Image)
@@ -233,19 +320,19 @@ namespace StegoPlusPlus.Views
                 using (StorageItemThumbnail thumbnail = await file_cover.GetThumbnailAsync(ThumbnailMode.PicturesView))
                 {
                     if (thumbnail != null && propBitDepth.ToString() == "32")
-                    {                       
-                        ico_picker_cover.Visibility = Visibility.Visible;
+                    {
+                        F_ico_picker_cover.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
-                        ico_picker_cover.Source = bitmapImage;
+                        F_ico_picker_cover.Source = bitmapImage;
 
                         Binary_embed_file_cover = await dp.Convert_FileImage_to_Byte(file_cover);
 
-                        status_picker_cover.Text = file_cover.Name;
-                        pathfile_picker_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
-                        sizefile_picker_cover.Text = String.Format("{0} bytes", propSize);
-                        dimensionfile_picker_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover.Length);
-                        estimatefile_picker_cover.Text = String.Format("± {0} bytes", (Binary_embed_file_cover.Length / 8));
+                        F_picker_status_cover.Text = file_cover.Name;
+                        F_picker_path_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
+                        F_picker_size_cover.Text = String.Format("{0} bytes", propSize);
+                        F_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover.Length);
+                        F_picker_eta_cover.Text = String.Format("± {0} bytes", (Binary_embed_file_cover.Length / 8));
                     }
                     else
                     {
@@ -298,15 +385,15 @@ namespace StegoPlusPlus.Views
                 {
                     if (thumbnail != null && int.Parse(propSize.ToString()) < Binary_embed_file_cover.Length / 8)
                     {
-                        status_picker_hiding.Text = file_hiding.Name;
-                        pathfile_picker_hiding.Text = file_hiding.Path.Replace("\\" + file_hiding.Name, String.Empty);
-                        sizefile_picker_hiding.Text = String.Format("{0} bytes", propSize);
-                        typefile_picker_hiding.Text = file_hiding.DisplayType;
+                        F_picker_status_file.Text = file_hiding.Name;
+                        F_picker_path_file.Text = file_hiding.Path.Replace("\\" + file_hiding.Name, String.Empty);
+                        F_picker_size_file.Text = String.Format("{0} bytes", propSize);
+                        F_picker_type_file.Text = file_hiding.DisplayType;
 
-                        ico_picker_hiding.Visibility = Visibility.Visible;
+                        F_ico_picker_file.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
-                        ico_picker_hiding.Source = bitmapImage;
+                        F_ico_picker_file.Source = bitmapImage;
                         Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType.ToLower());
                         //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
@@ -328,60 +415,45 @@ namespace StegoPlusPlus.Views
                 SetStatus_HidingFile();
             }
         }
-        
+
         //Trigger Function From btn_Save_Password_file_Click (Embed File -> Insert Password -> Save)
-        private async void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
+        private void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
         {
             string notify = String.Empty;
-            if (Input_Password_file.Text != String.Empty)
+            if (F_textbox_passwd.Text != String.Empty)
             {
-                notify = dp.validatePasswdOrMessageInput(Input_Password_file.Text);
+                notify = dp.validatePasswdOrMessageInput(F_textbox_passwd.Text);
                 if (notify == "Password Invalid")
                 {
-                    dlg_embed_file = new ContentDialog()
-                    {
-                        Title = NotifyDataText.Notify_Input_Passwd_Invalid,
-                        PrimaryButtonText = NotifyDataText.OK_Button
-                    };
-                    show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+                    PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd);
                 }
                 else
                 {
-                    string enc = Input_Password_file.Text;
-                    Input_Password_file.IsReadOnly = true;                    
-                    Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                    Binary_pwd_embed_file = dp.Convert_Passwd(Input_Password_file.Text);
-                    Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(Input_Password_file.Text));
-                    Input_Password_file.Text = dp.Encrypt_BifidCipher(enc);
-                    btn_Save_Password_file.IsEnabled = false;
+                    string enc = F_textbox_passwd.Text;
+                    F_textbox_passwd.IsReadOnly = true;
+                    F_textbox_passwd.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
+                    Binary_pwd_embed_file = dp.Convert_Passwd(F_textbox_passwd.Text);
+                    Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(F_textbox_passwd.Text));
+                    F_textbox_passwd.Text = dp.Encrypt_BifidCipher(enc);
+                    F_btn_save_passwd.IsEnabled = false;
                 }
             }
             else
             {
-                dlg_embed_file = new ContentDialog()
-                {
-                    Title = NotifyDataText.Err_Input_Null_Embed_File_pwd,
-                    PrimaryButtonText = NotifyDataText.OK_Button
-                };
-                show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+                PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd);
             }
         }
 
         //Trigger Function From btn_Clear_Password_file_Click (Embed File -> Insert Password -> Clear)
-        private async void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
+        private void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
         {
-            if (Input_Password_file.Text != String.Empty)
+            if (F_textbox_passwd.Text != String.Empty)
             {
-                Input_Password_file.IsReadOnly = false;
-                Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
-                Input_Password_file.Text = String.Empty;
-                btn_Save_Password_file.IsEnabled = true;
-                dlg_embed_file = new ContentDialog()
-                {
-                    Title = NotifyDataText.Clear_Input_Embed_File_pwd,
-                    PrimaryButtonText = NotifyDataText.OK_Button
-                };
-                show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+                F_textbox_passwd.IsReadOnly = false;
+                F_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
+                F_textbox_passwd.Text = String.Empty;
+                F_btn_save_passwd.IsEnabled = true;
+                PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd);
             }
         }
 
@@ -408,7 +480,7 @@ namespace StegoPlusPlus.Views
         //Function of Steg File (From FooterMenu -> Exec)
         private async void ExecSteg_File()
         {
-            if (status_picker_cover.Text != "No Image" && Input_Password_file.IsReadOnly == true)
+            if (F_picker_status_cover.Text != "No Image" && F_textbox_passwd.IsReadOnly == true)
             {
                 dlg_embed_file = new ContentDialog()
                 {
@@ -424,7 +496,7 @@ namespace StegoPlusPlus.Views
                     try
                     {
                         dlg_embed_file.Hide();
-                        progBar_file.Visibility = Visibility.Visible;
+                        F_progBar.Visibility = Visibility.Visible;
                         Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                         Binary_STEG_RESULT = dp.RUN_STEG(Binary_embed_file_encoded, Binary_embed_file_cover, Binary_pwd_embed_file, Binary_pwd_embed_file_encoded, Binary_ext_embed_file, Binary_def);
                     }
@@ -438,7 +510,7 @@ namespace StegoPlusPlus.Views
 
                         show_dlg_embed_file = await dlg_embed_file.ShowAsync();
                         SaveImageAsPNG();
-                        progBar_file.Visibility = Visibility.Collapsed;
+                        F_progBar.Visibility = Visibility.Collapsed;
                     }
                 }
                 else
@@ -483,29 +555,21 @@ namespace StegoPlusPlus.Views
         ContentDialogResult show_dlg_embed_msg = new ContentDialogResult();
 
         StorageFile file_cover_2;
+        StorageFile file_hidingText;
 
         //Initial Default Text PickerCover Message
         private void SetStatus_PickerCover_2()
         {
-            status_picker_cover_2.Text = "No Image";
-            pathfile_picker_cover_2.Text = "-";
-            sizefile_picker_cover_2.Text = "-";
-            dimensionfile_picker_cover_2.Text = "-";
-            charfile_picker_cover_2.Text = "-";
-            ico_picker_cover_2.Visibility = Visibility.Collapsed;
+            MSG_picker_ico_cover.Visibility = Visibility.Collapsed;
         }
 
         private void SetStatus_Password_2()
         {
-            Input_Password_msg.Text = String.Empty;
-            Input_Password_msg.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
-            Input_Password_msg.IsReadOnly = false;
-            btn_Save_Password_msg.IsEnabled = true;
+            MSG_textbox_passwd.IsReadOnly = false;
+            MSG_btn_save_message.IsEnabled = true;
 
-            InputMessage.DataContext = String.Empty;
-            InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
-            InputMessage.IsReadOnly = false;
-            btn_Save_Message.IsEnabled = true;
+            MSG_richeditbox_message.IsReadOnly = false;
+            MSG_btn_save_message.IsEnabled = true;
         }
 
         //Trigger Function From btn_CoverImage_2_Click (Embed Message -> Choose Image)
@@ -540,18 +604,18 @@ namespace StegoPlusPlus.Views
                 {
                     if (thumbnail != null && propBitDepth.ToString() == "32")
                     {
-                        ico_picker_cover_2.Visibility = Visibility.Visible;
+                        MSG_picker_ico_cover.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
-                        ico_picker_cover_2.Source = bitmapImage;
+                        MSG_picker_ico_cover.Source = bitmapImage;
 
                         Binary_embed_file_cover_2 = await dp.Convert_FileImage_to_Byte(file_cover_2);
 
-                        status_picker_cover_2.Text = file_cover_2.Name;
-                        pathfile_picker_cover_2.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
-                        sizefile_picker_cover_2.Text = String.Format("{0} bytes", propSize);
-                        dimensionfile_picker_cover_2.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover_2.Length);
-                        charfile_picker_cover_2.Text = String.Format("± {0} Character", Binary_embed_file_cover_2.Length / 8);
+                        MSG_picker_status_cover.Text = file_cover_2.Name;
+                        MSG_picker_path_cover.Text = file_cover_2.Path.Replace("\\" + file_cover_2.Name, String.Empty);
+                        MSG_picker_size_cover.Text = String.Format("{0} bytes", propSize);
+                        MSG_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover_2.Length);
+                        MSG_picker_eta_cover.Text = String.Format("± {0} Character", Binary_embed_file_cover_2.Length / 8);
                     }
                     else
                     {
@@ -571,12 +635,51 @@ namespace StegoPlusPlus.Views
             }
         }
 
+        private async void btn_HidingText_Click(object sender, RoutedEventArgs e)
+        {
+            //Set an Extensions File Cover
+            FileOpenPicker picker_cover = new FileOpenPicker();
+            foreach (string extension in FileExtensions.SecretMessage)
+            {
+                picker_cover.FileTypeFilter.Add(extension);
+            }
+
+            //Set Get a Name Property Image File Cover
+            foreach (string propText in propImage.All)
+            {
+                propMsgList.Add(propText);
+            }
+
+            file_hidingText = await picker_cover.PickSingleFileAsync();
+
+            if (file_hidingText != null)
+            {
+                MSG_richeditbox_message.IsReadOnly = false;
+                //Get Property File Picker Selected (await)
+                IDictionary<string, object> extraProperties = await file_hidingText.Properties.RetrievePropertiesAsync(propMsgList);
+                var propSize = extraProperties["System.Size"];
+
+                MSG_picker_status_message.Text = file_hidingText.Name;
+                MSG_picker_path_message.Text = file_hidingText.Path.Replace("\\" + file_hidingText.Name, String.Empty);
+                MSG_picker_size_message.Text = String.Format("{0} bytes", propSize);
+                MSG_picker_type_message.Text = file_hidingText.DisplayType;
+
+                string txt_hidingText;
+                var lines = await FileIO.ReadTextAsync(file_hidingText);
+                MSG_richeditbox_message.Document.SetText(TextSetOptions.None, lines);
+                MSG_richeditbox_message.Document.GetText(TextGetOptions.None, out txt_hidingText);
+                MSG_picker_count_message.Text = (txt_hidingText.Length - 1).ToString();
+                MSG_richeditbox_message.IsReadOnly = true;
+            }
+        }
+
         //Trigger Function From btn_Save_Message_Click (Embed Message -> Insert Text/Message -> Save)
         private async void btn_Save_Message_Click(object sender, RoutedEventArgs e)
         {
+            MSG_richeditbox_message.IsReadOnly = false;
             string notify = String.Empty;
             string temp_msg = String.Empty;
-            InputMessage.Document.GetText(TextGetOptions.None, out temp_msg);
+            MSG_richeditbox_message.Document.GetText(TextGetOptions.None, out temp_msg);
             temp_msg = temp_msg.TrimEnd('\r');
             if (temp_msg.Length > 0)
             {
@@ -593,12 +696,12 @@ namespace StegoPlusPlus.Views
                 else
                 {
 
-                    InputMessage.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
+                    MSG_richeditbox_message.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_msg;
                     Binary_msg_embed_encoded = dp.Convert_Message_or_Text(dp.Encrypt_BifidCipher(temp_msg));
-                    InputMessage.Document.SetText(TextSetOptions.None, dp.Encrypt_BifidCipher(temp_msg));
-                    InputMessage.Header = dp.Encrypt_BifidCipher(temp_msg).Length;
-                    InputMessage.IsReadOnly = true;
-                    btn_Save_Message.IsEnabled = false;
+                    MSG_richeditbox_message.Document.SetText(TextSetOptions.None, dp.Encrypt_BifidCipher(temp_msg));
+                    MSG_richeditbox_message.Header = dp.Encrypt_BifidCipher(temp_msg).Length;
+                    MSG_richeditbox_message.IsReadOnly = true;
+                    MSG_btn_save_message.IsEnabled = false;
                 }
             }
             else
@@ -616,20 +719,19 @@ namespace StegoPlusPlus.Views
         private async void btn_Clear_Message_Click(object sender, RoutedEventArgs e)
         {
             string temp_msg = String.Empty;
-            InputMessage.Document.GetText(TextGetOptions.None, out temp_msg);
+            MSG_richeditbox_message.Document.GetText(TextGetOptions.None, out temp_msg);
             temp_msg = temp_msg.TrimEnd('\r');
             if (temp_msg.Length > 0)
             {
-
-                InputMessage.IsReadOnly = false;
-                InputMessage.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
-                InputMessage.Document.SetText(TextSetOptions.None, dp.Decrypt_BifidCipher(temp_msg));
+                MSG_richeditbox_message.IsReadOnly = false;
+                MSG_richeditbox_message.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_msg;
+                MSG_richeditbox_message.Document.SetText(TextSetOptions.None, dp.Decrypt_BifidCipher(temp_msg));
                 //InputMessage.Document.SetText(TextSetOptions.None, String.Empty);
-                btn_Save_Message.IsEnabled = true;
+                MSG_btn_save_message.IsEnabled = true;
                 dlg_embed_msg = new ContentDialog()
                 {
                     Title = NotifyDataText.Clear_Input_Embed_Msg_msg,
-                    PrimaryButtonText = NotifyDataText.OK_Button
+                    PrimaryButtonText = DataText_prop.Button.OK
                 };
                 show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
             }
@@ -639,9 +741,9 @@ namespace StegoPlusPlus.Views
         private async void btn_Save_Password_msg_Click(object sender, RoutedEventArgs e)
         {
             string notify = String.Empty;
-            if (Input_Password_msg.Text != String.Empty)
+            if (MSG_textbox_passwd.Text != String.Empty)
             {
-                notify = dp.validatePasswdOrMessageInput(Input_Password_msg.Text);
+                notify = dp.validatePasswdOrMessageInput(MSG_textbox_passwd.Text);
                 if (notify == "Password Invalid")
                 {
                     dlg_embed_msg = new ContentDialog()
@@ -653,13 +755,13 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    string enc = Input_Password_msg.Text;
-                    Input_Password_msg.IsReadOnly = true;
-                    Input_Password_msg.Header = NotifyDataText.Saving_Header_Notify_Embed_Msg_pwd;
-                    Binary_pwd_embed_msg = dp.Convert_Passwd(Input_Password_msg.Text); //Uncrypt
-                    Binary_pwd_embed_msg_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(Input_Password_msg.Text)); //Crypt with Bifid Cipher
-                    Input_Password_msg.Text = dp.Encrypt_BifidCipher(enc);
-                    btn_Save_Password_msg.IsEnabled = false;
+                    string enc = MSG_textbox_passwd.Text;
+                    MSG_textbox_passwd.IsReadOnly = true;
+                    MSG_textbox_passwd.Header = DataText_prop.Passwd.head_save;
+                    Binary_pwd_embed_msg = dp.Convert_Passwd(MSG_textbox_passwd.Text); //Uncrypt
+                    Binary_pwd_embed_msg_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(MSG_textbox_passwd.Text)); //Crypt with Bifid Cipher
+                    MSG_textbox_passwd.Text = dp.Encrypt_BifidCipher(enc);
+                    MSG_btn_save_passwd.IsEnabled = false;
                 }
             }
             else
@@ -676,12 +778,12 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Clear_Password_msg_Click (Embed Message -> Insert Password -> Clear)
         private async void btn_Clear_Password_msg_Click(object sender, RoutedEventArgs e)
         {
-            if (Input_Password_msg.Text != String.Empty)
+            if (MSG_textbox_passwd.Text != String.Empty)
             {
-                Input_Password_msg.IsReadOnly = false;
-                Input_Password_msg.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
-                Input_Password_msg.Text = String.Empty;
-                btn_Save_Password_msg.IsEnabled = true;
+                MSG_textbox_passwd.IsReadOnly = false;
+                MSG_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_Msg_pwd;
+                MSG_textbox_passwd.Text = String.Empty;
+                MSG_btn_save_passwd.IsEnabled = true;
                 dlg_embed_msg = new ContentDialog()
                 {
                     Title = NotifyDataText.Clear_Input_Embed_Msg_pwd,
@@ -713,7 +815,7 @@ namespace StegoPlusPlus.Views
         //Function of Steg Message (From FooterMenu -> Exec)
         private async void ExecSteg_Message()
         {
-            if (status_picker_cover_2.Text != "No Image" && Input_Password_msg.IsReadOnly == true && InputMessage.IsReadOnly == true)
+            if (MSG_picker_status_cover.Text != "No Image" && MSG_textbox_passwd.IsReadOnly == true && MSG_richeditbox_message.IsReadOnly == true)
             {
                 dlg_embed_msg = new ContentDialog()
                 {
@@ -729,7 +831,7 @@ namespace StegoPlusPlus.Views
                     try
                     {
                         dlg_embed_msg.Hide();
-                        progBar_msg.Visibility = Visibility.Visible;
+                        MSG_progBar.Visibility = Visibility.Visible;
                         Binary_STEG_RESULT = dp.RUN_STEG(Binary_msg_embed_encoded, Binary_embed_file_cover_2, Binary_pwd_embed_msg, Binary_pwd_embed_msg_encoded, Binary_ext_embed_msg, Binary_def_msg);
                     }
                     finally
@@ -742,7 +844,7 @@ namespace StegoPlusPlus.Views
 
                         show_dlg_embed_msg = await dlg_embed_msg.ShowAsync();
                         SaveImageAsPNG();
-                        progBar_msg.Visibility = Visibility.Collapsed;
+                        MSG_progBar.Visibility = Visibility.Collapsed;
                     }
                 }
                 else
@@ -765,9 +867,9 @@ namespace StegoPlusPlus.Views
         private void InputMessage_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             string count_msg = String.Empty;
-            InputMessage.Document.GetText(TextGetOptions.None, out count_msg);
+            MSG_richeditbox_message.Document.GetText(TextGetOptions.None, out count_msg);
             count_msg = count_msg.TrimEnd('\r');
-            picker_count_text.Text = count_msg.Length.ToString();
+            MSG_picker_count_message.Text = count_msg.Length.ToString();
         }
 
         //PAGE CONTROL FOR EMBED MESSAGE (EMBED MENU -> EMBED MESSAGE)
