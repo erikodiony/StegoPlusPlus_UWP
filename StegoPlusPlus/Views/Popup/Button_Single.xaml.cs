@@ -9,6 +9,8 @@ namespace StegoPlusPlus.Views.Popup
     public sealed partial class Button_Single : ContentDialog
     {
         public string Detail;
+        public string Icon;
+        public bool CodeStatus;
 
         public Button_Single()
         {
@@ -32,12 +34,14 @@ namespace StegoPlusPlus.Views.Popup
 
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e)
         {
+            lbl_icon.Text = Icon;
             lbl_detail.Text = Detail;
             GetThemes();
         }
 
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
+            CodeStatus = true;
         }      
     }
 }

@@ -43,6 +43,12 @@ namespace StegoPlusPlus
                     public static readonly string Insert_Message = "Choose Text / Message";
                     public static readonly string Image_Cover = "Choose Image Cover";
                 }
+                public static class Icon
+                {
+                    public static readonly string Smile = "J";
+                    public static readonly string Sad = "L";
+                    public static readonly string Flat = "K";
+                }
             }
             #endregion
             #region Popup Complete

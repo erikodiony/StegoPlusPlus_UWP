@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="3,0,10,0" HorizontalAlignment="Stretch">
-                    <TextBlock Text="&#xEC24;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <TextBlock x:Name="lbl_icon" FontFamily="Wingdings" FontWeight="Normal" Style="{StaticResource HeaderTextBlockStyle}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Margin="10,0,3,0" HorizontalAlignment="Stretch">
                     <TextBlock x:Name="lbl_detail" FontSize="20" Style="{StaticResource BaseTextBlockStyle}" TextWrapping="Wrap"/>

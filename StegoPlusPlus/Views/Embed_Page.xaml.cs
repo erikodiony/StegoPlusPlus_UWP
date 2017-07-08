@@ -425,7 +425,7 @@ namespace StegoPlusPlus.Views
                 notify = dp.validatePasswdOrMessageInput(F_textbox_passwd.Text);
                 if (notify == "Password Invalid")
                 {
-                    PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd);
+                    PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd, Icon.Sad);
                 }
                 else
                 {
@@ -440,7 +440,7 @@ namespace StegoPlusPlus.Views
             }
             else
             {
-                PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd);
+                PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
             }
         }
 
@@ -453,7 +453,7 @@ namespace StegoPlusPlus.Views
                 F_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
                 F_textbox_passwd.Text = String.Empty;
                 F_btn_save_passwd.IsEnabled = true;
-                PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd);
+                PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
 
