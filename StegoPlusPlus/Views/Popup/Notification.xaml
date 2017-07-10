@@ -6,28 +6,31 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Loading="ContentDialog_Loading"
     Loaded="ContentDialog_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Margin="0,20,0,20" Grid.ColumnSpan="2">
+        <StackPanel Grid.Row="0" Margin="0,20,0,20">
             <Rectangle Width="Auto" Height="5" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
         </StackPanel>
-        <StackPanel Grid.Row="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Margin="3,0,10,0" HorizontalAlignment="Stretch">
-                    <TextBlock x:Name="lbl_icon" FontFamily="Wingdings" FontWeight="Normal" Style="{StaticResource HeaderTextBlockStyle}"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Margin="10,0,3,0" HorizontalAlignment="Stretch">
-                    <TextBlock x:Name="lbl_detail" FontSize="20" Style="{StaticResource BaseTextBlockStyle}" TextWrapping="Wrap"/>
-                </StackPanel>
-            </Grid>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Left">
+            <ScrollViewer HorizontalScrollMode="Auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="3,0,10,0" HorizontalAlignment="Stretch">
+                        <TextBlock x:Name="lbl_icon" FontFamily="Wingdings" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="10,0,3,0" HorizontalAlignment="Stretch">
+                        <TextBlock x:Name="lbl_detail" Style="{StaticResource BaseTextBlockStyle}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
         </StackPanel>
     </Grid>
 </ContentDialog>

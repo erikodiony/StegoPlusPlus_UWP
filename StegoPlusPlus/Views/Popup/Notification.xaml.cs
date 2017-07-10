@@ -37,8 +37,20 @@ namespace StegoPlusPlus.Views.Popup
             Process.Theme.SetTheme(setTheme.ToString());
         }
 
+        private void Init_Transition()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+            Transitions = Process.Transition.GetTransition(value);
+            Process.Transition.SetTransition(value);
+        }
+
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void ContentDialog_Loading(FrameworkElement sender, object args)
+        {
+            Init_Transition();
             Init_Theme();
             lbl_icon.Text = Icon;
             lbl_detail.Text = Detail;

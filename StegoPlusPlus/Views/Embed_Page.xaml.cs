@@ -23,20 +23,6 @@ namespace StegoPlusPlus.Views
         public Embed_Page()
         {
             InitializeComponent();
-
-            InitializingPage();
-            Init_Transition();
-            Init_Theme();
-
-            SetStatus_HidingFile(); //(Embed Menu -> Embed File -> Hiding File)
-            SetStatus_PickerCover(); //(Embed Menu -> Embed File -> Insert Image File)
-            SetStatus_PickerCover_2(); //(Embed Menu -> Embed Text/Message -> Insert Image File)
-            SetStatus_Password(); //(Embed Menu -> Embed File -> Insert Passwd)
-            SetStatus_Password_2(); //(Embed Menu -> Embed Text/Message ->Insert Passwd)
-
-            F_textbox_passwd.Text = String.Empty; 
-            MSG_textbox_passwd.Text = String.Empty;
-
             F_btn_input_cover.Click += new RoutedEventHandler(btn_CoverImage_Click); //Fungsi Click Cover ke Sinkron dengan Fungsi File Picker
             F_btn_input_file.Click += new RoutedEventHandler(btn_HidingFile_Click); //Fungsi Click Hiding ke Sinkron dengan Fungsi Hiding Picker
             MSG_btn_input_cover.Click += new RoutedEventHandler(btn_CoverImage_2_Click); //Fungsi Click Cover2 ke Sinkron dengan Fungsi File Picker
@@ -50,103 +36,146 @@ namespace StegoPlusPlus.Views
         //PAGE CONTROL FOR EMBED MENU
         //BEGIN
 
-
-        //Initialize DataText Property of Embed Menu
-        private void InitializingPage()
+        private void Page_Loading(FrameworkElement sender, object args)
         {
+            Init_Transition();
+            Init_Theme();
+            Init_Page();
+        }
+
+        private void Init_F_CoverImage_NEW()
+        {
+            F_picker_status_cover.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
+            F_picker_path_cover.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
+            F_picker_size_cover.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
+            F_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", Process.GetData.Picker[Data.Misc.Dimensions].ToString(), Process.GetData.Picker[Data.Misc.BitDepth].ToString(), Process.GetData.Picker[Data.Misc.Pixel].ToString());
+            F_picker_eta_cover.Text = String.Format("± {0} bytes", Process.GetData.Picker[Data.Misc.Eta].ToString());
+            F_picker_ico_cover.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
+            F_picker_ico_cover.Visibility = Visibility.Visible;
+        }
+
+        #region Initializing Property
+        private void Init_Page()
+        {
+            Init_F_CoverImage();
+            Init_F_File();
+            Init_F_Passwd();
+            Init_MSG_CoverImage();
+            Init_MSG_Message();
+            Init_MSG_Passwd();
+
             HeaderInfo.Text = HeaderPage.EmbedPage;
             MSG_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
             MSG_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
             F_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
             F_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
-
-            #region MSG_CoverImage
-            MSG_lbl_title_cover.Text = DataText_prop.CoverImage.title;
-            MSG_lbl_subtitle_cover.Text = DataText_prop.CoverImage.subtitle;
-            MSG_picker_status_cover.Text = DataText_prop.CoverImage.picker_status;
-            MSG_lbl_path_cover.Text = DataText_prop.CoverImage.picker_path;
-            MSG_picker_path_cover.Text = Data.Prop_Button.OK;
-            MSG_lbl_size_cover.Text = DataText_prop.CoverImage.picker_size;
-            MSG_picker_size_cover.Text = "-";
-            MSG_lbl_dimension_cover.Text = DataText_prop.CoverImage.picker_dimension;
-            MSG_picker_dimension_cover.Text = "-";
-            MSG_lbl_eta_cover.Text = DataText_prop.CoverImage.picker_eta_msg;
-            MSG_picker_eta_cover.Text = "-";
-            MSG_btn_input_cover.Content = DataText_prop.CoverImage.button;
-            #endregion
-
-            #region MSG_Passwd
-            MSG_lbl_title_passwd.Text = DataText_prop.Passwd.title;
-            MSG_lbl_subtitle_passwd.Text = DataText_prop.Passwd.subtitle;
-            MSG_textbox_passwd.PlaceholderText = DataText_prop.Passwd.placeholder;
-            MSG_textbox_passwd.Header = DataText_prop.Passwd.head_default;
-            MSG_btn_save_passwd.Label = DataText_prop.Button.Save;
-            MSG_btn_clear_passwd.Label = DataText_prop.Button.Clear;
-            #endregion
-
-            #region MSG_Message
-            //SUB 1
-            MSG_lbl_title_message.Text = DataText_prop.Secret_Message.title;
-            MSG_lbl_subtitle_message.Text = DataText_prop.Secret_Message.subtitle;
-            MSG_lbl_subtitle2_message.Text = DataText_prop.Secret_Message.subtitle2;
-            //SUB 2
-            MSG_btn_input_message.Content = DataText_prop.Secret_Message.button;
-            MSG_picker_status_message.Text = DataText_prop.Secret_Message.picker_status;
-            //SUB 3
-            MSG_lbl_path_message.Text = DataText_prop.Secret_Message.picker_path;
-            MSG_picker_path_message.Text = "-";
-            MSG_lbl_size_message.Text = DataText_prop.Secret_Message.picker_size;
-            MSG_picker_size_message.Text = "-";
-            MSG_lbl_type_message.Text = DataText_prop.Secret_Message.picker_type;
-            MSG_picker_type_message.Text = "-";
-            //SUB 4
-            MSG_richeditbox_message.Header = DataText_prop.Secret_Message.head_default;
-            MSG_richeditbox_message.PlaceholderText = DataText_prop.Secret_Message.placeholder;
-            MSG_lbl_counter_message.Text = DataText_prop.Secret_Message.counter;
-            //SUB 5
-            MSG_btn_save_message.Label = DataText_prop.Button.Save;
-            MSG_btn_clear_message.Label = DataText_prop.Button.Clear;
-            #endregion
-
-            #region F_CoverImage
-            F_lbl_title_cover.Text = DataText_prop.CoverImage.title;
-            F_lbl_subtitle_cover.Text = DataText_prop.CoverImage.subtitle;
-            F_picker_status_cover.Text = DataText_prop.CoverImage.picker_status;
-            F_lbl_path_cover.Text = DataText_prop.CoverImage.picker_path;
-            F_picker_path_cover.Text = "-";
-            F_lbl_size_cover.Text = DataText_prop.CoverImage.picker_size;
-            F_picker_size_cover.Text = "-";
-            F_lbl_dimension_cover.Text = DataText_prop.CoverImage.picker_dimension;
-            F_picker_dimension_cover.Text = "-";
-            F_lbl_eta_cover.Text = DataText_prop.CoverImage.picker_eta_file;
-            F_picker_eta_cover.Text = "-";
-            F_btn_input_cover.Content = DataText_prop.CoverImage.button;
-            #endregion
-
-            #region F_File
-            F_lbl_title_file.Text = DataText_prop.Secret_File.title;
-            F_lbl_subtitle_file.Text = DataText_prop.Secret_File.subtitle;
-            F_picker_status_file.Text = DataText_prop.Secret_File.picker_status;
-            F_lbl_path_file.Text = DataText_prop.Secret_File.picker_path;
-            F_picker_path_file.Text = "-";
-            F_lbl_size_file.Text = DataText_prop.Secret_File.picker_size;
-            F_picker_size_file.Text = "-";
-            F_lbl_type_file.Text = DataText_prop.Secret_File.picker_type;
-            F_picker_type_file.Text = "-";
-            F_btn_input_file.Content = DataText_prop.Secret_File.button;
-            #endregion
-
-            #region F_Passwd
-            F_lbl_title_passwd.Text = DataText_prop.Passwd.title;
-            F_lbl_subtitle_passwd.Text = DataText_prop.Passwd.subtitle;
-            F_textbox_passwd.PlaceholderText = DataText_prop.Passwd.placeholder;
-            F_textbox_passwd.Header = DataText_prop.Passwd.head_default;
-            F_btn_save_passwd.Label = DataText_prop.Button.Save;
-            F_btn_clear_passwd.Label = DataText_prop.Button.Clear;
-            #endregion
-
         }
+        private void Init_MSG_CoverImage()
+        {
+            MSG_picker_ico_cover.Visibility = Visibility.Collapsed;
+            MSG_lbl_title_cover.Text = Data.Prop_Image_Cover.title;
+            MSG_lbl_subtitle_cover.Text = Data.Prop_Image_Cover.subtitle;
+            MSG_picker_status_cover.Text = Data.Prop_Image_Cover.picker_status;
+            MSG_lbl_path_cover.Text = Data.Prop_Image_Cover.picker_path;
+            MSG_picker_path_cover.Text = "-";
+            MSG_lbl_size_cover.Text = Data.Prop_Image_Cover.picker_size;
+            MSG_picker_size_cover.Text = "-";
+            MSG_lbl_dimension_cover.Text = Data.Prop_Image_Cover.picker_dimension;
+            MSG_picker_dimension_cover.Text = "-";
+            MSG_lbl_eta_cover.Text = Data.Prop_Image_Cover.picker_eta_msg;
+            MSG_picker_eta_cover.Text = "-";
+            MSG_btn_input_cover.Content = Data.Prop_Image_Cover.button;
+        }
+        private void Init_MSG_Passwd()
+        {
+            MSG_lbl_title_passwd.Text = Data.Prop_Passwd.title;
+            MSG_lbl_subtitle_passwd.Text = Data.Prop_Passwd.subtitle;
+            MSG_textbox_passwd.PlaceholderText = Data.Prop_Passwd.placeholder;
+            MSG_textbox_passwd.Header = Data.Prop_Passwd.head_default;
+            MSG_textbox_passwd.Text = String.Empty;
+            MSG_textbox_passwd.IsReadOnly = false;
+            MSG_btn_save_passwd.IsEnabled = true;
+            MSG_btn_save_passwd.Label = Data.Prop_Button.Save;
+            MSG_btn_clear_passwd.Label = Data.Prop_Button.Clear;
+        }
+        private void Init_MSG_Message()
+        {
+            MSG_picker_ico_message.Visibility = Visibility.Collapsed;
+            MSG_lbl_title_message.Text = Data.Prop_Secret_Message.title;
+            MSG_lbl_subtitle_message.Text = Data.Prop_Secret_Message.subtitle;
+            MSG_lbl_subtitle2_message.Text = Data.Prop_Secret_Message.subtitle2;
+            MSG_btn_input_message.Content = Data.Prop_Secret_Message.button;
+            MSG_picker_status_message.Text = Data.Prop_Secret_Message.picker_status;
+            MSG_lbl_path_message.Text = Data.Prop_Secret_Message.picker_path;
+            MSG_picker_path_message.Text = "-";
+            MSG_lbl_size_message.Text = Data.Prop_Secret_Message.picker_size;
+            MSG_picker_size_message.Text = "-";
+            MSG_lbl_type_message.Text = Data.Prop_Secret_Message.picker_type;
+            MSG_picker_type_message.Text = "-";
+            MSG_richeditbox_message.Header = Data.Prop_Secret_Message.head_default;
+            MSG_richeditbox_message.PlaceholderText = Data.Prop_Secret_Message.placeholder;
+            MSG_lbl_counter_message.Text = Data.Prop_Secret_Message.counter;
+            MSG_btn_save_message.Label = Data.Prop_Button.Save;
+            MSG_btn_clear_message.Label = Data.Prop_Button.Clear;
+        }
+        private void Init_F_CoverImage()
+        {
+            F_picker_ico_cover.Visibility = Visibility.Collapsed;
+            F_lbl_title_cover.Text = Data.Prop_Image_Cover.title;
+            F_lbl_subtitle_cover.Text = Data.Prop_Image_Cover.subtitle;
+            F_picker_status_cover.Text = Data.Prop_Image_Cover.picker_status;
+            F_lbl_path_cover.Text = Data.Prop_Image_Cover.picker_path;
+            F_picker_path_cover.Text = "-";
+            F_lbl_size_cover.Text = Data.Prop_Image_Cover.picker_size;
+            F_picker_size_cover.Text = "-";
+            F_lbl_dimension_cover.Text = Data.Prop_Image_Cover.picker_dimension;
+            F_picker_dimension_cover.Text = "-";
+            F_lbl_eta_cover.Text = Data.Prop_Image_Cover.picker_eta_file;
+            F_picker_eta_cover.Text = "-";
+            F_btn_input_cover.Content = Data.Prop_Image_Cover.button;
+        }
+        private void Init_F_Passwd()
+        {
+            F_lbl_title_passwd.Text = Data.Prop_Passwd.title;
+            F_lbl_subtitle_passwd.Text = Data.Prop_Passwd.subtitle;
+            F_textbox_passwd.PlaceholderText = Data.Prop_Passwd.placeholder;
+            F_textbox_passwd.Header = Data.Prop_Passwd.head_default;
+            F_textbox_passwd.Text = String.Empty;
+            F_textbox_passwd.IsReadOnly = false;
+            F_btn_save_passwd.IsEnabled = true;
+            F_btn_save_passwd.Label = Data.Prop_Button.Save;
+            F_btn_clear_passwd.Label = Data.Prop_Button.Clear;
+        }
+        private void Init_F_File()
+        {
+            F_picker_ico_file.Visibility = Visibility.Collapsed;
+            F_lbl_title_file.Text = Data.Prop_Secret_File.title;
+            F_lbl_subtitle_file.Text = Data.Prop_Secret_File.subtitle;
+            F_picker_status_file.Text = Data.Prop_Secret_File.picker_status;
+            F_lbl_path_file.Text = Data.Prop_Secret_File.picker_path;
+            F_picker_path_file.Text = "-";
+            F_lbl_size_file.Text = Data.Prop_Secret_File.picker_size;
+            F_picker_size_file.Text = "-";
+            F_lbl_type_file.Text = Data.Prop_Secret_File.picker_type;
+            F_picker_type_file.Text = "-";
+            F_btn_input_file.Content = Data.Prop_Secret_File.button;
+        }
+        #endregion
 
+        #region Initializing Animation
+        private void Init_Transition()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+            Transitions = Process.Transition.GetTransition(value);
+            Process.Transition.SetTransition(value);
+        }
+        private void Init_Theme()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            Process.Theme.SetTheme(setTheme.ToString());
+        }
+        #endregion
 
         byte[] Binary_STEG_RESULT; //FILE STEG RGB
 
@@ -155,23 +184,6 @@ namespace StegoPlusPlus.Views
         List<string> propMsgList = new List<string>(); //Create List Specific Property For File Text Picker
         TransitionCollection collection = new TransitionCollection(); //Initializing Effect Transition Page
         NavigationThemeTransition theme = new NavigationThemeTransition(); //Initializing Theme Color Page
-
-        //Function to Check Effect Transition
-        private void Init_Transition()
-        {
-            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
-            collection.Add(Process.Transition.GetTransition(value));
-            Transitions = collection;
-            Process.Transition.SetTransition(value);
-        }
-
-        //Function Check Theme Status
-        private void Init_Theme()
-        {
-            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
-            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
-            Process.Theme.SetTheme(setTheme.ToString());
-        }
 
         //Saving Image Steg
         public async void SaveImageAsPNG()
@@ -224,34 +236,6 @@ namespace StegoPlusPlus.Views
         StorageFile file_cover;
         StorageFile file_hiding;
 
-        //Initial Default Text PickerCover File (EMBED MENU -> EMBED FILE)
-        private void SetStatus_PickerCover()
-        {
-            F_picker_status_cover.Text = "No Image";
-            F_picker_path_cover.Text = "-";
-            F_picker_size_cover.Text = "-";
-            F_picker_dimension_cover.Text = "-";
-            F_picker_eta_cover.Text = "-";
-            F_ico_picker_cover.Visibility = Visibility.Collapsed;
-        }
-
-        //Initial Default Text Hiding File (EMBED MENU -> EMBED FILE)
-        private void SetStatus_HidingFile()
-        {
-            F_picker_status_file.Text = "No File";
-            F_picker_path_file.Text = "-";
-            F_picker_size_file.Text = "-";
-            F_picker_type_file.Text = "-";
-            F_ico_picker_file.Visibility = Visibility.Collapsed;
-        }
-
-        //Initial Default Text Password (EMBED MENU -> EMBED FILE)
-        private void SetStatus_Password()
-        {
-            F_textbox_passwd.Text = String.Empty;
-            F_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
-            F_textbox_passwd.IsReadOnly = false;
-        }
 
         //Trigger Function From btn_CoverImage_Click (Embed File -> Cover Image)
         private async void btn_CoverImage_Click(object sender, RoutedEventArgs e)
@@ -286,10 +270,10 @@ namespace StegoPlusPlus.Views
                 {
                     if (thumbnail != null && propBitDepth.ToString() == "32")
                     {
-                        F_ico_picker_cover.Visibility = Visibility.Visible;
+                        F_picker_ico_cover.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
-                        F_ico_picker_cover.Source = bitmapImage;
+                        F_picker_ico_cover.Source = bitmapImage;
 
                         Binary_embed_file_cover = await dp.Convert_FileImage_to_Byte(file_cover);
 
@@ -316,7 +300,7 @@ namespace StegoPlusPlus.Views
 
             else
             {
-                SetStatus_PickerCover();
+                Init_F_CoverImage();
             }
         }
 
@@ -355,10 +339,10 @@ namespace StegoPlusPlus.Views
                         F_picker_size_file.Text = String.Format("{0} bytes", propSize);
                         F_picker_type_file.Text = file_hiding.DisplayType;
 
-                        F_ico_picker_file.Visibility = Visibility.Visible;
+                        F_picker_ico_file.Visibility = Visibility.Visible;
                         BitmapImage bitmapImage = new BitmapImage();
                         bitmapImage.SetSource(thumbnail);
-                        F_ico_picker_file.Source = bitmapImage;
+                        F_picker_ico_file.Source = bitmapImage;
                         Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType.ToLower());
                         //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
                     }
@@ -377,7 +361,7 @@ namespace StegoPlusPlus.Views
 
             else
             {
-                SetStatus_HidingFile();
+                Init_F_File();
             }
         }
 
@@ -387,8 +371,7 @@ namespace StegoPlusPlus.Views
             string notify = String.Empty;
             if (F_textbox_passwd.Text != String.Empty)
             {
-                notify = dp.validatePasswdOrMessageInput(F_textbox_passwd.Text);
-                if (notify == "Password Invalid")
+                if (Process.Validate.Input(F_textbox_passwd.Text) == false)
                 {
                     await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd, Icon.Sad);
                 }
@@ -405,19 +388,11 @@ namespace StegoPlusPlus.Views
             }
             else
             {
-                //PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
-                bool result = await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_File, Confirm.isExecute, Icon.Flat);
-                if (result == true)
-                {
-                    System.Diagnostics.Debug.WriteLine("PrimaryClicked");
-                }
-                else
-                {
-                    System.Diagnostics.Debug.WriteLine("SecondaryClicked");
-                }
-
+                //await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);               
+                //if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_F_CoverImage_NEW(); else Init_F_CoverImage();
             }
-        }
+        }       
+
 
         //Trigger Function From btn_Clear_Password_file_Click (Embed File -> Insert Password -> Clear)
         private async void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
@@ -435,15 +410,8 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Clear_FooterMenuEmbedFile_Click (Embed File -> Footer Menu -> Clear)
         private async void btn_Clear_FooterMenuEmbedFile_Click(object sender, RoutedEventArgs e)
         {
-            SetStatus_PickerCover();
-            SetStatus_HidingFile();
-            SetStatus_Password();
-            dlg_embed_file = new ContentDialog()
-            {
-                Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
-                PrimaryButtonText = NotifyDataText.OK_Button
-            };
-            show_dlg_embed_file = await dlg_embed_file.ShowAsync();
+            Init_Page();
+            await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Clear_All, Icon.Smile);
         }
 
         //Trigger Function From btn_Exec_FooterMenuEmbedFile_Click (Embed File -> Footer Menu -> Exec)
@@ -539,15 +507,6 @@ namespace StegoPlusPlus.Views
         private void SetStatus_PickerCover_2()
         {
             MSG_picker_ico_cover.Visibility = Visibility.Collapsed;
-        }
-
-        private void SetStatus_Password_2()
-        {
-            MSG_textbox_passwd.IsReadOnly = false;
-            MSG_btn_save_message.IsEnabled = true;
-
-            MSG_richeditbox_message.IsReadOnly = false;
-            MSG_btn_save_message.IsEnabled = true;
         }
 
         //Trigger Function From btn_CoverImage_2_Click (Embed Message -> Choose Image)
@@ -774,7 +733,7 @@ namespace StegoPlusPlus.Views
         //Trigger Function From btn_Clear_FooterMenuEmbedMessage_Click (Embed Message -> Footer Menu -> Clear)
         private async void btn_Clear_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
         {
-            SetStatus_Password_2();
+            Init_Page();
             SetStatus_PickerCover_2();
             dlg_embed_msg = new ContentDialog()
             {

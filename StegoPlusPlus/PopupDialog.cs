@@ -12,7 +12,7 @@ namespace StegoPlusPlus
     class PopupDialog
     {
         public static ContentDialogResult result = new ContentDialogResult();
-        public static async Task<bool> Show(string status, string title, string msg, string ico)
+        public static async Task Show(string status, string title, string msg, string ico)
         {
             Notification cbox = new Notification()
             {
@@ -21,8 +21,7 @@ namespace StegoPlusPlus
                 Detail = msg,
                 Icon = ico
             };
-            bool value = (await cbox.ShowAsync() == ContentDialogResult.Primary) ? true : false;
-            return value;
+            await cbox.ShowAsync();
         }
 
         public static async Task<bool> ShowConfirm(string status, string title, string msg, string ico)

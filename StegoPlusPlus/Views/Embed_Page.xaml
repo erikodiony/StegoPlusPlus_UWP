@@ -5,7 +5,8 @@
     xmlns:local="using:StegoPlusPlus.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loading="Page_Loading">
 
     <!--Define Main Row-->
     <Grid Background="#808080">
@@ -133,7 +134,7 @@
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="F_ico_picker_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="F_picker_ico_cover" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
@@ -182,7 +183,7 @@
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="F_ico_picker_file" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="F_picker_ico_file" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
