@@ -199,7 +199,13 @@ namespace StegoPlusPlus
             public static readonly string Type = "Type";
             public static readonly string Icon = "Icon";
             public static readonly string DataPixel = "DataPixel";
-            public static readonly char[] Character = { 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', (char)32, (char)33, (char)34, (char)35, (char)36, (char)37, (char)38, (char)39, (char)40, (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47, (char)58, (char)59, (char)60, (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93, (char)94, (char)95, (char)96, (char)123, (char)124, (char)125, (char)126, (char)9, (char)10, (char)11, (char)12, (char)13 };
+            public static readonly string DataPassword = "DataPassword";
+            public static readonly string DataNameFile = "DataNameFile";
+            public static readonly string DataType = "DataType";
+            public static readonly string DataExtension = "DataExtension";
+            public static readonly string DataSecret = "DataPassword";
+
+            public static readonly char[] Character = { 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', (char)32, (char)33, (char)34, (char)35, (char)36, (char)37, (char)38, (char)39, (char)40, (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47, (char)58, (char)59, (char)60, (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93, (char)94, (char)95, (char)96, (char)123, (char)124, (char)125, (char)125, (char)9, (char)10, (char)11, (char)12, (char)13 };
             public static readonly char[,] Matrix = new char[,]
             {
                 { 'A' , 'a' , 'B' , 'b' , 'C' , 'c' , 'D' , 'd' , 'E' , 'e' },
@@ -211,7 +217,7 @@ namespace StegoPlusPlus
                 { '8' , '9' , (char)32 , (char)33, (char)34, (char)35, (char)36, (char)37, (char)38, (char)39 },
                 { (char)40 , (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47 , (char)58, (char)59 },
                 { (char)60 , (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93 , (char)94, (char)95 },
-                { (char)96 , (char)123, (char)124, (char)125, (char)126, (char)9, (char)10, (char)11 , (char)12, (char)13 }
+                { (char)96 , (char)123, (char)124, (char)125, (char)125, (char)9, (char)10, (char)11 , (char)12, (char)13 }
             };
         }
     }

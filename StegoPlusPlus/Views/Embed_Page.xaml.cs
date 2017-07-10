@@ -377,13 +377,20 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    string enc = F_textbox_passwd.Text;
-                    F_textbox_passwd.IsReadOnly = true;
-                    F_textbox_passwd.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                    Binary_pwd_embed_file = dp.Convert_Passwd(F_textbox_passwd.Text);
-                    Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(F_textbox_passwd.Text));
-                    F_textbox_passwd.Text = dp.Encrypt_BifidCipher(enc);
-                    F_btn_save_passwd.IsEnabled = false;
+                    string asd = Process.Bifid_Cipher.Encrypt(F_textbox_passwd.Text);
+                    F_textbox_passwd.Text = asd;
+                    F_textbox_passwd.Header = asd.Length;
+                    //System.Diagnostics.Debug.WriteLine(asd);
+                    //string enc = F_textbox_passwd.Text;
+                    //F_textbox_passwd.IsReadOnly = true;
+                    //F_textbox_passwd.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
+                    //Binary_pwd_embed_file = dp.Convert_Passwd(F_textbox_passwd.Text);
+                    //Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(F_textbox_passwd.Text));
+                    //F_textbox_passwd.Text = dp.Encrypt_BifidCipher(enc);
+                    //F_btn_save_passwd.IsEnabled = false;
+
+
+
                 }
             }
             else

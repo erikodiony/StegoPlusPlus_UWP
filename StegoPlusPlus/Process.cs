@@ -152,7 +152,7 @@ namespace StegoPlusPlus
             public static void Reset_Picker()
             {
                 GetData.Picker.Clear();
-                GetData.Pixel.Clear();
+                GetData.Embed.Remove(Data.Misc.DataPixel);
             }
 
         }
@@ -160,7 +160,7 @@ namespace StegoPlusPlus
         public class GetData
         {
             public static Dictionary<string, object> Picker = new Dictionary<string, object>();
-            public static Dictionary<string, object> Pixel = new Dictionary<string, object>();
+            public static Dictionary<string, object> Embed = new Dictionary<string, object>();
         }
 
         public class Conversion
@@ -178,7 +178,7 @@ namespace StegoPlusPlus
                             decoder = await BitmapDecoder.CreateAsync(ram);
                             pixel = (await decoder.GetPixelDataAsync()).DetachPixelData();
 
-                            GetData.Pixel.Add(Data.Misc.DataPixel, pixel);
+                            GetData.Embed.Add(Data.Misc.DataPixel, pixel);
                             GetData.Picker.Add(Data.Misc.Pixel, pixel.Length);
                             GetData.Picker.Add(Data.Misc.Eta, (pixel.Length / 8));
                             break;
@@ -199,11 +199,15 @@ namespace StegoPlusPlus
                 return value;
             }
 
+            public static char[] ToBinary(List<int> value)
+            {
+
+            }
         }
 
         public class Bifid_Cipher
         {
-            public string Encrypt(string value)
+            public static string Encrypt(string value)
             {
                 char[] input_char = value.ToCharArray();
                 List<int> list_x = new List<int>();
@@ -213,6 +217,7 @@ namespace StegoPlusPlus
                 string[] crypt_x;
                 string[] crypt_y;
                 string result = String.Empty; //Encrypt of Passwd
+                List<int> passwd = new List<int>();
 
                 foreach (var xx in input_char)
                 {
@@ -228,7 +233,6 @@ namespace StegoPlusPlus
                         }
                     }
                 }
-
 
                 list_xy = list_x;
                 list_xy.AddRange(list_y);
@@ -247,9 +251,17 @@ namespace StegoPlusPlus
 
                 for (int i = 0; i < crypt_x.Length; i++)
                 {
-                    result += Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])].ToString();
+                    passwd.Add(Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])]);
+                    result += (int)Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])] + " ";
                 }
+
+                GetData.Embed.Add(Data.Misc.DataPassword, passwd);
                 return result;
+            }
+            public static string Decrypt(string value)
+            {
+                string asd = String.Empty;
+                return asd;
             }
         }
 
@@ -258,7 +270,15 @@ namespace StegoPlusPlus
             public static bool Input(string value)
             {
                 bool result = true;
-                foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
+                //foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
+                foreach (char c in value)
+                {
+                    if (Data.Misc.Character.Contains(c) == false)
+                    {
+                        result = false;
+                    }
+                    //System.Diagnostics.Debug.WriteLine(c);
+                }
                 return result;
             }
         }
