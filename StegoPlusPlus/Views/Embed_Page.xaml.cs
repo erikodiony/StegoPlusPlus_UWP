@@ -54,6 +54,24 @@ namespace StegoPlusPlus.Views
             F_picker_ico_cover.Visibility = Visibility.Visible;
         }
 
+        private void Init_F_File_NEW()
+        {
+            F_picker_status_file.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
+            F_picker_path_file.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
+            F_picker_size_file.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
+            F_picker_type_file.Text = Process.GetData.Picker[Data.Misc.Type].ToString();
+            F_picker_ico_file.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
+            F_picker_ico_file.Visibility = Visibility.Visible;
+        }
+
+        private void Init_F_Passwd_NEW(string value)
+        {
+            F_textbox_passwd.Text = value;
+            F_textbox_passwd.Header = Data.Prop_Passwd.head_save;
+            F_textbox_passwd.IsReadOnly = true;
+            F_btn_save_passwd.IsEnabled = false;
+        }
+
         #region Initializing Property
         private void Init_Page()
         {
@@ -233,136 +251,19 @@ namespace StegoPlusPlus.Views
         ContentDialog dlg_embed_file;
         ContentDialogResult show_dlg_embed_file = new ContentDialogResult();
 
-        StorageFile file_cover;
         StorageFile file_hiding;
 
 
         //Trigger Function From btn_CoverImage_Click (Embed File -> Cover Image)
         private async void btn_CoverImage_Click(object sender, RoutedEventArgs e)
         {
-            //Set an Extensions File Cover
-            FileOpenPicker picker_cover = new FileOpenPicker();
-            foreach (string extension in FileExtensions.Stego)
-            {
-                picker_cover.FileTypeFilter.Add(extension);
-            }
-
-            //Set Get a Name Property Image File Cover
-            foreach (string propImg in propImage.All)
-            {
-                propImgList.Add(propImg);
-            }
-
-            file_cover = await picker_cover.PickSingleFileAsync();
-            
-            //Check File Picker
-            if (file_cover != null)
-            {
-                //Get Property File Picker Selected (await)
-                IDictionary<string, object> extraProperties = await file_cover.Properties.RetrievePropertiesAsync(propImgList);
-                var propSize = extraProperties[propImage.Size];
-                var propDimension = extraProperties[propImage.Dimensions];
-                var propBitDepth = extraProperties[propImage.BitDepth];
-
-
-                //Show Thumbnail File Picker
-                using (StorageItemThumbnail thumbnail = await file_cover.GetThumbnailAsync(ThumbnailMode.PicturesView))
-                {
-                    if (thumbnail != null && propBitDepth.ToString() == "32")
-                    {
-                        F_picker_ico_cover.Visibility = Visibility.Visible;
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.SetSource(thumbnail);
-                        F_picker_ico_cover.Source = bitmapImage;
-
-                        Binary_embed_file_cover = await dp.Convert_FileImage_to_Byte(file_cover);
-
-                        F_picker_status_cover.Text = file_cover.Name;
-                        F_picker_path_cover.Text = file_cover.Path.Replace("\\" + file_cover.Name, String.Empty);
-                        F_picker_size_cover.Text = String.Format("{0} bytes", propSize);
-                        F_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", propDimension, propBitDepth, Binary_embed_file_cover.Length);
-                        F_picker_eta_cover.Text = String.Format("± {0} bytes", (Binary_embed_file_cover.Length / 8));
-                    }
-                    else
-                    {
-                        dlg_embed_file = new ContentDialog()
-                        {
-                            Title = NotifyDataText.Err_Input_32bitDepth,
-                            PrimaryButtonText = NotifyDataText.OK_Button,
-                        };
-
-                        show_dlg_embed_file = await dlg_embed_file.ShowAsync();
-                    }
-                }
-
-
-            }
-
-            else
-            {
-                Init_F_CoverImage();
-            }
+            if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_F_CoverImage_NEW(); else Init_F_CoverImage();
         }
 
         //Trigger Function From btn_HidingImage_Click (Embed File -> Hiding File)
         private async void btn_HidingFile_Click(object sender, RoutedEventArgs e)
         {
-            //Set an Extensions File Hiding
-            FileOpenPicker picker_hiding = new FileOpenPicker();
-            foreach (string extension in FileExtensions.All)
-            {
-                picker_hiding.FileTypeFilter.Add(extension);
-            }
-
-            //Set Get a Name Property Image File Hiding
-            foreach (string propImg in propImage.All)
-            {
-                propImgList.Add(propImg);
-            }
-
-            file_hiding = await picker_hiding.PickSingleFileAsync();
-
-            //Check File Hiding
-            if (file_hiding != null)
-            {
-                //Get Property File Picker Selected (await)
-                IDictionary<string, object> extraProperties = await file_hiding.Properties.RetrievePropertiesAsync(propImgList);
-                var propSize = extraProperties[propImage.Size];
-
-                //Show Thumbnail File Picker
-                using (StorageItemThumbnail thumbnail = await file_hiding.GetThumbnailAsync(ThumbnailMode.PicturesView))
-                {
-                    if (thumbnail != null && int.Parse(propSize.ToString()) < Binary_embed_file_cover.Length / 8)
-                    {
-                        F_picker_status_file.Text = file_hiding.Name;
-                        F_picker_path_file.Text = file_hiding.Path.Replace("\\" + file_hiding.Name, String.Empty);
-                        F_picker_size_file.Text = String.Format("{0} bytes", propSize);
-                        F_picker_type_file.Text = file_hiding.DisplayType;
-
-                        F_picker_ico_file.Visibility = Visibility.Visible;
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.SetSource(thumbnail);
-                        F_picker_ico_file.Source = bitmapImage;
-                        Binary_ext_embed_file = dp.Convert_FileType(file_hiding.FileType.ToLower());
-                        //Binary_embed_file_encoded = await dp.Convert_FileHiding_to_Byte(file_hiding);
-                    }
-                    else
-                    {
-                        dlg_embed_file = new ContentDialog()
-                        {
-                            Title = NotifyDataText.Err_FileHiding_Overload_Size,
-                            PrimaryButtonText = NotifyDataText.OK_Button,
-                        };
-
-                        show_dlg_embed_file = await dlg_embed_file.ShowAsync();
-                    }
-                }
-            }
-
-            else
-            {
-                Init_F_File();
-            }
+            if (await Process.Picker.Embed(Data.File_Extensions.All, "File") == true) Init_F_File_NEW(); else Init_F_File();
         }
 
         //Trigger Function From btn_Save_Password_file_Click (Embed File -> Insert Password -> Save)
@@ -377,26 +278,13 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    string asd = Process.Bifid_Cipher.Encrypt(F_textbox_passwd.Text);
-                    F_textbox_passwd.Text = asd;
-                    F_textbox_passwd.Header = asd.Length;
-                    //System.Diagnostics.Debug.WriteLine(asd);
-                    //string enc = F_textbox_passwd.Text;
-                    //F_textbox_passwd.IsReadOnly = true;
-                    //F_textbox_passwd.Header = NotifyDataText.Saving_Header_Notify_Embed_File_pwd;
-                    //Binary_pwd_embed_file = dp.Convert_Passwd(F_textbox_passwd.Text);
-                    //Binary_pwd_embed_file_encoded = dp.Convert_Passwd_Encrypt(dp.Encrypt_BifidCipher(F_textbox_passwd.Text));
-                    //F_textbox_passwd.Text = dp.Encrypt_BifidCipher(enc);
-                    //F_btn_save_passwd.IsEnabled = false;
-
-
-
+                    string result = Process.Bifid_Cipher.Encrypt(F_textbox_passwd.Text);
+                    Init_F_Passwd_NEW(result);
                 }
             }
             else
             {
-                //await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);               
-                //if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_F_CoverImage_NEW(); else Init_F_CoverImage();
+                await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
             }
         }       
 
@@ -406,10 +294,8 @@ namespace StegoPlusPlus.Views
         {
             if (F_textbox_passwd.Text != String.Empty)
             {
-                F_textbox_passwd.IsReadOnly = false;
-                F_textbox_passwd.Header = NotifyDataText.Clearing_Header_Notify_Embed_File_pwd;
-                F_textbox_passwd.Text = String.Empty;
-                F_btn_save_passwd.IsEnabled = true;
+                Init_F_Passwd();
+                Process.GetData.Reset_Data("Passwd");
                 await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
@@ -418,6 +304,7 @@ namespace StegoPlusPlus.Views
         private async void btn_Clear_FooterMenuEmbedFile_Click(object sender, RoutedEventArgs e)
         {
             Init_Page();
+            Process.GetData.Reset_Data("All");
             await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Clear_All, Icon.Smile);
         }
 

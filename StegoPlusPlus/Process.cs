@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,7 +80,6 @@ namespace StegoPlusPlus
             {
                 //Set an Extensions File Cover
                 FileOpenPicker picker = new FileOpenPicker();
-                List<string> propImgList = new List<string>();
                 foreach (string ext in extension)
                 {
                     picker.FileTypeFilter.Add(ext);
@@ -92,7 +92,7 @@ namespace StegoPlusPlus
                     switch (type)
                     {
                         case "Image":
-                            switch (await Picker_Property.Image(file))
+                            switch (await Picker_Property.GetPicker(file, type))
                             {
                                 case true:
                                     await Conversion.Image(file, "Cover");
@@ -102,8 +102,15 @@ namespace StegoPlusPlus
                             }
                             break;
                         case "File":
-                            Conversion.File(file);
-                            return true;
+                            switch (await Picker_Property.GetPicker(file, type))
+                            {
+                                case true:
+                                    await Conversion.File(file);
+                                    return true;
+                                case false:
+                                    return false;
+                            }
+                            break;
                         case "Message":
                             Conversion.Message(file);
                             return true;
@@ -112,55 +119,124 @@ namespace StegoPlusPlus
                 }
                 else
                 {
-                    await PopupDialog.Show(Status.Success, Detail.Embed_Message, Complete.Clear_Input_Message, Icon.Smile);
                     return false;
                 }
             }
-
         }
 
         public class Picker_Property
         {
-            public static async Task<bool> Image(StorageFile file)
+            public static async Task<bool> GetPicker(StorageFile file, string type)
             {
                 IDictionary<string, object> prop = await file.Properties.RetrievePropertiesAsync(Data.Prop_File_Picker.All);
+                StorageItemThumbnail thumbnail = await file.GetThumbnailAsync(ThumbnailMode.PicturesView);
+                BitmapImage bitmap = new BitmapImage();
 
-                if (prop[Data.Prop_File_Picker.BitDepth].ToString() == "32")
+                switch (type)
                 {
-                    //Get thumbnail icon && Reset Picker Data Object
-                    StorageItemThumbnail thumbnail = await file.GetThumbnailAsync(ThumbnailMode.PicturesView);
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.SetSource(thumbnail);
+                    case "Image":
+                        if (prop[Data.Prop_File_Picker.BitDepth].ToString() == "32")
+                        {
+                            bitmap.SetSource(thumbnail);
 
-                    Reset_Picker();
+                            Reset_Picker("Image");
 
-                    GetData.Picker.Add(Data.Misc.Icon, bitmap);
-                    GetData.Picker.Add(Data.Misc.Name, file.Name);
-                    GetData.Picker.Add(Data.Misc.Path, file.Path.Replace("\\" + file.Name, String.Empty));
-                    GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
-                    GetData.Picker.Add(Data.Misc.Dimensions, prop[Data.Prop_File_Picker.Dimensions]);
-                    GetData.Picker.Add(Data.Misc.BitDepth, prop[Data.Prop_File_Picker.BitDepth]);
-                    return true;
+                            GetData.Picker.Add(Data.Misc.Icon, bitmap);
+                            GetData.Picker.Add(Data.Misc.Name, file.Name);
+                            GetData.Picker.Add(Data.Misc.Path, file.Path.Replace("\\" + file.Name, String.Empty));
+                            GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
+                            GetData.Picker.Add(Data.Misc.Dimensions, prop[Data.Prop_File_Picker.Dimensions]);
+                            GetData.Picker.Add(Data.Misc.BitDepth, prop[Data.Prop_File_Picker.BitDepth]);
+                            return true;
+                        }
+                        else
+                        {
+                            await PopupDialog.Show(Status.Err, Detail.Image_Cover, Err.Invalid_32bitDepth, Icon.Sad);
+                            return false;
+                        }
+                    case "File":
+                        if (GetData.Embed.ContainsKey(Data.Misc.DataPixel) == false)
+                        {
+                            await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.Null_Size, Icon.Sad);
+                            return false;
+                        }
+                        else
+                        {
+                            byte[] cover = (byte[])GetData.Embed[Data.Misc.DataPixel];
+
+                            if (int.Parse(prop[Data.Prop_File_Picker.Size].ToString()) < cover.Length / 8)
+                            {
+                                bitmap.SetSource(thumbnail);
+
+                                Reset_Picker("File");
+
+                                GetData.Picker.Add(Data.Misc.Icon, bitmap);
+                                GetData.Picker.Add(Data.Misc.Name, file.Name);
+                                GetData.Picker.Add(Data.Misc.Path, file.Path.Replace("\\" + file.Name, String.Empty));
+                                GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
+                                GetData.Picker.Add(Data.Misc.Type, file.DisplayType);
+
+                                GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary(file.Name.Replace(file.FileType, String.Empty), "String"));
+                                GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary(file.FileType.ToLower(), "String"));
+                                GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("0", "String"));
+                                return true;
+                            }
+                            else
+                            {
+                                await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.Overload_Size, Icon.Sad);
+                                return false;
+                            }
+                        }
                 }
-                else
-                {
-                    await PopupDialog.Show(Status.Err, Detail.Image_Cover, Err.Invalid_32bitDepth, Icon.Sad);
-                    return false;
-                }                
+                return false;
             }
 
-            public static void Reset_Picker()
+            public static void Reset_Picker(string type)
             {
-                GetData.Picker.Clear();
-                GetData.Embed.Remove(Data.Misc.DataPixel);
+                switch(type)
+                {
+                    case "Image":
+                        GetData.Reset_Data(type);
+                        GetData.Picker.Clear();
+                        break;
+                    case "File":
+                        GetData.Reset_Data(type);
+                        GetData.Picker.Clear();
+                        break;
+                }
             }
-
         }
 
         public class GetData
         {
             public static Dictionary<string, object> Picker = new Dictionary<string, object>();
             public static Dictionary<string, object> Embed = new Dictionary<string, object>();
+            public static void Reset_Data(string type)
+            {
+                switch(type)
+                {
+                    case "Image":
+                        Embed.Remove(Data.Misc.DataPixel);
+                        break;
+                    case "File":
+                        Embed.Remove(Data.Misc.DataType);
+                        Embed.Remove(Data.Misc.DataSecret);
+                        Embed.Remove(Data.Misc.DataNameFile);
+                        Embed.Remove(Data.Misc.DataExtension);
+                        break;
+                    case "Passwd":
+                        Embed.Remove(Data.Misc.DataPassword);
+                        break;
+                    case "All":
+                        Embed.Remove(Data.Misc.DataType);
+                        Embed.Remove(Data.Misc.DataPixel);
+                        Embed.Remove(Data.Misc.DataSecret);
+                        Embed.Remove(Data.Misc.DataPassword);
+                        Embed.Remove(Data.Misc.DataNameFile);
+                        Embed.Remove(Data.Misc.DataExtension);
+                        break;
+                }
+            }
         }
 
         public class Conversion
@@ -188,20 +264,51 @@ namespace StegoPlusPlus
                     }
                 }
             }
-            public static byte[] File(StorageFile img)
+
+            public static async Task File(StorageFile value)
             {
-                byte[] value = null;
-                return value;
+                byte[] bin;
+                using (Stream st = await value.OpenStreamForReadAsync())
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(st))
+                    {
+                        bin = binaryReader.ReadBytes((int)st.Length).ToArray();
+                        GetData.Embed.Add(Data.Misc.DataSecret, ToBinary(bin, "File"));
+                    }
+                }
             }
+
             public static byte[] Message(StorageFile img)
             {
                 byte[] value = null;
                 return value;
             }
 
-            public static char[] ToBinary(List<int> value)
+            public static char[] ToBinary(object value, string type)
             {
-
+                string result = String.Empty;
+                switch (type)
+                {
+                    case "String":
+                        foreach (char x in (string)value)
+                        {
+                            result += Convert.ToString(x, 2).PadLeft(8, '0');
+                        }
+                        break;
+                    case "Passwd":
+                        foreach (char x in (List<int>)value)
+                        {
+                            result += Convert.ToString(x, 2).PadLeft(8, '0');
+                        }
+                        break;
+                    case "File":
+                        foreach (char x in (byte[])value)
+                        {
+                            result += Convert.ToString(x, 2).PadLeft(8, '0');
+                        }
+                        break;
+                }
+                return result.ToCharArray();
             }
         }
 
@@ -255,7 +362,7 @@ namespace StegoPlusPlus
                     result += (int)Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])] + " ";
                 }
 
-                GetData.Embed.Add(Data.Misc.DataPassword, passwd);
+                GetData.Embed.Add(Data.Misc.DataPassword, Conversion.ToBinary(passwd, "Passwd"));
                 return result;
             }
             public static string Decrypt(string value)
@@ -270,15 +377,7 @@ namespace StegoPlusPlus
             public static bool Input(string value)
             {
                 bool result = true;
-                //foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
-                foreach (char c in value)
-                {
-                    if (Data.Misc.Character.Contains(c) == false)
-                    {
-                        result = false;
-                    }
-                    //System.Diagnostics.Debug.WriteLine(c);
-                }
+                foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
                 return result;
             }
         }
