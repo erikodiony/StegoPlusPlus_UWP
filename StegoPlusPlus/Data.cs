@@ -55,8 +55,9 @@ namespace StegoPlusPlus
             public static class Complete
             {
                 public static readonly string Clear_All = "All field was Cleared !\nProcess Successfully...";
-                public static readonly string Clear_Input_Passwd = "Field ''Insert Password'' was Cleared !\nProcess Successfully...";
-                public static readonly string Clear_Input_Message = "Field ''Insert Text/Message'' was Cleared !\nProcess Successfully...";
+                public static readonly string Clear_Input_Passwd = "Field ''Input Password'' was Cleared !\nProcess Successfully...";
+                public static readonly string Clear_Input_Message = "Field ''Input Text/Message'' was Cleared !\nProcess Successfully...";
+                public static readonly string Saved = "Stego Image was Saved !\nProcess Successfully...";
             }
             #endregion
             #region Popup Error
@@ -65,23 +66,23 @@ namespace StegoPlusPlus
                 public static readonly string Input_isNull = "Some field is empty or input not saved !\nPlease check again...";
                 public static readonly string Input_Invalid_Passwd = "Password Invalid !\nCan't Saving Password...";
                 public static readonly string Input_Invalid_Message = "Text/Message Invalid !\nCan't Saving Text/Message...";
-                public static readonly string Input_Empty_Passwd = "Field ''Insert Password'' is empty !\nCan't Saving Password...";
-                public static readonly string Input_Empty_Message = "Field ''Insert Text/Message'' is empty !\nCan't Saving Text/Message...";
+                public static readonly string Input_Empty_Passwd = "Field ''Input Password'' is empty !\nCan't Saving Password...";
+                public static readonly string Input_Empty_Message = "Field ''Input Text/Message'' is empty !\nCan't Saving Text/Message...";
                 public static readonly string Invalid_Stego = "Invalid Image Stego !\nCan't Extract File / Message...";
                 public static readonly string Invalid_Passwd = "Password Incorrect !\nCan't Extract File / Message...";
                 public static readonly string Invalid_32bitDepth = "Only Image Cover 32BitDepth was supported !\nPlease check again...";
-                public static readonly string Overload_Size = "Overload size quota of File Hiding !\nCan't Saving File Hiding...";
-                public static readonly string Null_Size = "Field ''Choose Image Cover'' must be filled !\nCan't Saving File Hiding...";
+                public static readonly string Overload_Size = "Overload size quota of File !\nPlease check again...";
+                public static readonly string Null_Size = "Field ''Choose Image Cover'' must be filled !\nPlease check again...";
+                public static readonly string Replace_Message = "Field ''Input Text/Message'' is Saved !\nClick 'Clear' to Replace with new Text/Message...";
+                public static readonly string NotSaved = "Stego Image not saved !\nProcess cancelling...";
+                public static readonly string More150Kb = "Size more than 150Kb !\nCan't Saving File...";
             }
             #endregion
             #region Popup Confirm
             public static class Confirm
             {
                 public static readonly string isExecute = "Confirm to Execute ?\nClick 'OK' to continue...";
-                public static readonly string isSave_EmbedFile = "Embedding File was Completed !\nClick 'OK' to saving Stego Image...";
-                public static readonly string isSave_EmbedMessage = "Embedding Text/Message was Completed !\nClick 'OK' to saving Stego Image...";
-                public static readonly string isSave_ExtractFile = "Extracting File was Completed !\nClick 'OK' to saving Secret File...";
-                public static readonly string isSave_ExtractMessage = "Extracting Message was Completed !\nClick 'OK' to view Secret Text/Message...";
+                public static readonly string isLargeFile = "Large size will take a several minute !\nClick 'OK' to continue...";
             }
             #endregion
         }
@@ -188,6 +189,7 @@ namespace StegoPlusPlus
         }
         #endregion
 
+        #region Property Misc
         public static class Misc
         {
             public static readonly string Name = "Name";
@@ -199,14 +201,20 @@ namespace StegoPlusPlus
             public static readonly string Eta = "Eta";
             public static readonly string Type = "Type";
             public static readonly string Icon = "Icon";
+            public static readonly string Message = "Message";
+
+            public static readonly string PleaseWait = "Please Wait...";
+            public static readonly string PleaseWaitDetail = "This process may take a while or several minutes...";
+            public static readonly string WorkingOnIt = "Working on it...";
+
             public static readonly string DataPixel = "DataPixel";
-            public static readonly string DataPassword = "DataPassword";
             public static readonly string DataNameFile = "DataNameFile";
+            public static readonly string DataPassword = "DataPassword";
             public static readonly string DataType = "DataType";
             public static readonly string DataExtension = "DataExtension";
             public static readonly string DataSecret = "DataSecret";
 
-            public static readonly char[] Character = { 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', (char)32, (char)33, (char)34, (char)35, (char)36, (char)37, (char)38, (char)39, (char)40, (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47, (char)58, (char)59, (char)60, (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93, (char)94, (char)95, (char)96, (char)123, (char)124, (char)125, (char)125, (char)9, (char)10, (char)11, (char)12, (char)13 };
+            public static readonly char[] Character = { 'A', 'a', 'B', 'b', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'J', 'j', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'O', 'o', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'U', 'u', 'V', 'v', 'W', 'w', 'X', 'x', 'Y', 'y', 'Z', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', (char)32, (char)33, (char)34, (char)35, (char)36, (char)37, (char)38, (char)39, (char)40, (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47, (char)58, (char)59, (char)60, (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93, (char)94, (char)95, (char)96, (char)123, (char)124, (char)125, (char)126, (char)9, (char)10, (char)11, (char)12, (char)13 };
             public static readonly char[,] Matrix = new char[,]
             {
                 { 'A' , 'a' , 'B' , 'b' , 'C' , 'c' , 'D' , 'd' , 'E' , 'e' },
@@ -218,8 +226,9 @@ namespace StegoPlusPlus
                 { '8' , '9' , (char)32 , (char)33, (char)34, (char)35, (char)36, (char)37, (char)38, (char)39 },
                 { (char)40 , (char)41, (char)42, (char)43, (char)44, (char)45, (char)46, (char)47 , (char)58, (char)59 },
                 { (char)60 , (char)61, (char)62, (char)63, (char)64, (char)91, (char)92, (char)93 , (char)94, (char)95 },
-                { (char)96 , (char)123, (char)124, (char)125, (char)125, (char)9, (char)10, (char)11 , (char)12, (char)13 }
+                { (char)96 , (char)123, (char)124, (char)125, (char)126, (char)9, (char)10, (char)11 , (char)12, (char)13 }
             };
         }
+        #endregion
     }
 }

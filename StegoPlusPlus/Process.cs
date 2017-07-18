@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -78,8 +79,8 @@ namespace StegoPlusPlus
         {
             public static async Task<bool> Embed(string[] extension, string type)
             {
-                //Set an Extensions File Cover
                 FileOpenPicker picker = new FileOpenPicker();
+                PopupDialog.Loading pl = new PopupDialog.Loading();
                 foreach (string ext in extension)
                 {
                     picker.FileTypeFilter.Add(ext);
@@ -105,15 +106,34 @@ namespace StegoPlusPlus
                             switch (await Picker_Property.GetPicker(file, type))
                             {
                                 case true:
-                                    await Conversion.File(file);
+                                    Task x = Task.Run(() => Conversion.File(file));
+                                    pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
+                                    await x;
+                                    if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);
                                     return true;
                                 case false:
                                     return false;
                             }
                             break;
                         case "Message":
-                            Conversion.Message(file);
-                            return true;
+                            switch(await Picker_Property.GetPicker(file, type))
+                            {
+                                case true:
+                                    await Conversion.Message(file);
+                                    return true;
+                                case false:
+                                    return false;
+                            }
+                            break;
+                        case "Stego":
+                            switch(await Picker_Property.GetPicker(file, type))
+                            {
+                                case true:
+                                    break;
+                                case false:
+                                    break;
+                            }
+                            break;
                     }
                     return false;
                 }
@@ -154,11 +174,20 @@ namespace StegoPlusPlus
                             await PopupDialog.Show(Status.Err, Detail.Image_Cover, Err.Invalid_32bitDepth, Icon.Sad);
                             return false;
                         }
-                    case "File":
+                    default:
                         if (GetData.Embed.ContainsKey(Data.Misc.DataPixel) == false)
                         {
-                            await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.Null_Size, Icon.Sad);
-                            return false;
+                            switch(type)
+                            {
+                                case "File":
+                                    await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.Null_Size, Icon.Sad);
+                                    return false;
+                                case "Message":
+                                    await PopupDialog.Show(Status.Err, Detail.Insert_Message, Err.Null_Size, Icon.Sad);
+                                    return false;
+                                default:
+                                    return false;
+                            }
                         }
                         else
                         {
@@ -166,31 +195,80 @@ namespace StegoPlusPlus
 
                             if (int.Parse(prop[Data.Prop_File_Picker.Size].ToString()) < cover.Length / 8)
                             {
-                                bitmap.SetSource(thumbnail);
+                                if(int.Parse(prop[Data.Prop_File_Picker.Size].ToString()) < 150000)
+                                {
+                                    switch(type)
+                                    {
+                                        case "File":
+                                            if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Insert_File, Confirm.isLargeFile, Icon.Flat) == false)
+                                            {
+                                                return false;
+                                            }
+                                            break;
+                                        case "Message":
+                                            if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Insert_Message, Confirm.isLargeFile, Icon.Flat) == false)
+                                            {
+                                                return false;
+                                            }
+                                            break;
+                                    }
 
-                                Reset_Picker("File");
+                                    bitmap.SetSource(thumbnail);
 
-                                GetData.Picker.Add(Data.Misc.Icon, bitmap);
-                                GetData.Picker.Add(Data.Misc.Name, file.Name);
-                                GetData.Picker.Add(Data.Misc.Path, file.Path.Replace("\\" + file.Name, String.Empty));
-                                GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
-                                GetData.Picker.Add(Data.Misc.Type, file.DisplayType);
+                                    Reset_Picker("File");
 
-                                GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary(file.Name.Replace(file.FileType, String.Empty), "String"));
-                                GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary(file.FileType.ToLower(), "String"));
-                                GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("0", "String"));
-                                return true;
+                                    GetData.Picker.Add(Data.Misc.Icon, bitmap);
+                                    GetData.Picker.Add(Data.Misc.Name, file.Name);
+                                    GetData.Picker.Add(Data.Misc.Path, file.Path.Replace("\\" + file.Name, String.Empty));
+                                    GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
+                                    GetData.Picker.Add(Data.Misc.Type, file.DisplayType);
+
+                                    GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary(file.Name.Replace(file.FileType, String.Empty), "String"));
+                                    GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary(file.FileType.ToLower(), "String"));
+                                    switch (type)
+                                    {
+                                        case "File":
+                                            GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("0", "String"));
+                                            break;
+                                        case "Message":
+                                            GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("1", "String"));
+                                            break;
+                                    }
+                                    return true;
+
+                                }
+                                else
+                                {
+                                    switch (type)
+                                    {
+                                        case "File":
+                                            await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.More150Kb, Icon.Sad);
+                                            return false;
+                                        case "Message":
+                                            await PopupDialog.Show(Status.Err, Detail.Insert_Message, Err.More150Kb, Icon.Sad);
+                                            return false;
+                                        default:
+                                            return false;
+                                    }
+                                }
                             }
                             else
                             {
-                                await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.Overload_Size, Icon.Sad);
-                                return false;
+                                switch(type)
+                                {
+                                    case "File":
+                                        await PopupDialog.Show(Status.Err, Detail.Insert_File, Err.Overload_Size, Icon.Sad);
+                                        return false;
+                                    case "Message":
+                                        await PopupDialog.Show(Status.Err, Detail.Insert_Message, Err.Overload_Size, Icon.Sad);
+                                        return false;
+                                    default:
+                                        return false;
+                                }
                             }
                         }
                 }
-                return false;
             }
-
             public static void Reset_Picker(string type)
             {
                 switch(type)
@@ -209,6 +287,7 @@ namespace StegoPlusPlus
 
         public class GetData
         {
+            public static BitmapDecoder Decoder;
             public static Dictionary<string, object> Picker = new Dictionary<string, object>();
             public static Dictionary<string, object> Embed = new Dictionary<string, object>();
             public static void Reset_Data(string type)
@@ -241,18 +320,18 @@ namespace StegoPlusPlus
 
         public class Conversion
         {
-            public static async Task Image(StorageFile img, string type)
+            public static async Task Image(StorageFile file, string type)
             {
                 IRandomAccessStream ram;
-                BitmapDecoder decoder;
+                //BitmapDecoder decoder;
                 byte[] pixel;
-                using (ram = await img.OpenAsync(FileAccessMode.ReadWrite))
+                using (ram = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     switch (type)
                     {
                         case "Cover":
-                            decoder = await BitmapDecoder.CreateAsync(ram);
-                            pixel = (await decoder.GetPixelDataAsync()).DetachPixelData();
+                            GetData.Decoder = await BitmapDecoder.CreateAsync(ram);
+                            pixel = (await GetData.Decoder.GetPixelDataAsync()).DetachPixelData();
 
                             GetData.Embed.Add(Data.Misc.DataPixel, pixel);
                             GetData.Picker.Add(Data.Misc.Pixel, pixel.Length);
@@ -264,11 +343,10 @@ namespace StegoPlusPlus
                     }
                 }
             }
-
-            public static async Task File(StorageFile value)
+            public static async Task File(StorageFile file)
             {
                 byte[] bin;
-                using (Stream st = await value.OpenStreamForReadAsync())
+                using (Stream st = await file.OpenStreamForReadAsync())
                 {
                     using (BinaryReader binaryReader = new BinaryReader(st))
                     {
@@ -277,13 +355,10 @@ namespace StegoPlusPlus
                     }
                 }
             }
-
-            public static byte[] Message(StorageFile img)
+            public static async Task Message(StorageFile file)
             {
-                byte[] value = null;
-                return value;
+                GetData.Picker.Add(Data.Misc.Message, await FileIO.ReadTextAsync(file));
             }
-
             public static char[] ToBinary(object value, string type)
             {
                 string result = String.Empty;
@@ -295,8 +370,8 @@ namespace StegoPlusPlus
                             result += Convert.ToString(x, 2).PadLeft(8, '0');
                         }
                         break;
-                    case "Passwd":
-                        foreach (char x in (List<int>)value)
+                    case "Cipher":
+                        foreach (char x in (char[])value)
                         {
                             result += Convert.ToString(x, 2).PadLeft(8, '0');
                         }
@@ -314,7 +389,23 @@ namespace StegoPlusPlus
 
         public class Bifid_Cipher
         {
-            public static string Encrypt(string value)
+            public static async Task<string> Execute(string value, string type)
+            {
+                PopupDialog.Loading pl = new PopupDialog.Loading();
+                if (value.Length > 1000)
+                {
+                    pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
+                }
+
+                var x = Task.Run(() => Encrypt(value, type));
+                var result = await x;
+
+                if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);
+
+                return result;
+            }
+
+            public static string Encrypt(string value, string type)
             {
                 char[] input_char = value.ToCharArray();
                 List<int> list_x = new List<int>();
@@ -324,7 +415,7 @@ namespace StegoPlusPlus
                 string[] crypt_x;
                 string[] crypt_y;
                 string result = String.Empty; //Encrypt of Passwd
-                List<int> passwd = new List<int>();
+                List<char> encrypt_result = new List<char>();
 
                 foreach (var xx in input_char)
                 {
@@ -358,17 +449,74 @@ namespace StegoPlusPlus
 
                 for (int i = 0; i < crypt_x.Length; i++)
                 {
-                    passwd.Add(Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])]);
+                    encrypt_result.Add(Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])]);
                     result += (int)Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])] + " ";
                 }
 
-                GetData.Embed.Add(Data.Misc.DataPassword, Conversion.ToBinary(passwd, "Passwd"));
+                switch (type)
+                {
+                    case "Passwd":
+                        GetData.Embed.Add(Data.Misc.DataPassword, Conversion.ToBinary(encrypt_result.ToArray(), "Cipher"));
+                        break;
+                    case "Message":
+                        GetData.Embed.Add(Data.Misc.DataSecret, Conversion.ToBinary(encrypt_result.ToArray(), "Cipher"));
+                        break;
+                }
                 return result;
             }
-            public static string Decrypt(string value)
+            public static string Decrypt(char[] value)
             {
-                string asd = String.Empty;
-                return asd;
+                List<int> list_x = new List<int>();
+                List<int> list_y = new List<int>();
+                int[] arr_x;
+                int[] arr_y;
+                string xy = String.Empty;
+                string result = String.Empty;
+
+                foreach (var xx in value)
+                {
+                    for (int x = 0; x < Data.Misc.Matrix.GetLength(0); ++x)
+                    {
+                        for (int y = 0; y < Data.Misc.Matrix.GetLength(1); ++y)
+                        {
+                            if (Data.Misc.Matrix[x, y].Equals(xx))
+                            {
+                                list_x.Add(x);
+                                list_y.Add(y);
+                            }
+                        }
+                    }
+                }
+
+                arr_x = new int[list_x.Capacity];
+                arr_y = new int[list_y.Capacity];
+
+                arr_x = list_x.ToArray();
+                arr_y = list_y.ToArray();
+
+                for (int i = 0; i < arr_x.Length; i++)
+                {
+                    xy += arr_x[i].ToString() + arr_y[i].ToString();
+                }
+
+                char[] char_xy = xy.ToCharArray();
+                string[] str_x = new string[char_xy.Length / 2];
+                string[] str_y = new string[char_xy.Length / 2];
+
+                int tt = 0;
+
+                for (int i = 0; i < char_xy.Length / 2; i++)
+                {
+                    str_x[i] = char_xy[i].ToString();
+                    str_y[i] = char_xy[i + char_xy.Length / 2].ToString();
+                    ++tt;
+                }
+
+                for (int i = 0; i < str_x.Length; i++)
+                {
+                    result += Data.Misc.Matrix[Convert.ToInt32(str_x[i]), Convert.ToInt32(str_y[i])].ToString();
+                }
+                return result;
             }
         }
 
@@ -379,6 +527,163 @@ namespace StegoPlusPlus
                 bool result = true;
                 foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
                 return result;
+            }
+            public static void Execute(string type)
+            {
+                bool a = GetData.Embed.ContainsKey(Data.Misc.DataPixel);
+                bool b = GetData.Embed.ContainsKey(Data.Misc.DataSecret);
+                bool c = GetData.Embed.ContainsKey(Data.Misc.DataPassword);
+                bool d = GetData.Embed.ContainsKey(Data.Misc.DataType);
+                bool e = GetData.Embed.ContainsKey(Data.Misc.DataNameFile);
+                bool f = GetData.Embed.ContainsKey(Data.Misc.DataExtension);
+
+                switch (type)
+                {
+                    case "File":
+                        if ((a == true) && (b == true) && (c == true) && (d == true) && (e == true) && (f == true))
+                        {
+                            Embed.Execute(type);
+                            break;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    case "Message":
+                        if ((d == false) && (e == false) && (f == false))
+                        {
+                            GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary("0", "String"));
+                            GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary("0", "String"));
+                            GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("1", "String"));
+                            Embed.Execute(type);
+                            break;
+                        }
+                        else
+                        {
+                            Embed.Execute(type);
+                            break;
+                        }
+                }
+            }
+        }
+
+        public class Embed
+        {
+            public static async void Execute(string type)
+            {
+                PopupDialog.Loading pl = new PopupDialog.Loading();
+                pl.Show(true, Data.Misc.WorkingOnIt, String.Empty);
+                var x = Task.Run(() => Embed.Run());
+                var xx = await x;
+                if (x.IsCompleted == true)
+                {
+                    Embed.Save(xx, type);
+                    pl.Show(false, String.Empty, String.Empty);
+                }
+            }
+            public static async Task<Dictionary<string, object>> Run()
+            {
+                Dictionary<string, object> result = new Dictionary<string, object>();
+
+                var dataPixel = (byte[])GetData.Embed[Data.Misc.DataPixel];
+
+                var dataPasswd = (char[])GetData.Embed[Data.Misc.DataPassword];
+                var dataType = (char[])GetData.Embed[Data.Misc.DataType];
+                var dataNameFile = (char[])GetData.Embed[Data.Misc.DataNameFile];
+                var dataExtension = (char[])GetData.Embed[Data.Misc.DataExtension];
+                var dataSecret = (char[])GetData.Embed[Data.Misc.DataSecret];
+
+                var l_dataPasswd = dataPasswd.Length;
+                var l_dataType = dataType.Length;
+                var l_dataNameFile = dataNameFile.Length;
+                var l_dataExtension = dataExtension.Length;
+                var l_dataSecret = dataSecret.Length;
+
+                var l_data = l_dataPasswd + l_dataType + l_dataNameFile + l_dataExtension + l_dataSecret;
+                char[] data = new char[l_data];
+
+                Array.Copy(dataPasswd, data, l_dataPasswd);
+                Array.Copy(dataType, 0, data, l_dataPasswd, l_dataType);
+                Array.Copy(dataNameFile, 0, data, l_dataPasswd + l_dataType, l_dataNameFile);
+                Array.Copy(dataExtension, 0, data, l_dataPasswd + l_dataType + l_dataNameFile, l_dataExtension);
+                Array.Copy(dataSecret, 0, data, l_dataPasswd + l_dataType + l_dataNameFile + l_dataExtension, l_dataSecret);
+
+                for (int i = 0; i < data.Length; i++)
+                {
+                    if (data[i] == 49 && ((byte)(dataPixel[i] % 2) == 1))
+                    {
+                        dataPixel[i] = dataPixel[i];
+                    }
+
+                    if (data[i] == 49 && ((byte)(dataPixel[i] % 2) == 0))
+                    {
+                        dataPixel[i] = (byte)(dataPixel[i] + 1);
+                    }
+
+                    if (data[i] == 48 && ((byte)(dataPixel[i] % 2) == 1))
+                    {
+                        dataPixel[i] = (byte)(dataPixel[i] - 1);
+                    }
+
+                    if (data[i] == 48 && ((byte)(dataPixel[i] % 2) == 0))
+                    {
+                        dataPixel[i] = dataPixel[i];
+                    }
+                }
+
+                await Task.Delay(6000);
+
+                result.Add(Data.Misc.DataPixel, dataPixel);
+                result.Add(Data.Misc.DataPassword, l_dataPasswd);
+                result.Add(Data.Misc.DataType, l_dataType);
+                result.Add(Data.Misc.DataNameFile, l_dataNameFile);
+                result.Add(Data.Misc.DataExtension, l_dataExtension);
+                result.Add(Data.Misc.DataSecret, l_dataSecret);
+
+                return result;
+            }
+            public static async void Save(Dictionary<string,object> value, string type)
+            {
+                FileSavePicker fs = new FileSavePicker();
+                fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
+                StorageFile sf = await fs.PickSaveFileAsync();
+                if (sf != null)
+                {
+                    using (IRandomAccessStream ram = await sf.OpenAsync(FileAccessMode.ReadWrite))
+                    {
+                        BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, ram);
+                        encoder.SetPixelData(GetData.Decoder.BitmapPixelFormat, GetData.Decoder.BitmapAlphaMode, (uint)GetData.Decoder.PixelWidth, (uint)GetData.Decoder.PixelHeight, GetData.Decoder.DpiX, GetData.Decoder.DpiY, (byte[])value[Data.Misc.DataPixel]);
+                        var prop = new List<KeyValuePair<string, BitmapTypedValue>>();
+
+                        var desc = new BitmapTypedValue(String.Format("{0}|{1}|{2}|{3}|{4}", (int)value[Data.Misc.DataPassword], (int)value[Data.Misc.DataType], (int)value[Data.Misc.DataNameFile], (int)value[Data.Misc.DataExtension], (int)value[Data.Misc.DataSecret]), PropertyType.String);
+                        prop.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
+
+                        await encoder.BitmapProperties.SetPropertiesAsync(prop);
+                        await encoder.FlushAsync();
+                    }
+                    switch (type)
+                    {
+                        case "File":
+                            await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Saved, Icon.Smile);
+                            break;
+                        case "Message":
+                            await PopupDialog.Show(Status.Success, Detail.Embed_Message, Complete.Saved, Icon.Smile);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch(type)
+                    {
+                        case "File":
+                            await PopupDialog.Show(Status.Err, Detail.Embed_File, Err.NotSaved, Icon.Sad);
+                            break;
+                        case "Message":
+                            await PopupDialog.Show(Status.Err, Detail.Embed_Message, Err.NotSaved, Icon.Sad);
+                            break;
+                    }
+
+                }
             }
         }
 

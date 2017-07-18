@@ -12,24 +12,21 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace StegoPlusPlus.Views.Popup
 {
-    public sealed partial class Notification : ContentDialog
+    public sealed partial class Progress : ContentDialog
     {
-        public string Icon;
+        public string Message;
         public string Detail;
-
-        public Notification()
+        public Progress()
         {
             InitializeComponent();
         }
 
-        //Function Check Theme Status
         private void Init_Theme()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
@@ -37,18 +34,10 @@ namespace StegoPlusPlus.Views.Popup
             Process.Theme.SetTheme(setTheme.ToString());
         }
 
-        private void Init_Transition()
-        {
-            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
-            Transitions = Process.Transition.GetTransition(value);
-            Process.Transition.SetTransition(value);
-        }
-
         private void ContentDialog_Loading(FrameworkElement sender, object args)
         {
-            Init_Transition();
             Init_Theme();
-            lbl_icon.Text = Icon;
+            lbl_msg.Text = Message;
             lbl_detail.Text = Detail;
         }
     }

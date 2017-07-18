@@ -342,7 +342,7 @@
                                     <AppBarButton Margin="0,0,0,0" x:Name="MSG_btn_save_message" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Message_Click"/>
                                     <AppBarButton Margin="75,0,0,0" x:Name="MSG_btn_clear_message" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Message_Click"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,0,25,0" HorizontalAlignment="Right">
-                                        <Run x:Name="MSG_lbl_counter_message"/><Run x:Name="MSG_picker_count_message" Text="0" />
+                                        <Run x:Name="MSG_lbl_counter_message"/><Run x:Name="MSG_picker_count_message"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>

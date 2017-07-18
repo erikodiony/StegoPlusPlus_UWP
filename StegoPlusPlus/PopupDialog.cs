@@ -37,5 +37,18 @@ namespace StegoPlusPlus
             bool value = (await cbox.ShowAsync() == ContentDialogResult.Primary) ? true : false;
             return value;
         }
+
+        public class Loading
+        {
+            Progress pg = new Progress();
+            public async void Show(bool type, string msg, string detail)
+            {
+                pg.Message = msg;
+                pg.Detail = detail;
+                if (type == true) await pg.ShowAsync(); else pg.Hide();
+            }
+        }
+
+
     }
 }
