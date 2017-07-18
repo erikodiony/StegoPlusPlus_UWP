@@ -181,11 +181,15 @@ namespace StegoPlusPlus
         #region Property StegoImage
         public static class Prop_Image_Stego
         {
-            public static readonly string title = "";
-            public static readonly string subtitle = "";
-            public static readonly string placeholder = "";
+            public static readonly string title = "Choose Image Stego";
+            public static readonly string subtitle = "(Pilih Image Stego yang telah ter-Embed didalamnya)";
+            public static readonly string button = "Choose Image";
             public static readonly string head_default = "";
             public static readonly string head_save = "";
+            public static readonly string picker_status = "No Image";
+            public static readonly string picker_path = "Path : ";
+            public static readonly string picker_size = "Size : ";
+            public static readonly string picker_dimension = "Dimension : ";
         }
         #endregion
 

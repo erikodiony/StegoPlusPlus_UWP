@@ -5,7 +5,8 @@
     xmlns:local="using:StegoPlusPlus.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loading="Page_Loading">
 
     <!--Define Main Row-->
     <Grid Background="#808080">
@@ -87,20 +88,12 @@
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="extract_file_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="Clear_FooterMenuExtractFile" Icon="Cancel" Label="Clear All" Click="Clear_FooterMenuExtractFile_Click"/>
-                                <AppBarButton x:Name="Exec_FooterMenuExtractFile" Icon="Play" Label="Execute" Click="Exec_FooterMenuExtractFile_Click"/>
+                                <AppBarButton x:Name="STEG_btn_ClearAll_FooterMenu" Icon="Cancel" Click="Clear_FooterMenuExtractFile_Click"/>
+                                <AppBarButton x:Name="STEG_btn_Execute_FooterMenu" Icon="Play" Click="Exec_FooterMenuExtractFile_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 1 Footer Menu Extract File/Message-->
-
-                    <!--Pivot 2 LoadingBar Menu Embed Message-->
-                    <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="embed_extract_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <ProgressBar x:Name="progBar_extract" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                        </Grid>
-                    </RelativePanel>
-                    <!--Pivot 2 LoadingBar Menu Embed Message-->
 
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
@@ -123,33 +116,32 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Choose Image Stego"/><LineBreak/>
-                                    <Run Text="(Pilih File Stego yang telah ter-Embed didalamnya)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="STEG_lbl_title_stego"/><LineBreak/>
+                                    <Run x:Name="STEG_lbl_subtitle_stego" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_StegImage" Content="Choose Image"/>
+                                    <Button Margin="0,15,0,0" x:Name="STEG_btn_input_stego"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_steg" Text="No Image" FontStyle="Italic"/>
+                                        <Run x:Name="STEG_picker_status_stego" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="ico_picker_steg" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="STEG_picker_ico_stego" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_steg" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_steg" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_steg" Text="-" FontStyle="Italic"/>
+                                        <Run x:Name="STEG_lbl_path_stego"/><Run x:Name="STEG_picker_path_stego" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="STEG_lbl_size_stego"/><Run x:Name="STEG_picker_size_stego" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="STEG_lbl_dimension_stego"/><Run x:Name="STEG_picker_dimension_stego" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
-
                             </Grid>
 
-                            <Grid Margin="0,0,0,0" x:Name="steg_border_vertical">
+                            <Grid Margin="0,0,0,0" x:Name="STEG_border_vertical">
                                 <Rectangle Margin="25,20,-10,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
 
-                            <Grid Margin="0,0,0,0" x:Name="steg_border_horizontal">
+                            <Grid Margin="0,0,0,0" x:Name="STEG_border_horizontal">
                                 <Rectangle Margin="15,20,30,45" Width="Auto" Height="2" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                             </Grid>
 
@@ -160,15 +152,15 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Insert Password"/><LineBreak/>
-                                    <Run Text="(Hanya mendukung input huruf / angka dan beberapa simbol)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="STEG_lbl_title_passwd"/><LineBreak/>
+                                    <Run x:Name="STEG_lbl_subtitle_passwd" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1" Margin="0,15,25,10">
-                                    <TextBox x:Name="Input_Password_file" Header="Input Password" PlaceholderText="Secret Password" Width="Auto"/>
+                                    <TextBox x:Name="STEG_textbox_passwd" Width="Auto"/>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <AppBarButton Margin="0,0,0,0" x:Name="btn_Save_Password_Steg" Icon="Save" Label="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_Steg_Click"/>
-                                    <AppBarButton Margin="75,0,0,0" x:Name="btn_Clear_Password_Steg" Icon="Clear" Label="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_Steg_Click"/>
+                                    <AppBarButton Margin="0,0,0,0" x:Name="STEG_btn_save_passwd" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_Steg_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="STEG_btn_clear_passwd" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_Steg_Click"/>
                                 </Grid>
                             </Grid>
                         </StackPanel>
@@ -191,8 +183,8 @@
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="check_steg_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="Clear_FooterMenuCheckSteg" Icon="Cancel" Label="Clear All" Click="Clear_FooterMenuCheckSteg_Click"/>
-                                <AppBarButton x:Name="Exec_FooterMenuCheckSteg" Icon="Play" Label="Execute" Click="Exec_FooterMenuCheckSteg_Click"/>
+                                <AppBarButton x:Name="CHK_btn_ClearAll_FooterMenu" Icon="Cancel" Click="Clear_FooterMenuCheckSteg_Click"/>
+                                <AppBarButton x:Name="CHK_btn_Execute_FooterMenu" Icon="Play" Click="Exec_FooterMenuCheckSteg_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
@@ -219,23 +211,23 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="0">
-                                    <Run Text="Choose Image Stego"/><LineBreak/>
-                                    <Run Text="(Pilih File Stego yang telah ter-Embed didalamnya)" FontStyle="Italic" FontSize="14"/>
+                                    <Run x:Name="CHK_lbl_title_stego"/><LineBreak/>
+                                    <Run x:Name="CHK_lbl_subtitle_stego" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="btn_StegImage_check_healthy" Content="Choose Image"/>
+                                    <Button Margin="0,15,0,0" x:Name="CHK_btn_input_stego"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
-                                        <Run x:Name="status_picker_steg_check" Text="No Image" FontStyle="Italic"/>
+                                        <Run x:Name="CHK_picker_status_stego" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Margin="0,20,0,0" x:Name="ico_picker_steg_check" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
+                                    <Image Margin="0,20,0,0" x:Name="CHK_picker_ico_stego" Stretch="None" VerticalAlignment="Top" HorizontalAlignment="Left"></Image>
                                 </Grid>
                                 <Grid Grid.Row="3">
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="0,20,0,0">
-                                        <Run Text="Path : "/><Run x:Name="pathfile_picker_steg_check" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Size : "/><Run x:Name="sizefile_picker_steg_check" Text="-" FontStyle="Italic"/><LineBreak/>
-                                        <Run Text="Dimension : "/><Run x:Name="dimensionfile_picker_steg_check" Text="-" FontStyle="Italic"/>
+                                        <Run x:Name="CHK_lbl_path_stego"/><Run x:Name="CHK_picker_path_stego" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="CHK_lbl_size_stego"/><Run x:Name="CHK_picker_size_stego" FontStyle="Italic"/><LineBreak/>
+                                        <Run x:Name="CHK_lbl_dimension_stego"/><Run x:Name="CHK_picker_dimension_stego" FontStyle="Italic"/>
                                     </TextBlock>
                                 </Grid>
                             </Grid>

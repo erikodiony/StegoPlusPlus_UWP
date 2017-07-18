@@ -28,19 +28,10 @@ namespace StegoPlusPlus.Views
     {
         public Extract_Page()
         {
-            this.InitializeComponent();
-
-            InitializingPage();
-            check_transition_effect_status();
-            check_theme_status();
-
-            SetStatus_PickerSteg();
-            SetStatus_Passwd();
-
-            SetStatus_PickerStegCheck();
-
-            btn_StegImage.Click += new RoutedEventHandler(btn_StegImage_Click);
-            btn_StegImage_check_healthy.Click += new RoutedEventHandler(btn_StegImage_check_healthy_Click);
+            InitializeComponent();
+            
+            STEG_btn_input_stego.Click += new RoutedEventHandler(btn_StegImage_Click);
+            CHK_btn_input_stego.Click += new RoutedEventHandler(btn_StegImage_check_healthy_Click);
         }
 
         
@@ -55,68 +46,85 @@ namespace StegoPlusPlus.Views
         List<string> propImgList = new List<string>(); //Create List Specific Property For File Picker Stego
         TransitionCollection collection = new TransitionCollection(); //Initializing Effect Transition Page
         NavigationThemeTransition theme = new NavigationThemeTransition(); //Initializing Theme Color Page
-        string typefile = String.Empty;        
+        string typefile = String.Empty;
 
-        public void setTransition()
+
+        private void Page_Loading(FrameworkElement sender, object args)
         {
-
+            Init_Transition();
+            Init_Theme();
+            Init_Page();
         }
 
-        //Function to Check Effect Transition
-        private void check_transition_effect_status()
+        #region Initializing Property
+        private void Init_Page()
+        {
+            Init_STEG_StegoImage();
+            Init_STEG_Passwd();
+            Init_CHK_StegoImage();
+
+            HeaderInfo.Text = HeaderPage.ExtractPage;
+            STEG_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
+            STEG_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
+            CHK_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
+            CHK_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
+        }
+        private void Init_STEG_StegoImage()
+        {
+            STEG_picker_ico_stego.Visibility = Visibility.Collapsed;
+            STEG_lbl_title_stego.Text = Data.Prop_Image_Stego.title;
+            STEG_lbl_subtitle_stego.Text = Data.Prop_Image_Stego.subtitle;
+            STEG_picker_status_stego.Text = Data.Prop_Image_Stego.picker_status;
+            STEG_lbl_path_stego.Text = Data.Prop_Image_Stego.picker_path;
+            STEG_picker_path_stego.Text = "-";
+            STEG_lbl_size_stego.Text = Data.Prop_Image_Stego.picker_size;
+            STEG_picker_size_stego.Text = "-";
+            STEG_lbl_dimension_stego.Text = Data.Prop_Image_Stego.picker_dimension;
+            STEG_picker_dimension_stego.Text = "-";
+            STEG_btn_input_stego.Content = Data.Prop_Image_Stego.button;
+        }
+        private void Init_STEG_Passwd()
+        {
+            STEG_lbl_title_passwd.Text = Data.Prop_Passwd.title;
+            STEG_lbl_subtitle_passwd.Text = Data.Prop_Passwd.subtitle;
+            STEG_textbox_passwd.PlaceholderText = Data.Prop_Passwd.placeholder;
+            STEG_textbox_passwd.Header = Data.Prop_Passwd.head_default;
+            STEG_textbox_passwd.Text = String.Empty;
+            STEG_textbox_passwd.IsReadOnly = false;
+            STEG_btn_save_passwd.IsEnabled = true;
+            STEG_btn_save_passwd.Label = Data.Prop_Button.Save;
+            STEG_btn_clear_passwd.Label = Data.Prop_Button.Clear;
+        }
+        private void Init_CHK_StegoImage()
+        {
+            CHK_picker_ico_stego.Visibility = Visibility.Collapsed;
+            CHK_lbl_title_stego.Text = Data.Prop_Image_Stego.title;
+            CHK_lbl_subtitle_stego.Text = Data.Prop_Image_Stego.subtitle;
+            CHK_picker_status_stego.Text = Data.Prop_Image_Stego.picker_status;
+            CHK_lbl_path_stego.Text = Data.Prop_Image_Stego.picker_path;
+            CHK_picker_path_stego.Text = "-";
+            CHK_lbl_size_stego.Text = Data.Prop_Image_Stego.picker_size;
+            CHK_picker_size_stego.Text = "-";
+            CHK_lbl_dimension_stego.Text = Data.Prop_Image_Stego.picker_dimension;
+            CHK_picker_dimension_stego.Text = "-";
+            CHK_btn_input_stego.Content = Data.Prop_Image_Stego.button;
+        }
+        #endregion
+        #region Initializing Animation
+        private void Init_Transition()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
-
-            if (value == "Continuum")
-            {
-                theme.DefaultNavigationTransitionInfo = new ContinuumNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
-            else if (value == "Common")
-            {
-                theme.DefaultNavigationTransitionInfo = new CommonNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
-            else if (value == "Slide")
-            {
-                theme.DefaultNavigationTransitionInfo = new SlideNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
-            else
-            {
-                theme.DefaultNavigationTransitionInfo = new SuppressNavigationTransitionInfo();
-                collection.Add(theme);
-                Transitions = collection;
-            }
-
+            Transitions = Process.Transition.GetTransition(value);
+            Process.Transition.SetTransition(value);
         }
-
-        //Function Check Theme Status
-        private void check_theme_status()
+        private void Init_Theme()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
-
-            if (value == "Dark")
-            {
-                RequestedTheme = ElementTheme.Dark;
-            }
-            else
-            {
-                RequestedTheme = ElementTheme.Light;
-            }
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            Process.Theme.SetTheme(setTheme.ToString());
         }
+        #endregion
 
-        //Initial Text Header Page
-        private void InitializingPage()
-        {
-            HeaderInfo.Text = HeaderPage.ExtractPage;
-        }
 
         //Initial Check FileType Known
         public void CheckingFileType()
@@ -181,140 +189,71 @@ namespace StegoPlusPlus.Views
 
         StorageFile file_steg;
 
-        //Initial Default Text PickerStego (EXTRACT MENU -> EXTRACT FILE)
-        private void SetStatus_PickerSteg()
-        {
-            status_picker_steg.Text = "No Image";
-            pathfile_picker_steg.Text = "-";
-            sizefile_picker_steg.Text = "-";
-            dimensionfile_picker_steg.Text = "-";
-            ico_picker_steg.Visibility = Visibility.Collapsed;
-        }
-
-        //Initial Default Text PickerFolderStego (EXTRACT MENU -> EXTRACT FILE)
-        private void SetStatus_Passwd()
-        {
-            Input_Password_file.Text = String.Empty;
-            Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Extract_File_pwd;
-            Input_Password_file.IsReadOnly = false;
-        }
-
         //Trigger Function From btn_StegImage_Click (Extract File -> Insert File)
-        private async void btn_StegImage_Click(object sender, RoutedEventArgs e)
+        private void btn_StegImage_Click(object sender, RoutedEventArgs e)
         {
-            //Set an Extensions File Cover
-            FileOpenPicker picker_steg = new FileOpenPicker();
-            foreach (string extension in FileExtensions.Stego)
-            {
-                picker_steg.FileTypeFilter.Add(extension);
-            }
 
-            //Set Get a Name Property Image File Cover
-            foreach (string propImg in propImage.All)
-            {
-                propImgList.Add(propImg);
-            }
-
-            file_steg = await picker_steg.PickSingleFileAsync();
-
-            //Check File Picker
-            if (file_steg != null)
-            {
-                //Get Property File Picker Selected (await)
-                IDictionary<string, object> extraProperties = await file_steg.Properties.RetrievePropertiesAsync(propImgList);
-                var propSize = extraProperties[propImage.Size];
-                var propDimension = extraProperties[propImage.Dimensions];
-
-                //Show Thumbnail File Picker
-                using (StorageItemThumbnail thumbnail = await file_steg.GetThumbnailAsync(ThumbnailMode.PicturesView))
-                {
-                    if (thumbnail != null)
-                    {
-                        ico_picker_steg.Visibility = Visibility.Visible;
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.SetSource(thumbnail);
-                        ico_picker_steg.Source = bitmapImage;
-
-                        Binary_embed_file_steg = await dp.Convert_FileImage_to_Byte(file_steg);
-
-                        status_picker_steg.Text = file_steg.Name;
-                        pathfile_picker_steg.Text = file_steg.Path.Replace("\\" + file_steg.Name, String.Empty);
-                        sizefile_picker_steg.Text = String.Format("{0} bytes", propSize);
-                        dimensionfile_picker_steg.Text = String.Format("{0}", propDimension);
-
-                    }
-                    else
-                    {
-                        ico_picker_steg.Visibility = Visibility.Collapsed;
-                    }
-                }
-            }
-
-            else
-            {
-                SetStatus_PickerSteg();
-            }
         }
 
         //Trigger Function From btn_Clear_Password_Steg_Click (Extract File/Message -> Insert Password -> Clear)
-        private async void btn_Clear_Password_Steg_Click(object sender, RoutedEventArgs e)
+        private void btn_Clear_Password_Steg_Click(object sender, RoutedEventArgs e)
         {
-            if (Input_Password_file.Text != String.Empty)
-            {
-                Input_Password_file.IsReadOnly = false;
-                Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Extract_File_pwd;
-                Input_Password_file.Text = String.Empty;
-                btn_Save_Password_Steg.IsEnabled = true;
-                dlg_extract_file = new ContentDialog()
-                {
-                    Title = NotifyDataText.Clear_Input_Extract_File_pwd,
-                    PrimaryButtonText = NotifyDataText.OK_Button
-                };
-                show_dlg_extract_file = await dlg_extract_file.ShowAsync();
-            }
+          //  if (Input_Password_file.Text != String.Empty)
+          //  {
+          //      Input_Password_file.IsReadOnly = false;
+          //      Input_Password_file.Header = NotifyDataText.Clearing_Header_Notify_Extract_File_pwd;
+          //      Input_Password_file.Text = String.Empty;
+          //      btn_Save_Password_Steg.IsEnabled = true;
+          //      dlg_extract_file = new ContentDialog()
+          //      {
+          //          Title = NotifyDataText.Clear_Input_Extract_File_pwd,
+          //          PrimaryButtonText = NotifyDataText.OK_Button
+          //      };
+          //      show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+          //  }
         }
 
         //Trigger Function From btn_Save_Password_Steg_Click (Extract File/Message -> Insert Password -> Save)
-        private async void btn_Save_Password_Steg_Click(object sender, RoutedEventArgs e)
+        private void btn_Save_Password_Steg_Click(object sender, RoutedEventArgs e)
         {
-            string notify = String.Empty;
-            if (Input_Password_file.Text != String.Empty)
-            {
-                notify = dp.validatePasswdOrMessageInput(Input_Password_file.Text);
-                if (notify == "Password Invalid")
-                {
-                    dlg_extract_file = new ContentDialog()
-                    {
-                        Title = NotifyDataText.Notify_Input_Passwd_Invalid,
-                        PrimaryButtonText = NotifyDataText.OK_Button
-                    };
-                    show_dlg_extract_file = await dlg_extract_file.ShowAsync();
-                }
-                else
-                {
-                    string enc = Input_Password_file.Text;
-                    Input_Password_file.IsReadOnly = true;
-                    Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Extract_File_pwd;
-                    Pwd_file_steg = dp.Encrypt_BifidCipher(Input_Password_file.Text); //Get Value as Public
-                    Input_Password_file.Text = dp.Encrypt_BifidCipher(enc);
-                    btn_Save_Password_Steg.IsEnabled = false;
-                }
-            }
-            else
-            {
-                dlg_extract_file = new ContentDialog()
-                {
-                    Title = NotifyDataText.Err_Input_Null_Extract_File_pwd,
-                    PrimaryButtonText = NotifyDataText.OK_Button
-                };
-                show_dlg_extract_file = await dlg_extract_file.ShowAsync();
-            }
+        //    string notify = String.Empty;
+        //    if (Input_Password_file.Text != String.Empty)
+        //    {
+        //        notify = dp.validatePasswdOrMessageInput(Input_Password_file.Text);
+        //        if (notify == "Password Invalid")
+        //        {
+        //            dlg_extract_file = new ContentDialog()
+        //            {
+        //                Title = NotifyDataText.Notify_Input_Passwd_Invalid,
+        //                PrimaryButtonText = NotifyDataText.OK_Button
+        //            };
+        //            show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+        //        }
+        //        else
+        //        {
+        //            string enc = Input_Password_file.Text;
+        //            Input_Password_file.IsReadOnly = true;
+        //            Input_Password_file.Header = NotifyDataText.Saving_Header_Notify_Extract_File_pwd;
+        //            Pwd_file_steg = dp.Encrypt_BifidCipher(Input_Password_file.Text); //Get Value as Public
+        //            Input_Password_file.Text = dp.Encrypt_BifidCipher(enc);
+        //            btn_Save_Password_Steg.IsEnabled = false;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        dlg_extract_file = new ContentDialog()
+        //        {
+        //            Title = NotifyDataText.Err_Input_Null_Extract_File_pwd,
+        //            PrimaryButtonText = NotifyDataText.OK_Button
+        //        };
+        //        show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+        //    }
         }
 
         private async void Clear_FooterMenuExtractFile_Click(object sender, RoutedEventArgs e)
         {
-            SetStatus_PickerSteg();
-            SetStatus_Passwd();
+        //    SetStatus_PickerSteg();
+        //    SetStatus_Passwd();
             dlg_extract_file = new ContentDialog()
             {
                 Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
@@ -331,7 +270,7 @@ namespace StegoPlusPlus.Views
         //Function of Steg Message (From FooterMenu -> Exec)
         private async void ExecSteg()
         {
-            if (status_picker_steg.Text != "No Image" && Input_Password_file.IsReadOnly == true)
+            if (STEG_picker_status_stego.Text != "No Image" && STEG_textbox_passwd.IsReadOnly == true)
             {
                 dlg_extract_file = new ContentDialog()
                 {
@@ -371,7 +310,6 @@ namespace StegoPlusPlus.Views
                         try
                         {
                             dlg_extract_file.Hide();
-                            progBar_extract.Visibility = Visibility.Visible;
                         }
                         finally
                         {
@@ -383,7 +321,6 @@ namespace StegoPlusPlus.Views
 
                             show_dlg_extract_file = await dlg_extract_file.ShowAsync();
                             SaveStegoAsFile();
-                            progBar_extract.Visibility = Visibility.Collapsed;
                         }
 
                     }
@@ -393,7 +330,6 @@ namespace StegoPlusPlus.Views
                         try
                         {
                             dlg_extract_file.Hide();
-                            progBar_extract.Visibility = Visibility.Visible;
                         }
                         finally
                         {
@@ -406,7 +342,6 @@ namespace StegoPlusPlus.Views
                             show_dlg_extract_file = await dlg_extract_file.ShowAsync();
                             CSecretMessage dlg = new CSecretMessage();
                             ContentDialogResult result = await dlg.ShowAsync();
-                            progBar_extract.Visibility = Visibility.Collapsed;
                         }
                     }
 
@@ -449,73 +384,15 @@ namespace StegoPlusPlus.Views
         StorageFile file_steg_check;
 
         //Initial Default Text PickerStegoCheck (EXTRACT MENU -> EXTRACT CHECK HEALTH)
-        private void SetStatus_PickerStegCheck()
-        {
-            status_picker_steg_check.Text = "No Image";
-            pathfile_picker_steg_check.Text = "-";
-            sizefile_picker_steg_check.Text = "-";
-            dimensionfile_picker_steg_check.Text = "-";
-            ico_picker_steg_check.Visibility = Visibility.Collapsed;
-        }
 
         //Trigger Function From btn_StegImage_check_healthy_Click
-        private async void btn_StegImage_check_healthy_Click(object sender, RoutedEventArgs e)
+        private void btn_StegImage_check_healthy_Click(object sender, RoutedEventArgs e)
         {
-            //Set an Extensions File Steg Check Healthy
-            FileOpenPicker picker_steg_check = new FileOpenPicker();
-            foreach (string extension in FileExtensions.Stego)
-            {
-                picker_steg_check.FileTypeFilter.Add(extension);
-            }
 
-            //Set Get a Name Property Image File Cover
-            foreach (string propImg in propImage.All)
-            {
-                propImgList.Add(propImg);
-            }
-
-            file_steg_check = await picker_steg_check.PickSingleFileAsync();
-
-            //Check File Picker
-            if (file_steg_check != null)
-            {
-                //Get Property File Picker Selected (await)
-                IDictionary<string, object> extraProperties = await file_steg_check.Properties.RetrievePropertiesAsync(propImgList);
-                var propSize = extraProperties[propImage.Size];
-                var propDimension = extraProperties[propImage.Dimensions];
-
-                //Show Thumbnail File Picker
-                using (StorageItemThumbnail thumbnail = await file_steg_check.GetThumbnailAsync(ThumbnailMode.PicturesView))
-                {
-                    if (thumbnail != null)
-                    {
-                        status_picker_steg_check.Text = file_steg_check.Name;
-                        pathfile_picker_steg_check.Text = file_steg_check.Path.Replace("\\" + file_steg_check.Name, String.Empty);
-                        sizefile_picker_steg_check.Text = String.Format("{0} bytes", propSize);
-                        dimensionfile_picker_steg_check.Text = String.Format("{0}", propDimension);
-
-                        ico_picker_steg_check.Visibility = Visibility.Visible;
-                        BitmapImage bitmapImage = new BitmapImage();
-                        bitmapImage.SetSource(thumbnail);
-                        ico_picker_steg_check.Source = bitmapImage;
-                        Binary_embed_file_steg_check = await dp.Convert_FileImage_to_Byte(file_steg_check);
-                    }
-                    else
-                    {
-                        ico_picker_steg_check.Visibility = Visibility.Collapsed;
-                    }
-                }
-            }
-
-            else
-            {
-                SetStatus_PickerStegCheck();
-            }
         }
 
         private async void Clear_FooterMenuCheckSteg_Click(object sender, RoutedEventArgs e)
         {
-            SetStatus_PickerStegCheck();
             dlg_extract_file_check = new ContentDialog()
             {
                 Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
@@ -532,7 +409,7 @@ namespace StegoPlusPlus.Views
         //Function of Steg Message (From FooterMenu -> Exec)
         private async void ExecSteg_Check()
         {
-            if (status_picker_steg_check.Text != "No Image")
+            if (CHK_picker_status_stego.Text != "No Image")
             {
                 dlg_extract_file_check = new ContentDialog()
                 {

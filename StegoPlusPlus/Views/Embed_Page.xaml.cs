@@ -16,9 +16,9 @@ namespace StegoPlusPlus.Views
         public Embed_Page()
         {
             InitializeComponent();
-            F_btn_input_cover.Click += new RoutedEventHandler(F_btn_input_cover_CLICK); //Fungsi Click Cover ke Sinkron dengan Fungsi File Picker
-            F_btn_input_file.Click += new RoutedEventHandler(F_btn_input_file_CLICK); //Fungsi Click Hiding ke Sinkron dengan Fungsi Hiding Picker
-            MSG_btn_input_cover.Click += new RoutedEventHandler(MSG_btn_input_cover_CLICK); //Fungsi Click Cover2 ke Sinkron dengan Fungsi File Picker
+            F_btn_input_cover.Click += new RoutedEventHandler(F_btn_input_cover_CLICK);
+            F_btn_input_file.Click += new RoutedEventHandler(F_btn_input_file_CLICK);
+            MSG_btn_input_cover.Click += new RoutedEventHandler(MSG_btn_input_cover_CLICK);
             MSG_btn_input_message.Click += new RoutedEventHandler(MSG_btn_input_message_CLICK);
         }
 

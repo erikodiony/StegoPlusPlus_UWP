@@ -92,14 +92,6 @@
                     </RelativePanel>
                     <!--Pivot 1 Footer Menu Embed File-->
 
-                    <!--Pivot 2 LoadingBar Menu Embed Message-->
-                    <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="F_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <ProgressBar x:Name="F_progBar" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                        </Grid>
-                    </RelativePanel>
-                    <!--Pivot 2 LoadingBar Menu Embed Message-->
-
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
                         <TextBlock Text="&#xE8A6;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
@@ -219,14 +211,6 @@
                         </Grid>
                     </RelativePanel>
                     <!--Pivot 2 Footer Menu Embed Message-->
-
-                    <!--Pivot 2 LoadingBar Menu Embed Message-->
-                    <RelativePanel Grid.ColumnSpan="3">
-                        <Grid x:Name="MSG_loadingbar" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <ProgressBar x:Name="MSG_progBar" Width="Auto" Height="20" Visibility="Collapsed" IsIndeterminate="true" Background="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                        </Grid>
-                    </RelativePanel>
-                    <!--Pivot 2 LoadingBar Menu Embed Message-->
 
                     <!--Pivot 2 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
