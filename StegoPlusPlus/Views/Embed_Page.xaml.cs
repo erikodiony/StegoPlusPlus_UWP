@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Windows.Foundation;
-using Windows.Graphics.Imaging;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using Windows.Storage.Streams;
 
 using static StegoPlusPlus.Data.Prop_Popup;
 using static StegoPlusPlus.Data.Prop_Popup.Title;
