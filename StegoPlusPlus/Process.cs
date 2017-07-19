@@ -129,9 +129,9 @@ namespace StegoPlusPlus
                             switch(await Picker_Property.GetPicker(file, type))
                             {
                                 case true:
-                                    break;
+                                    return true;
                                 case false:
-                                    break;
+                                    return false;
                             }
                             break;
                     }
@@ -174,6 +174,17 @@ namespace StegoPlusPlus
                             await PopupDialog.Show(Status.Err, Detail.Image_Cover, Err.Invalid_32bitDepth, Icon.Sad);
                             return false;
                         }
+                    case "Stego":
+                        bitmap.SetSource(thumbnail);
+
+                        Reset_Picker("Image");
+
+                        GetData.Picker.Add(Data.Misc.Icon, bitmap);
+                        GetData.Picker.Add(Data.Misc.Name, file.Name);
+                        GetData.Picker.Add(Data.Misc.Path, file.Path.Replace("\\" + file.Name, String.Empty));
+                        GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
+                        GetData.Picker.Add(Data.Misc.Dimensions, prop[Data.Prop_File_Picker.Dimensions]);
+                        return true;
                     default:
                         if (GetData.Embed.ContainsKey(Data.Misc.DataPixel) == false)
                         {
@@ -274,11 +285,13 @@ namespace StegoPlusPlus
                 switch(type)
                 {
                     case "Image":
-                        GetData.Reset_Data(type);
+                        GetData.Reset_Data("Embed", type);
+                        GetData.Reset_Data("Extract", type);
                         GetData.Picker.Clear();
                         break;
                     case "File":
-                        GetData.Reset_Data(type);
+                        GetData.Reset_Data("Embed", type);
+                        GetData.Reset_Data("Extract", type);
                         GetData.Picker.Clear();
                         break;
                 }
@@ -290,29 +303,60 @@ namespace StegoPlusPlus
             public static BitmapDecoder Decoder;
             public static Dictionary<string, object> Picker = new Dictionary<string, object>();
             public static Dictionary<string, object> Embed = new Dictionary<string, object>();
-            public static void Reset_Data(string type)
+            public static Dictionary<string, object> Extract = new Dictionary<string, object>();
+            public static void Reset_Data(string type, string type2)
             {
                 switch(type)
                 {
-                    case "Image":
-                        Embed.Remove(Data.Misc.DataPixel);
+                    case "Embed":
+                        switch(type2)
+                        {
+                            case "Image":
+                                Embed.Remove(Data.Misc.DataPixel);
+                                break;
+                            case "File":
+                                Embed.Remove(Data.Misc.DataType);
+                                Embed.Remove(Data.Misc.DataSecret);
+                                Embed.Remove(Data.Misc.DataNameFile);
+                                Embed.Remove(Data.Misc.DataExtension);
+                                break;
+                            case "Passwd":
+                                Embed.Remove(Data.Misc.DataPassword);
+                                break;
+                            case "All":
+                                Embed.Remove(Data.Misc.DataType);
+                                Embed.Remove(Data.Misc.DataPixel);
+                                Embed.Remove(Data.Misc.DataSecret);
+                                Embed.Remove(Data.Misc.DataPassword);
+                                Embed.Remove(Data.Misc.DataNameFile);
+                                Embed.Remove(Data.Misc.DataExtension);
+                                break;
+                        }
                         break;
-                    case "File":
-                        Embed.Remove(Data.Misc.DataType);
-                        Embed.Remove(Data.Misc.DataSecret);
-                        Embed.Remove(Data.Misc.DataNameFile);
-                        Embed.Remove(Data.Misc.DataExtension);
-                        break;
-                    case "Passwd":
-                        Embed.Remove(Data.Misc.DataPassword);
-                        break;
-                    case "All":
-                        Embed.Remove(Data.Misc.DataType);
-                        Embed.Remove(Data.Misc.DataPixel);
-                        Embed.Remove(Data.Misc.DataSecret);
-                        Embed.Remove(Data.Misc.DataPassword);
-                        Embed.Remove(Data.Misc.DataNameFile);
-                        Embed.Remove(Data.Misc.DataExtension);
+                    case "Extract":
+                        switch(type2)
+                        {
+                            case "Image":
+                                Extract.Remove(Data.Misc.DataPixel);
+                                break;
+                            case "File":
+                                Extract.Remove(Data.Misc.DataType);
+                                Extract.Remove(Data.Misc.DataSecret);
+                                Extract.Remove(Data.Misc.DataNameFile);
+                                Extract.Remove(Data.Misc.DataExtension);
+                                break;
+                            case "Passwd":
+                                Extract.Remove(Data.Misc.DataPassword);
+                                break;
+                            case "All":
+                                Extract.Remove(Data.Misc.DataType);
+                                Extract.Remove(Data.Misc.DataPixel);
+                                Extract.Remove(Data.Misc.DataSecret);
+                                Extract.Remove(Data.Misc.DataPassword);
+                                Extract.Remove(Data.Misc.DataNameFile);
+                                Extract.Remove(Data.Misc.DataExtension);
+                                break;
+                        }
                         break;
                 }
             }

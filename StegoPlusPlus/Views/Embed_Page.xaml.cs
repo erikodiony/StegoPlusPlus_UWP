@@ -279,7 +279,7 @@ namespace StegoPlusPlus.Views
             if (F_textbox_passwd.Text != String.Empty)
             {
                 Init_F_Passwd();
-                Process.GetData.Reset_Data("Passwd");
+                Process.GetData.Reset_Data("Embed","Passwd");
                 await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
@@ -289,7 +289,7 @@ namespace StegoPlusPlus.Views
         {
             Init_Page();
             Process.GetData.Picker.Clear();
-            Process.GetData.Reset_Data("All");
+            Process.GetData.Reset_Data("Embed","All");
             await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Clear_All, Icon.Smile);
         }
 
@@ -349,7 +349,7 @@ namespace StegoPlusPlus.Views
             if (result.Length > 0)
             {
                 Process.GetData.Picker.Clear();
-                Process.GetData.Reset_Data("File");
+                Process.GetData.Reset_Data("Embed","File");
                 Init_MSG_Message();
                 await PopupDialog.Show(Status.Success, Detail.Insert_Message, Complete.Clear_Input_Message, Icon.Smile);
             }
@@ -381,7 +381,7 @@ namespace StegoPlusPlus.Views
             if (MSG_textbox_passwd.Text != String.Empty)
             {
                 Init_MSG_Passwd();
-                Process.GetData.Reset_Data("Passwd");
+                Process.GetData.Reset_Data("Embed","Passwd");
                 await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
@@ -391,7 +391,7 @@ namespace StegoPlusPlus.Views
         {
             Init_Page();
             Process.GetData.Picker.Clear();
-            Process.GetData.Reset_Data("All");
+            Process.GetData.Reset_Data("Embed","All");
             await PopupDialog.Show(Status.Success, Detail.Embed_Message, Complete.Clear_All, Icon.Smile);
         }
 

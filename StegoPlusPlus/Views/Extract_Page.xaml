@@ -156,7 +156,7 @@
                                     <Run x:Name="STEG_lbl_subtitle_passwd" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1" Margin="0,15,25,10">
-                                    <TextBox x:Name="STEG_textbox_passwd" Width="Auto"/>
+                                    <PasswordBox x:Name="STEG_textbox_passwd" Width="Auto" PasswordChar="*"/>
                                 </Grid>
                                 <Grid Grid.Row="2">
                                     <AppBarButton Margin="0,0,0,0" x:Name="STEG_btn_save_passwd" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_Steg_Click"/>
