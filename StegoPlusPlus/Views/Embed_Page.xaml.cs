@@ -398,7 +398,6 @@ namespace StegoPlusPlus.Views
         //(Embed Message -> Footer Menu -> Save)
         private void btn_Exec_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
         {
-            //ExecSteg_Message();
             Exec("Message");
         }
         #endregion
@@ -410,7 +409,7 @@ namespace StegoPlusPlus.Views
                 case "File":
                     if (F_picker_status_cover.Text != "No Image" && F_btn_save_passwd.IsEnabled == false && F_picker_status_file.Text != "No Image")
                     {
-                        if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_File, Confirm.isExecute, Icon.Flat) == true) Process.Validate.Execute(type);
+                        if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_File, Confirm.isExecute, Icon.Flat) == true) Process.Embed.Starting(type);
                     }
                     else
                     {
@@ -420,7 +419,7 @@ namespace StegoPlusPlus.Views
                 case "Message":
                     if (MSG_picker_status_cover.Text != "No Image" && MSG_btn_save_passwd.IsEnabled == false && MSG_btn_save_message.IsEnabled == false)
                     {
-                        if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_Message, Confirm.isExecute, Icon.Flat) == true) Process.Validate.Execute(type);
+                        if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Embed_Message, Confirm.isExecute, Icon.Flat) == true) Process.Embed.Starting(type);
                     }
                     else
                     {

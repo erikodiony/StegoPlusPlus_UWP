@@ -129,6 +129,7 @@ namespace StegoPlusPlus
                             switch(await Picker_Property.GetPicker(file, type))
                             {
                                 case true:
+                                    await Conversion.Image(file, type);
                                     return true;
                                 case false:
                                     return false;
@@ -304,6 +305,7 @@ namespace StegoPlusPlus
             public static Dictionary<string, object> Picker = new Dictionary<string, object>();
             public static Dictionary<string, object> Embed = new Dictionary<string, object>();
             public static Dictionary<string, object> Extract = new Dictionary<string, object>();
+            public static Dictionary<string, object> SecretData = new Dictionary<string, object>();
             public static void Reset_Data(string type, string type2)
             {
                 switch(type)
@@ -339,22 +341,15 @@ namespace StegoPlusPlus
                             case "Image":
                                 Extract.Remove(Data.Misc.DataPixel);
                                 break;
-                            case "File":
-                                Extract.Remove(Data.Misc.DataType);
-                                Extract.Remove(Data.Misc.DataSecret);
-                                Extract.Remove(Data.Misc.DataNameFile);
-                                Extract.Remove(Data.Misc.DataExtension);
-                                break;
                             case "Passwd":
                                 Extract.Remove(Data.Misc.DataPassword);
                                 break;
+                            case "Secret":
+                                SecretData.Clear();
+                                break;
                             case "All":
-                                Extract.Remove(Data.Misc.DataType);
-                                Extract.Remove(Data.Misc.DataPixel);
-                                Extract.Remove(Data.Misc.DataSecret);
-                                Extract.Remove(Data.Misc.DataPassword);
-                                Extract.Remove(Data.Misc.DataNameFile);
-                                Extract.Remove(Data.Misc.DataExtension);
+                                SecretData.Clear();
+                                Extract.Clear();
                                 break;
                         }
                         break;
@@ -367,7 +362,6 @@ namespace StegoPlusPlus
             public static async Task Image(StorageFile file, string type)
             {
                 IRandomAccessStream ram;
-                //BitmapDecoder decoder;
                 byte[] pixel;
                 using (ram = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
@@ -382,7 +376,9 @@ namespace StegoPlusPlus
                             GetData.Picker.Add(Data.Misc.Eta, (pixel.Length / 8));
                             break;
                         case "Stego":
-                            //Conversion.File(file);
+                            GetData.Decoder = await BitmapDecoder.CreateAsync(ram);
+                            pixel = (await GetData.Decoder.GetPixelDataAsync()).DetachPixelData();
+                            GetData.Extract.Add(Data.Misc.DataPixel, pixel);
                             break;
                     }
                 }
@@ -448,7 +444,6 @@ namespace StegoPlusPlus
 
                 return result;
             }
-
             public static string Encrypt(string value, string type)
             {
                 char[] input_char = value.ToCharArray();
@@ -572,7 +567,36 @@ namespace StegoPlusPlus
                 foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
                 return result;
             }
-            public static void Execute(string type)
+            public static async Task<bool> SecretData()
+            {
+                IRandomAccessStream ram;
+                StorageFile sf = await StorageFile.GetFileFromPathAsync(GetData.Picker[Data.Misc.Path] + "\\" + GetData.Picker[Data.Misc.Name]);
+                using (ram = await sf.OpenAsync(FileAccessMode.ReadWrite))
+                {
+                    GetData.Decoder = await BitmapDecoder.CreateAsync(ram);
+                    BitmapPropertySet prop = await GetData.Decoder.BitmapProperties.GetPropertiesAsync(new string[] { Data.Misc.Secret });
+                    if (prop.ContainsKey(Data.Misc.Secret) == false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        GetData.Reset_Data("Extract", "Secret");
+                        string[] secret = ((string)prop[Data.Misc.Secret].Value).Split('|');
+                        GetData.SecretData.Add(Data.Misc.DataPassword, secret[0]);
+                        GetData.SecretData.Add(Data.Misc.DataType, secret[1]);
+                        GetData.SecretData.Add(Data.Misc.DataNameFile, secret[2]);
+                        GetData.SecretData.Add(Data.Misc.DataExtension, secret[3]);
+                        GetData.SecretData.Add(Data.Misc.DataSecret, secret[4]);
+                        return true;
+                    }
+                }                
+            }
+        }
+
+        public class Embed
+        {
+            public static void Starting(string type)
             {
                 bool a = GetData.Embed.ContainsKey(Data.Misc.DataPixel);
                 bool b = GetData.Embed.ContainsKey(Data.Misc.DataSecret);
@@ -586,7 +610,7 @@ namespace StegoPlusPlus
                     case "File":
                         if ((a == true) && (b == true) && (c == true) && (d == true) && (e == true) && (f == true))
                         {
-                            Embed.Execute(type);
+                            Execute(type);
                             break;
                         }
                         else
@@ -599,25 +623,21 @@ namespace StegoPlusPlus
                             GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary("0", "String"));
                             GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary("0", "String"));
                             GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("1", "String"));
-                            Embed.Execute(type);
+                            Execute(type);
                             break;
                         }
                         else
                         {
-                            Embed.Execute(type);
+                            Execute(type);
                             break;
                         }
                 }
             }
-        }
-
-        public class Embed
-        {
             public static async void Execute(string type)
             {
                 PopupDialog.Loading pl = new PopupDialog.Loading();
                 pl.Show(true, Data.Misc.WorkingOnIt, String.Empty);
-                var x = Task.Run(() => Embed.Run());
+                var x = Task.Run(() => Run());
                 var xx = await x;
                 if (x.IsCompleted == true)
                 {
@@ -700,7 +720,7 @@ namespace StegoPlusPlus
                         var prop = new List<KeyValuePair<string, BitmapTypedValue>>();
 
                         var desc = new BitmapTypedValue(String.Format("{0}|{1}|{2}|{3}|{4}", (int)value[Data.Misc.DataPassword], (int)value[Data.Misc.DataType], (int)value[Data.Misc.DataNameFile], (int)value[Data.Misc.DataExtension], (int)value[Data.Misc.DataSecret]), PropertyType.String);
-                        prop.Add(new KeyValuePair<string, BitmapTypedValue>("/tEXt/{str=Description}", desc));
+                        prop.Add(new KeyValuePair<string, BitmapTypedValue>(Data.Misc.Secret, desc));
 
                         await encoder.BitmapProperties.SetPropertiesAsync(prop);
                         await encoder.FlushAsync();
@@ -728,6 +748,67 @@ namespace StegoPlusPlus
                     }
 
                 }
+            }
+        }
+
+        public class Extract
+        {
+            public static async void Starting(string type, string passwd)
+            {
+                if (await Validate.SecretData() == false)
+                {
+                    switch(type)
+                    {
+                        case "STEG":
+                            await PopupDialog.Show(Status.Err, Detail.Extract_FileMessage, Err.Invalid_Stego, Icon.Sad);
+                            break;
+                        case "CHK":
+                            await PopupDialog.Show(Status.Err, Detail.Extract_Check, Err.Invalid_Stego, Icon.Sad);
+                            break;
+                    }
+                }
+                else
+                {
+                    Execute(type);  
+                }
+            }
+            public static async void Execute(string type)
+            {
+                PopupDialog.Loading pl = new PopupDialog.Loading();
+                pl.Show(true, Data.Misc.WorkingOnIt, String.Empty);
+                var x = Task.Run(() => Run());
+                await x;
+                if (x.IsCompleted == true)
+                {
+                    pl.Show(false, String.Empty, String.Empty);
+
+
+
+                }
+            }
+            public static async Task Run()
+            {
+                List<char> dataPixel_char = new List<char>();
+                List<byte> dataLSB = new List<byte>();
+                string dataPixel_str;
+
+                for (int i = 0; i < ((byte[])GetData.Extract[Data.Misc.DataPixel]).Length; i++)
+                {
+                    if (((byte[])GetData.Extract[Data.Misc.DataPixel])[i] % 2 == 0) dataPixel_char.Add((char)48); else dataPixel_char.Add((char)49);
+                }
+
+                dataPixel_str = new string(dataPixel_char.ToArray());
+
+                for (int i = 0; i < (dataPixel_str.Length / 8); ++i)
+                {
+                    dataLSB.Add(Convert.ToByte(dataPixel_str.Substring(8 * i, 8), 2));
+                }
+
+                GetData.Extract.Add(Data.Misc.DataPassword, dataLSB.GetRange(0, int.Parse((string)GetData.SecretData[Data.Misc.DataPassword])));
+
+                System.Diagnostics.Debug.WriteLine(GetData.Extract[Data.Misc.DataPassword]);
+
+                await Task.Delay(6000);
             }
         }
 

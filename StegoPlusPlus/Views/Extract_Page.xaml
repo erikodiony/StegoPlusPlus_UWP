@@ -88,8 +88,8 @@
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="extract_file_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="STEG_btn_ClearAll_FooterMenu" Icon="Cancel" Click="Clear_FooterMenuExtractFile_Click"/>
-                                <AppBarButton x:Name="STEG_btn_Execute_FooterMenu" Icon="Play" Click="Exec_FooterMenuExtractFile_Click"/>
+                                <AppBarButton x:Name="STEG_btn_ClearAll_FooterMenu" Icon="Cancel" Click="STEG_btn_ClearAll_FooterMenu_Click"/>
+                                <AppBarButton x:Name="STEG_btn_Execute_FooterMenu" Icon="Play" Click="STEG_btn_Execute_FooterMenu_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>
@@ -159,8 +159,8 @@
                                     <PasswordBox x:Name="STEG_textbox_passwd" Width="Auto" PasswordChar="*"/>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <AppBarButton Margin="0,0,0,0" x:Name="STEG_btn_save_passwd" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Save_Password_Steg_Click"/>
-                                    <AppBarButton Margin="75,0,0,0" x:Name="STEG_btn_clear_passwd" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="btn_Clear_Password_Steg_Click"/>
+                                    <AppBarButton Margin="0,0,0,0" x:Name="STEG_btn_save_passwd" Icon="Save" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="STEG_btn_save_passwd_Click"/>
+                                    <AppBarButton Margin="75,0,0,0" x:Name="STEG_btn_clear_passwd" Icon="Clear" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" Click="STEG_btn_clear_passwd_Click"/>
                                 </Grid>
                             </Grid>
                         </StackPanel>
@@ -183,8 +183,8 @@
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="check_steg_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
                             <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
-                                <AppBarButton x:Name="CHK_btn_ClearAll_FooterMenu" Icon="Cancel" Click="Clear_FooterMenuCheckSteg_Click"/>
-                                <AppBarButton x:Name="CHK_btn_Execute_FooterMenu" Icon="Play" Click="Exec_FooterMenuCheckSteg_Click"/>
+                                <AppBarButton x:Name="CHK_btn_ClearAll_FooterMenu" Icon="Cancel" Click="CHK_btn_ClearAll_FooterMenu_Click"/>
+                                <AppBarButton x:Name="CHK_btn_Execute_FooterMenu" Icon="Play" Click="CHK_btn_Execute_FooterMenu_Click"/>
                             </CommandBar>
                         </Grid>
                     </RelativePanel>

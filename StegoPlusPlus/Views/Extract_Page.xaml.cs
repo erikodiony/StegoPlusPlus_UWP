@@ -81,10 +81,6 @@ namespace StegoPlusPlus.Views
                     break;
             }
         }
-        private void Init_Passwd_NEW(string value)
-        {
-
-        }
         #endregion
         #region Initializing Property
         private void Init_Page()
@@ -120,7 +116,7 @@ namespace StegoPlusPlus.Views
             STEG_textbox_passwd.PlaceholderText = Data.Prop_Passwd.placeholder;
             STEG_textbox_passwd.Header = Data.Prop_Passwd.head_default;
             STEG_textbox_passwd.Password = String.Empty;
-            //STEG_textbox_passwd. = false;
+            STEG_textbox_passwd.IsEnabled = true;
             STEG_btn_save_passwd.IsEnabled = true;
             STEG_btn_save_passwd.Label = Data.Prop_Button.Save;
             STEG_btn_clear_passwd.Label = Data.Prop_Button.Clear;
@@ -226,24 +222,29 @@ namespace StegoPlusPlus.Views
         }
 
         //Trigger Function From btn_Clear_Password_Steg_Click (Extract File/Message -> Insert Password -> Clear)
-        private void btn_Clear_Password_Steg_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        //Trigger Function From btn_Save_Password_Steg_Click (Extract File/Message -> Insert Password -> Save)
-        private async void btn_Save_Password_Steg_Click(object sender, RoutedEventArgs e)
+        private async void STEG_btn_clear_passwd_Click(object sender, RoutedEventArgs e)
         {
             if (STEG_textbox_passwd.Password != String.Empty)
             {
-                System.Diagnostics.Debug.WriteLine(STEG_textbox_passwd.Password);
+                Init_STEG_Passwd();
+                Process.GetData.Reset_Data("Extract", "Passwd");
+                await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
+            }
+        }
+
+        //Trigger Function From btn_Save_Password_Steg_Click (Extract File/Message -> Insert Password -> Save)
+        private async void STEG_btn_save_passwd_Click(object sender, RoutedEventArgs e)
+        {
+            if (STEG_textbox_passwd.Password != String.Empty)
+            {
                 if (Process.Validate.Input(STEG_textbox_passwd.Password) == false)
                 {
                     await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Invalid_Passwd, Icon.Sad);
                 }
                 else
                 {
-                    Init_Passwd_NEW(await Process.Bifid_Cipher.Execute(STEG_textbox_passwd.Password, "Passwd"));
+                    STEG_textbox_passwd.IsEnabled = false;
+                    STEG_btn_save_passwd.IsEnabled = false;
                 }
             }
             else
@@ -252,21 +253,18 @@ namespace StegoPlusPlus.Views
             }
         }
 
-        private async void Clear_FooterMenuExtractFile_Click(object sender, RoutedEventArgs e)
+        private async void STEG_btn_ClearAll_FooterMenu_Click(object sender, RoutedEventArgs e)
         {
-        //    SetStatus_PickerSteg();
-        //    SetStatus_Passwd();
-            dlg_extract_file = new ContentDialog()
-            {
-                Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
-                PrimaryButtonText = NotifyDataText.OK_Button
-            };
-            show_dlg_extract_file = await dlg_extract_file.ShowAsync();
+            Init_Page();
+            Process.GetData.Picker.Clear();
+            Process.GetData.Reset_Data("Extract", "All");
+            await PopupDialog.Show(Status.Success, Detail.Extract_FileMessage, Complete.Clear_All, Icon.Smile);
         }
 
-        private void Exec_FooterMenuExtractFile_Click(object sender, RoutedEventArgs e)
+        private void STEG_btn_Execute_FooterMenu_Click(object sender, RoutedEventArgs e)
         {
-            ExecSteg();
+            Exec("STEG");
+           //ExecSteg();
         }
 
         //Function of Steg Message (From FooterMenu -> Exec)
@@ -393,19 +391,18 @@ namespace StegoPlusPlus.Views
             if (await Process.Picker.Embed(Data.File_Extensions.Png, "Stego") == true) Init_StegoImage_NEW("CHK"); else Init_CHK_StegoImage();
         }
 
-        private async void Clear_FooterMenuCheckSteg_Click(object sender, RoutedEventArgs e)
+        private async void CHK_btn_ClearAll_FooterMenu_Click(object sender, RoutedEventArgs e)
         {
-            dlg_extract_file_check = new ContentDialog()
-            {
-                Title = NotifyDataText.Dialog_Clear_Footer_Menu_Null,
-                PrimaryButtonText = NotifyDataText.OK_Button
-            };
-            show_dlg_extract_file_check = await dlg_extract_file_check.ShowAsync();
+            Init_Page();
+            Process.GetData.Picker.Clear();
+            Process.GetData.Reset_Data("Embed", "All");
+            await PopupDialog.Show(Status.Success, Detail.Extract_Check, Complete.Clear_All, Icon.Smile);
         }
 
-        private void Exec_FooterMenuCheckSteg_Click(object sender, RoutedEventArgs e)
+        private void CHK_btn_Execute_FooterMenu_Click(object sender, RoutedEventArgs e)
         {
-            ExecSteg_Check();
+            Exec("CHK");
+            //ExecSteg_Check();
         }
 
         //Function of Steg Message (From FooterMenu -> Exec)
@@ -456,6 +453,34 @@ namespace StegoPlusPlus.Views
                     PrimaryButtonText = NotifyDataText.OK_Button
                 };
                 show_dlg_extract_file_check = await dlg_extract_file_check.ShowAsync();
+            }
+        }
+
+
+        private async void Exec(string type)
+        {
+            switch(type)
+            {
+                case "STEG":
+                    if (STEG_picker_status_stego.Text != "No Image" && STEG_btn_save_passwd.IsEnabled == false)
+                    {
+                        if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Extract_FileMessage, Confirm.isExecute, Icon.Flat) == true) Process.Extract.Starting(type, STEG_textbox_passwd.Password);
+                    }
+                    else
+                    {
+                        await PopupDialog.Show(Status.Err, Detail.Extract_FileMessage, Err.Input_isNull, Icon.Sad);
+                    }
+                    break;
+                case "CHK":
+                    if (CHK_picker_status_stego.Text != "No Image")
+                    {
+                        if (await PopupDialog.ShowConfirm(Status.Confirm, Detail.Extract_Check, Confirm.isExecute, Icon.Flat) == true) Process.Extract.Starting(type, String.Empty);
+                    }
+                    else
+                    {
+                        await PopupDialog.Show(Status.Err, Detail.Extract_Check, Err.Input_isNull, Icon.Sad);
+                    }
+                    break;
             }
         }
 
