@@ -21,15 +21,12 @@ namespace StegoPlusPlus.Views.Popup
     {
         public Secret_Message()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void toggle_Data_Toggled(object sender, RoutedEventArgs e)
         {
-        }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
-        {
         }
     }
 }

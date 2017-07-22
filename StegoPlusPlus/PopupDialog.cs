@@ -23,7 +23,6 @@ namespace StegoPlusPlus
             };
             await cbox.ShowAsync();
         }
-
         public static async Task<bool> ShowConfirm(string status, string title, string msg, string ico)
         {
             Notification cbox = new Notification()
@@ -37,7 +36,14 @@ namespace StegoPlusPlus
             bool value = (await cbox.ShowAsync() == ContentDialogResult.Primary) ? true : false;
             return value;
         }
-
+        public static async Task ShowMessage()
+        {
+            Secret_Message sm = new Secret_Message()
+            {
+                Title = "Secret Text / Message"
+            };
+            await sm.ShowAsync();
+        }
         public class Loading
         {
             Progress pg = new Progress();

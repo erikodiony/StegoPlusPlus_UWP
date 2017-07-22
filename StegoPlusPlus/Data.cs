@@ -57,7 +57,8 @@ namespace StegoPlusPlus
                 public static readonly string Clear_All = "All field was Cleared !\nProcess Successfully...";
                 public static readonly string Clear_Input_Passwd = "Field ''Input Password'' was Cleared !\nProcess Successfully...";
                 public static readonly string Clear_Input_Message = "Field ''Input Text/Message'' was Cleared !\nProcess Successfully...";
-                public static readonly string Saved = "Stego Image was Saved !\nProcess Successfully...";
+                public static readonly string Saved_StegoImage = "Stego Image was Saved !\nProcess Successfully...";
+                public static readonly string Saved_SecretFile = "Secret File was Saved !\nProcess Successfully...";
             }
             #endregion
             #region Popup Error
@@ -74,7 +75,8 @@ namespace StegoPlusPlus
                 public static readonly string Overload_Size = "Overload size quota of File !\nPlease check again...";
                 public static readonly string Null_Size = "Field ''Choose Image Cover'' must be filled !\nPlease check again...";
                 public static readonly string Replace_Message = "Field ''Input Text/Message'' is Saved !\nClick 'Clear' to Replace with new Text/Message...";
-                public static readonly string NotSaved = "Stego Image not saved !\nProcess cancelling...";
+                public static readonly string NotSaved_StegoImage = "Stego Image not saved !\nProcess cancelling...";
+                public static readonly string NotSaved_SecretFile = "Secret File not saved !\nProcess cancelling...";
                 public static readonly string More150Kb = "Size more than 150Kb !\nCan't Saving File...";
             }
             #endregion
