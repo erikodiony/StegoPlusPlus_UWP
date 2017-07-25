@@ -130,6 +130,7 @@ namespace StegoPlusPlus
                             {
                                 case true:
                                     await Conversion.Image(file, type);
+                                    await Validate.SecretData(file);
                                     return true;
                                 case false:
                                     return false;
@@ -235,8 +236,9 @@ namespace StegoPlusPlus
                                     GetData.Picker.Add(Data.Misc.Size, prop[Data.Prop_File_Picker.Size]);
                                     GetData.Picker.Add(Data.Misc.Type, file.DisplayType);
 
-                                    GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary(file.Name.Replace(file.FileType, String.Empty), "String"));
-                                    GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary(file.FileType.ToLower(), "String"));
+                                    //Encrypt NameFile & Extension
+                                    GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary(await Bifid_Cipher.Execute("Embed", file.Name.Replace(file.FileType, String.Empty), String.Empty), "String"));
+                                    GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary(await Bifid_Cipher.Execute("Embed", file.FileType.ToLower(), String.Empty), "String"));
                                     switch (type)
                                     {
                                         case "File":
@@ -247,7 +249,6 @@ namespace StegoPlusPlus
                                             break;
                                     }
                                     return true;
-
                                 }
                                 else
                                 {
@@ -293,6 +294,9 @@ namespace StegoPlusPlus
                     case "File":
                         GetData.Reset_Data("Embed", type);
                         GetData.Picker.Clear();
+                        break;
+                    case "Text":
+                        GetData.Picker.Remove(Data.Misc.Text);
                         break;
                 }
             }
@@ -389,13 +393,14 @@ namespace StegoPlusPlus
                     using (BinaryReader binaryReader = new BinaryReader(st))
                     {
                         bin = binaryReader.ReadBytes((int)st.Length).ToArray();
-                        GetData.Embed.Add(Data.Misc.DataSecret, ToBinary(bin, "File"));
+                        GetData.Embed.Add(Data.Misc.DataSecret, ToBinary(bin, "File/Cipher"));
                     }
                 }
             }
             public static async Task Message(StorageFile file)
             {
-                GetData.Picker.Add(Data.Misc.Message, await FileIO.ReadTextAsync(file));
+                Picker_Property.Reset_Picker("Text");
+                GetData.Picker.Add(Data.Misc.Text, await FileIO.ReadTextAsync(file));
             }
             public static char[] ToBinary(object value, string type)
             {
@@ -403,19 +408,13 @@ namespace StegoPlusPlus
                 switch (type)
                 {
                     case "String":
-                        foreach (char x in (string)value)
+                        foreach (var x in (string)value)
                         {
                             result += Convert.ToString(x, 2).PadLeft(8, '0');
                         }
                         break;
-                    case "Cipher":
-                        foreach (char x in (char[])value)
-                        {
-                            result += Convert.ToString(x, 2).PadLeft(8, '0');
-                        }
-                        break;
-                    case "File":
-                        foreach (char x in (byte[])value)
+                    case "File/Cipher":
+                        foreach (var x in (byte[])value)
                         {
                             result += Convert.ToString(x, 2).PadLeft(8, '0');
                         }
@@ -427,20 +426,26 @@ namespace StegoPlusPlus
 
         public class Bifid_Cipher
         {
-            public static async Task<string> Execute(string value, string type)
+            public static async Task<string> Execute(string exec, string value, string type)
             {
-                PopupDialog.Loading pl = new PopupDialog.Loading();
-                if (value.Length > 1000)
+                if (exec == "Embed")
                 {
-                    pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
+                    PopupDialog.Loading pl = new PopupDialog.Loading();
+                    if (value.Length > 1000) pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
+
+                    Picker_Property.Reset_Picker(Data.Misc.Text);
+
+                    var x = Task.Run(() => Encrypt(value, type));
+                    var result = await x;
+
+                    if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);                    
+                    return result;
                 }
-
-                var x = Task.Run(() => Encrypt(value, type));
-                var result = await x;
-
-                if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);
-
-                return result;
+                else
+                {
+                    var result = await Task.Run(() => Decrypt(value));
+                    return result;
+                }
             }
             public static string Encrypt(string value, string type)
             {
@@ -451,8 +456,9 @@ namespace StegoPlusPlus
                 int[] x_y; //From list_xy Convert to Array
                 string[] crypt_x;
                 string[] crypt_y;
-                string result = String.Empty; //Encrypt of Passwd
-                List<char> encrypt_result = new List<char>();
+                List<byte> result_lst = new List<byte>();
+                string result_txt = String.Empty;
+                string result = String.Empty;
 
                 foreach (var xx in input_char)
                 {
@@ -486,23 +492,31 @@ namespace StegoPlusPlus
 
                 for (int i = 0; i < crypt_x.Length; i++)
                 {
-                    encrypt_result.Add(Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])]);
-                    result += (int)Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])] + " ";
+                    result_lst.Add(Convert.ToByte(Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])]));
+                    result_txt += (int)Data.Misc.Matrix[Convert.ToInt32(crypt_x[i]), Convert.ToInt32(crypt_y[i])] + " ";
                 }
 
                 switch (type)
                 {
                     case "Passwd":
-                        GetData.Embed.Add(Data.Misc.DataPassword, Conversion.ToBinary(encrypt_result.ToArray(), "Cipher"));
+                        GetData.Embed.Add(Data.Misc.DataPassword, Conversion.ToBinary(result_lst.ToArray(), "File/Cipher"));
+                        GetData.Picker.Add(Data.Misc.Text, result_txt);
+                        result = String.Empty;
                         break;
                     case "Message":
-                        GetData.Embed.Add(Data.Misc.DataSecret, Conversion.ToBinary(encrypt_result.ToArray(), "Cipher"));
+                        GetData.Embed.Add(Data.Misc.DataSecret, Conversion.ToBinary(result_lst.ToArray(), "File/Cipher"));
+                        GetData.Picker.Add(Data.Misc.Text, result_txt);
+                        result = String.Empty;
+                        break;
+                    default:
+                        result = Encoding.ASCII.GetString(result_lst.ToArray());
                         break;
                 }
                 return result;
             }
-            public static string Decrypt(char[] value)
+            public static string Decrypt(string value)
             {
+                char[] input_char = value.ToCharArray();
                 List<int> list_x = new List<int>();
                 List<int> list_y = new List<int>();
                 int[] arr_x;
@@ -510,7 +524,7 @@ namespace StegoPlusPlus
                 string xy = String.Empty;
                 string result = String.Empty;
 
-                foreach (var xx in value)
+                foreach (var xx in input_char)
                 {
                     for (int x = 0; x < Data.Misc.Matrix.GetLength(0); ++x)
                     {
@@ -565,19 +579,14 @@ namespace StegoPlusPlus
                 foreach (char c in value) if (Data.Misc.Character.Contains(c) == false) result = false;
                 return result;
             }
-            public static async Task<bool> SecretData()
+            public static async Task SecretData(StorageFile file)
             {
                 IRandomAccessStream ram;
-                StorageFile sf = await StorageFile.GetFileFromPathAsync(GetData.Picker[Data.Misc.Path] + "\\" + GetData.Picker[Data.Misc.Name]);
-                using (ram = await sf.OpenAsync(FileAccessMode.ReadWrite))
+                using (ram = await file.OpenAsync(FileAccessMode.ReadWrite))
                 {
                     GetData.Decoder = await BitmapDecoder.CreateAsync(ram);
                     BitmapPropertySet prop = await GetData.Decoder.BitmapProperties.GetPropertiesAsync(new string[] { Data.Misc.Secret });
-                    if (prop.ContainsKey(Data.Misc.Secret) == false)
-                    {
-                        return false;
-                    }
-                    else
+                    if (prop.ContainsKey(Data.Misc.Secret) == true)
                     {
                         GetData.Reset_Data("Extract", "Secret");
                         string[] secret = ((string)prop[Data.Misc.Secret].Value).Split('|');
@@ -587,48 +596,49 @@ namespace StegoPlusPlus
                         GetData.SecretData.Add(Data.Misc.DataNameFile, secret[2]);
                         GetData.SecretData.Add(Data.Misc.DataExtension, secret[3]);
                         GetData.SecretData.Add(Data.Misc.DataSecret, secret[4]);
-                        return true;
+                    }
+                    else
+                    {
+                        GetData.Reset_Data("Extract", "Secret");
                     }
                 }                
             }
             public static bool Password(string passwd)
             {
-                char[] x = Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataPassword]).ToArray()).ToCharArray();
+                string x = Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataPassword]).ToArray());
                 if (Bifid_Cipher.Decrypt(x) == passwd) return true; else return false;
             }
             public static string IsType(string typefile)
             {
                 string result = String.Empty;
+
+                foreach (var x in Data.File_Extensions.Txt)
+                {
+                    if (typefile.Contains(x)) result = "Text Files";
+                }
+
                 foreach (var x in Data.File_Extensions.Image)
                 {
-                    if (typefile.Contains(x))
-                    {
-                        result = "Image Files";
-                    }
+                    if (typefile.Contains(x)) result = "Image Files";
                 }
 
                 foreach (var xx in Data.File_Extensions.Document)
                 {
-                    if (typefile.Contains(xx))
-                    {
-                        result = "Document Files";
-                    }
+                    if (typefile.Contains(xx)) result = "Document Files";
                 }
 
                 foreach (var xxx in Data.File_Extensions.Other)
                 {
-                    if (typefile.Contains(xxx))
-                    {
-                        result = "Other Files";
-                    }
+                    if (typefile.Contains(xxx)) result = "Other Files";
                 }
+
                 return result;
             }
         }
 
         public class Embed
         {
-            public static void Starting(string type)
+            public static async void Starting(string type)
             {
                 bool a = GetData.Embed.ContainsKey(Data.Misc.DataPixel);
                 bool b = GetData.Embed.ContainsKey(Data.Misc.DataSecret);
@@ -653,7 +663,7 @@ namespace StegoPlusPlus
                         if ((d == false) && (e == false) && (f == false))
                         {
                             GetData.Embed.Add(Data.Misc.DataNameFile, Conversion.ToBinary("0", "String"));
-                            GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary("0", "String"));
+                            GetData.Embed.Add(Data.Misc.DataExtension, Conversion.ToBinary(await Bifid_Cipher.Execute("Embed", ".txt", String.Empty), "String"));
                             GetData.Embed.Add(Data.Misc.DataType, Conversion.ToBinary("1", "String"));
                             Execute(type);
                             break;
@@ -673,8 +683,8 @@ namespace StegoPlusPlus
                 var xx = await x;
                 if (x.IsCompleted == true)
                 {
-                    await Embed.Save(xx, type);
                     pl.Show(false, String.Empty, String.Empty);
+                    await Embed.Save(xx, type);
                 }
             }
             public static async Task<Dictionary<string, object>> Run()
@@ -741,7 +751,7 @@ namespace StegoPlusPlus
             public static async Task Save(Dictionary<string,object> value, string type)
             {
                 FileSavePicker fs = new FileSavePicker();
-                fs.FileTypeChoices.Add("PNG Image", new List<string>() { ".png" });
+                fs.FileTypeChoices.Add("Stego Image Files", new List<string>() { ".png" });
                 StorageFile sf = await fs.PickSaveFileAsync();
                 if (sf != null)
                 {
@@ -787,7 +797,7 @@ namespace StegoPlusPlus
         {
             public static async void Starting(string type, string passwd)
             {
-                if (await Validate.SecretData() == false)
+                if (GetData.SecretData.ContainsKey(Data.Misc.DataPassword) == false)
                 {
                     switch(type)
                     {
@@ -861,7 +871,8 @@ namespace StegoPlusPlus
                         switch(type)
                         {
                             case "STEG":
-                                await PopupDialog.ShowMessage();
+                                PopupDialog.Message pm = new PopupDialog.Message();
+                                pm.Show(true);
                                 break;
                             case "CHK":
                                 break;
@@ -883,7 +894,9 @@ namespace StegoPlusPlus
             public static async Task Save()
             {
                 FileSavePicker fs = new FileSavePicker();
-                fs.FileTypeChoices.Add(Validate.IsType(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataExtension]).ToArray())), new List<string>() { Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataExtension]).ToArray()) });
+                string ext = Bifid_Cipher.Decrypt(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataExtension]).ToArray()));
+                fs.FileTypeChoices.Add(Validate.IsType(ext), new List<string>() { ext });
+                fs.SuggestedFileName = Bifid_Cipher.Decrypt(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataNameFile]).ToArray()));
                 IStorageFile sf = await fs.PickSaveFileAsync();
                 if (sf != null)
                 {

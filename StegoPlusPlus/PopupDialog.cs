@@ -11,7 +11,7 @@ namespace StegoPlusPlus
 {
     class PopupDialog
     {
-        public static ContentDialogResult result = new ContentDialogResult();
+        //public static ContentDialogResult result = new ContentDialogResult();
         public static async Task Show(string status, string title, string msg, string ico)
         {
             Notification cbox = new Notification()
@@ -36,14 +36,6 @@ namespace StegoPlusPlus
             bool value = (await cbox.ShowAsync() == ContentDialogResult.Primary) ? true : false;
             return value;
         }
-        public static async Task ShowMessage()
-        {
-            Secret_Message sm = new Secret_Message()
-            {
-                Title = "Secret Text / Message"
-            };
-            await sm.ShowAsync();
-        }
         public class Loading
         {
             Progress pg = new Progress();
@@ -52,6 +44,15 @@ namespace StegoPlusPlus
                 pg.Message = msg;
                 pg.Detail = detail;
                 if (type == true) await pg.ShowAsync(); else pg.Hide();
+            }
+        }
+        public class Message
+        {
+            Secret_Message sm = new Secret_Message();
+            public async void Show(bool type)
+            {
+                sm.Title = "Secret Text / Message";
+                if (type == true) await sm.ShowAsync(); else sm.Hide();
             }
         }
 

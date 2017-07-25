@@ -13,7 +13,7 @@ namespace StegoPlusPlus
         {
             public static readonly string[] Png = new string[] { ".png" };
             public static readonly string[] Txt = new string[] { ".txt" };
-            public static readonly string[] Document = new string[] { ".doc", ".xls", ".ppt", ".docx", ".xlsx", ".pptx", ".pdf", ".txt" };
+            public static readonly string[] Document = new string[] { ".doc", ".xls", ".ppt", ".docx", ".xlsx", ".pptx", ".pdf" };
             public static readonly string[] Image = new string[] { ".jpg", ".gif", ".png" };
             public static readonly string[] Other = new string[] { ".mp3", ".mp4", ".zip", ".rar" };
             public static readonly string[] All = new string[] { ".doc", ".xls", ".ppt", ".docx", ".xlsx", ".pptx", ".pdf", ".jpg", ".gif", ".png", ".mp3", ".mp4", ".zip", ".rar" };
@@ -128,7 +128,7 @@ namespace StegoPlusPlus
         {
             public static readonly string title = "Insert Password";
             public static readonly string subtitle = "(Mendukung Input huruf / angka dan beberapa simbol)";
-            public static readonly string placeholder = "Secret Password";
+            public static readonly string placeholder = "Secret Password (Case Sensitive)";
             public static readonly string head_default = "Input Password";
             public static readonly string head_save = "Input Password (Saved & Encrypted)";
         }
@@ -207,10 +207,10 @@ namespace StegoPlusPlus
             public static readonly string Eta = "Eta";
             public static readonly string Type = "Type";
             public static readonly string Icon = "Icon";
-            public static readonly string Message = "Message";
+            public static readonly string Text = "Text";
 
             public static readonly string PleaseWait = "Please Wait...";
-            public static readonly string PleaseWaitDetail = "This process may take a while or several minutes...";
+            public static readonly string PleaseWaitDetail = "This process might take a while or several minutes...";
             public static readonly string WorkingOnIt = "Working on it...";
 
             public static readonly string DataPixel = "DataPixel";

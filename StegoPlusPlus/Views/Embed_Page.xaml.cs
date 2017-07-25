@@ -39,9 +39,9 @@ namespace StegoPlusPlus.Views
         }
 
         #region Initializing Result
-        private void Init_CoverImage_NEW(string type)
+        private void Init_CoverImage_NEW(string section)
         {
-            switch(type)
+            switch(section)
             {
                 case "FILE":
                     F_picker_status_cover.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
@@ -63,9 +63,9 @@ namespace StegoPlusPlus.Views
                     break;
             }
         }
-        private void Init_File_NEW(string type)
+        private void Init_PickerSecret_NEW(string section)
         {
-            switch(type)
+            switch(section)
             {
                 case "FILE":
                     F_picker_status_file.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
@@ -82,37 +82,40 @@ namespace StegoPlusPlus.Views
                     MSG_picker_type_message.Text = Process.GetData.Picker[Data.Misc.Type].ToString();
                     MSG_picker_ico_message.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
                     MSG_picker_ico_message.Visibility = Visibility.Visible;                    
-                    MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Message].ToString());
+                    MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Text].ToString());
                     MSG_richeditbox_message.IsReadOnly = true;
-                    MSG_picker_count_message.Text = (Process.GetData.Picker[Data.Misc.Message].ToString()).Length.ToString();
+                    MSG_picker_count_message.Text = (Process.GetData.Picker[Data.Misc.Text].ToString()).Length.ToString();
                     break;
             }
         }
-        private void Init_Passwd_NEW(string value, string type)
+        private void Init_Text_NEW(string type, string section)
         {
-            switch (type)
+            if (type == "PASSWD")
             {
-                case "FILE":
-                    F_textbox_passwd.Text = value;
-                    F_textbox_passwd.Header = Data.Prop_Passwd.head_save;
-                    F_textbox_passwd.IsReadOnly = true;
-                    F_btn_save_passwd.IsEnabled = false;
-                    break;
-                case "MESSAGE":
-                    MSG_textbox_passwd.Text = value;
-                    MSG_textbox_passwd.Header = Data.Prop_Passwd.head_save;
-                    MSG_textbox_passwd.IsReadOnly = true;
-                    MSG_btn_save_passwd.IsEnabled = false;
-                    break;
+                switch (section)
+                {
+                    case "FILE":
+                        F_textbox_passwd.Text = Process.GetData.Picker[Data.Misc.Text].ToString();
+                        F_textbox_passwd.Header = Data.Prop_Passwd.head_save;
+                        F_textbox_passwd.IsReadOnly = true;
+                        F_btn_save_passwd.IsEnabled = false;
+                        break;
+                    case "MESSAGE":
+                        MSG_textbox_passwd.Text = Process.GetData.Picker[Data.Misc.Text].ToString();
+                        MSG_textbox_passwd.Header = Data.Prop_Passwd.head_save;
+                        MSG_textbox_passwd.IsReadOnly = true;
+                        MSG_btn_save_passwd.IsEnabled = false;
+                        break;
+                }
             }
-        }
-        private void Init_Message_NEW(string value)
-        {
-            MSG_richeditbox_message.IsReadOnly = false;
-            MSG_richeditbox_message.Document.SetText(TextSetOptions.None, value);
-            MSG_richeditbox_message.IsReadOnly = true;
-            MSG_richeditbox_message.Header = Data.Prop_Secret_Message.head_save;
-            MSG_btn_save_message.IsEnabled = false;
+            else
+            {
+                MSG_richeditbox_message.IsReadOnly = false;
+                MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Text].ToString());
+                MSG_richeditbox_message.IsReadOnly = true;
+                MSG_richeditbox_message.Header = Data.Prop_Secret_Message.head_save;
+                MSG_btn_save_message.IsEnabled = false;
+            }
         }
         #endregion
         #region Initializing Property
@@ -250,7 +253,7 @@ namespace StegoPlusPlus.Views
         //(Embed File -> Hiding File)
         private async void F_btn_input_file_CLICK(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Embed(Data.File_Extensions.All, "File") == true) Init_File_NEW("FILE"); else Init_F_File();
+            if (await Process.Picker.Embed(Data.File_Extensions.All, "File") == true) Init_PickerSecret_NEW("FILE"); else Init_F_File();
         }
 
         //(Embed File -> Insert Password -> Save)
@@ -264,7 +267,8 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    Init_Passwd_NEW(await Process.Bifid_Cipher.Execute(F_textbox_passwd.Text, "Passwd"), "FILE");
+                    await Process.Bifid_Cipher.Execute("Embed", F_textbox_passwd.Text, "Passwd");
+                    Init_Text_NEW("PASSWD", "FILE");
                 }
             }
             else
@@ -311,7 +315,7 @@ namespace StegoPlusPlus.Views
             if (MSG_btn_save_message.IsEnabled == true)
             {
                 MSG_richeditbox_message.IsReadOnly = false;
-                if (await Process.Picker.Embed(Data.File_Extensions.Txt, "Message") == true) Init_File_NEW("MESSAGE"); else Init_MSG_Message();
+                if (await Process.Picker.Embed(Data.File_Extensions.Txt, "Message") == true) Init_PickerSecret_NEW("MESSAGE"); else Init_MSG_Message();
             }
             else
             {
@@ -332,7 +336,8 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    Init_Message_NEW(await Process.Bifid_Cipher.Execute(text, "Message"));                    
+                    await Process.Bifid_Cipher.Execute("Embed", text, "Message");
+                    Init_Text_NEW("MESSAGE", String.Empty);
                 }
             }
             else
@@ -366,7 +371,8 @@ namespace StegoPlusPlus.Views
                 }
                 else
                 {
-                    Init_Passwd_NEW(await Process.Bifid_Cipher.Execute(MSG_textbox_passwd.Text, "Passwd"), "MESSAGE");
+                    await Process.Bifid_Cipher.Execute("Embed", MSG_textbox_passwd.Text, "Passwd");
+                    Init_Text_NEW("PASSWD", "MESSAGE");
                 }
             }
             else
