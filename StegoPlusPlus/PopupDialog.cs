@@ -48,11 +48,13 @@ namespace StegoPlusPlus
         }
         public class Message
         {
-            Secret_Message sm = new Secret_Message();
-            public async void Show(bool type)
+            public async void Show()
             {
-                sm.Title = "Secret Text / Message";
-                if (type == true) await sm.ShowAsync(); else sm.Hide();
+                Secret_Message sm = new Secret_Message()
+                {
+                    Title = "Secret Text / Message"
+                };                
+                await sm.ShowAsync();
             }
         }
 

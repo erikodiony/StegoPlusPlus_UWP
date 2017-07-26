@@ -98,6 +98,10 @@ namespace StegoPlusPlus.Views.Popup
             return result;
         }
 
-
+        private async void btn_SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            await Process.Extract.Save("Message");
+        }
     }
 }

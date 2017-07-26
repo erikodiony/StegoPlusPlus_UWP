@@ -872,7 +872,7 @@ namespace StegoPlusPlus
                         {
                             case "STEG":
                                 PopupDialog.Message pm = new PopupDialog.Message();
-                                pm.Show(true);
+                                pm.Show();
                                 break;
                             case "CHK":
                                 break;
@@ -883,7 +883,7 @@ namespace StegoPlusPlus
                         switch (type)
                         {
                             case "STEG":
-                                await Save();
+                                await Save("File");
                                 break;
                             case "CHK":
                                 break;
@@ -891,16 +891,25 @@ namespace StegoPlusPlus
                     }
                 }
             }
-            public static async Task Save()
+            public static async Task Save(string type)
             {
                 FileSavePicker fs = new FileSavePicker();
                 string ext = Bifid_Cipher.Decrypt(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataExtension]).ToArray()));
                 fs.FileTypeChoices.Add(Validate.IsType(ext), new List<string>() { ext });
                 fs.SuggestedFileName = Bifid_Cipher.Decrypt(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataNameFile]).ToArray()));
                 IStorageFile sf = await fs.PickSaveFileAsync();
+
                 if (sf != null)
                 {
-                    await FileIO.WriteBytesAsync(sf, ((List<byte>)GetData.Extract[Data.Misc.DataSecret]).ToArray());
+                    switch (type)
+                    {
+                        case "File":
+                            await FileIO.WriteBytesAsync(sf, ((List<byte>)GetData.Extract[Data.Misc.DataSecret]).ToArray());
+                            break;
+                        case "Message":
+                            await FileIO.WriteTextAsync(sf, await Bifid_Cipher.Execute("Extract", Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataSecret]).ToArray()), String.Empty));
+                            break;
+                    }
                     await PopupDialog.Show(Status.Success, Detail.Extract_FileMessage, Complete.Saved_SecretFile, Icon.Smile);
                 }
                 else
