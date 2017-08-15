@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
 using System.Threading.Tasks;
 using StegoPlusPlus.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -34,6 +26,7 @@ namespace StegoPlusPlus.Views.Popup
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
             var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            if (setTheme == ElementTheme.Dark) loading_Data.Foreground = new SolidColorBrush(Colors.White); else loading_Data.Foreground = new SolidColorBrush(Colors.Black);
             Process.Theme.SetTheme(setTheme.ToString());
         }
 
@@ -58,7 +51,9 @@ namespace StegoPlusPlus.Views.Popup
                 toggle_Data.IsEnabled = false;
                 richeditbox_Data.IsEnabled = false;
                 richeditbox_Data.IsReadOnly = false;
+                btn_SaveAs.IsEnabled = false;
                 richeditbox_Data.Document.SetText(TextSetOptions.None, await Execute("Encrypt"));
+                btn_SaveAs.IsEnabled = true;
                 richeditbox_Data.IsReadOnly = true;
                 richeditbox_Data.IsEnabled = true;
                 toggle_Data.IsEnabled = true;
@@ -68,7 +63,9 @@ namespace StegoPlusPlus.Views.Popup
                 toggle_Data.IsEnabled = false;
                 richeditbox_Data.IsEnabled = false;
                 richeditbox_Data.IsReadOnly = false;
+                btn_SaveAs.IsEnabled = false;
                 richeditbox_Data.Document.SetText(TextSetOptions.None, await Execute("Decrypt"));
+                btn_SaveAs.IsEnabled = true;
                 richeditbox_Data.IsReadOnly = true;
                 richeditbox_Data.IsEnabled = true;
                 toggle_Data.IsEnabled = true;
@@ -91,6 +88,7 @@ namespace StegoPlusPlus.Views.Popup
             }
             return result;
         }
+
         private async Task<string> Decrypt()
         {
             string result = String.Empty;

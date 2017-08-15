@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="ErikodionyAW-StegoPlusPlus" Publisher="CN=Erikodiony Ariessa Wahyudi" Version="1.1.0.0" />
+  <Identity Name="ErikodionyAW-StegoPlusPlus" Publisher="CN=Erikodiony" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="eb276beb-6e93-4dec-b9d6-f3763d87a693" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>StegoPlusPlus</DisplayName>
@@ -17,6 +17,9 @@
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="StegoPlusPlus.App">
       <uap:VisualElements DisplayName="Stego++ with Password" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Stego++ with Password" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Stego++ with Password">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="wide310x150Logo" />
+          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#8B8B8B" />
       </uap:VisualElements>

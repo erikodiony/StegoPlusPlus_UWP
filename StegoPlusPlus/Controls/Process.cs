@@ -804,7 +804,9 @@ namespace StegoPlusPlus.Controls
                 {
                     using (IRandomAccessStream ram = await sf.OpenAsync(FileAccessMode.ReadWrite))
                     {
-                        BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, ram);
+                        //BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, ram);
+                        var memStream = new InMemoryRandomAccessStream();
+                        BitmapEncoder encoder = await BitmapEncoder.CreateForTranscodingAsync(memStream, GetData.Decoder);
                         encoder.SetPixelData(GetData.Decoder.BitmapPixelFormat, GetData.Decoder.BitmapAlphaMode, (uint)GetData.Decoder.PixelWidth, (uint)GetData.Decoder.PixelHeight, GetData.Decoder.DpiX, GetData.Decoder.DpiY, (byte[])value[Data.Misc.DataPixel]);
                         var prop = new List<KeyValuePair<string, BitmapTypedValue>>();
 
@@ -813,6 +815,12 @@ namespace StegoPlusPlus.Controls
 
                         await encoder.BitmapProperties.SetPropertiesAsync(prop);
                         await encoder.FlushAsync();
+
+                        memStream.Seek(0);
+                        ram.Seek(0);
+                        ram.Size = 0;
+                        await RandomAccessStream.CopyAsync(memStream, ram);
+                        memStream.Dispose();
                     }
                     switch (type)
                     {
