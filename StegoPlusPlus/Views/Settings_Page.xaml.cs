@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StegoPlusPlus.Controls;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,11 +27,15 @@ namespace StegoPlusPlus.Views
     {   
         public Settings_Page()
         {
-            this.InitializeComponent();
-            check_transition_effect_status();
-            check_toggle_status();
-            InitializingPage();
+            InitializeComponent();
+        }
+
+        private void Page_Loading(FrameworkElement sender, object args)
+        {
+            Init_Page();
             Init_Tips();
+            Init_Theme();
+            Init_Transition();
         }
 
         #region Initializing Tips
@@ -51,74 +56,33 @@ namespace StegoPlusPlus.Views
             }
         }
         #endregion
+        #region Initializing Property
+        private void Init_Page()
+        {
+            HeaderInfo.Text = Data.Prop_Page.SettingsPage;
+        }
+        #endregion
+        #region Initializing Animation
+        private void Init_Transition()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+            Transitions = Process.Transition.GetTransition(value);
+            cb_effect.SelectedValue = Process.Transition.SetTransitionStatus(value);
+            Process.Transition.SetTransition(value);
 
-        //Trigger Toggled
+        }
+        private void Init_Theme()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            if (RequestedTheme == ElementTheme.Light) Toggle_BG.IsOn = false; else Toggle_BG.IsOn = true;
+            Process.Theme.SetTheme(setTheme.ToString());
+        }
+        #endregion
+
+
+        #region Trigger Toggle Switch
         private void Toggle_BG_Toggled(object sender, RoutedEventArgs e)
-        {
-            change_toggle();
-        }
-
-        //Function Check Effect Transition
-        TransitionCollection collection = new TransitionCollection();
-        NavigationThemeTransition theme = new NavigationThemeTransition();
-
-        private void check_transition_effect_status()
-        {
-            if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Continuum")
-            {
-                var info = new ContinuumNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                Transitions = collection;
-                cb_effect.SelectedValue = "Effect 1";
-            }
-
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Common")
-            {
-                var info = new CommonNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                Transitions = collection;
-                cb_effect.SelectedValue = "Effect 2";
-            }
-
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Slide")
-            {
-                var info = new SlideNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                Transitions = collection;
-                cb_effect.SelectedValue = "Effect 3";
-            }
-
-            else
-            {
-                var info = new SuppressNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                Transitions = collection;
-                cb_effect.SelectedValue = "None";
-            }
-
-        }
-
-        //Function Check Toggle From Default Theme
-        private void check_toggle_status()
-        {
-            if ((string)ApplicationData.Current.LocalSettings.Values["BG_set"] == "Dark")
-            {
-                Toggle_BG.IsOn = true;
-                RequestedTheme = ElementTheme.Dark;
-            }
-            else
-            {
-                Toggle_BG.IsOn = false;
-                RequestedTheme = ElementTheme.Light;
-            }
-        }
-
-        //Function Change Toggle Theme
-        public void change_toggle()
         {
             if (Toggle_BG.IsOn == true)
             {
@@ -131,8 +95,8 @@ namespace StegoPlusPlus.Views
                 RequestedTheme = ElementTheme.Light;
             }
         }
-
-        //Function Change ComboBox Transition Effect
+        #endregion
+        #region Trigger ComboBox
         private void cb_effect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cb_effect.SelectedValue.ToString() == "Effect 1")
@@ -152,12 +116,7 @@ namespace StegoPlusPlus.Views
                 ApplicationData.Current.LocalSettings.Values["Effect_set"] = "Off";
             }
         }
-
-        //Initial Text
-        private void InitializingPage()
-        {
-            HeaderInfo.Text = HeaderPage.SettingsPage;
-        }
+        #endregion
 
     }
 }

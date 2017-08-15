@@ -1,13 +1,13 @@
-﻿using System;
+﻿using StegoPlusPlus.Controls;
+using System;
 using Windows.Storage;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
-
-using static StegoPlusPlus.Data.Prop_Popup;
-using static StegoPlusPlus.Data.Prop_Popup.Title;
+using static StegoPlusPlus.Controls.Data.Prop_Popup;
+using static StegoPlusPlus.Controls.Data.Prop_Popup.Title;
 
 namespace StegoPlusPlus.Views
 {
@@ -16,10 +16,6 @@ namespace StegoPlusPlus.Views
         public Embed_Page()
         {
             InitializeComponent();
-            F_btn_input_cover.Click += new RoutedEventHandler(F_btn_input_cover_CLICK);
-            F_btn_input_file.Click += new RoutedEventHandler(F_btn_input_file_CLICK);
-            MSG_btn_input_cover.Click += new RoutedEventHandler(MSG_btn_input_cover_CLICK);
-            MSG_btn_input_message.Click += new RoutedEventHandler(MSG_btn_input_message_CLICK);
         }
 
         private void InputMessage_KeyUp(object sender, KeyRoutedEventArgs e)
@@ -31,6 +27,7 @@ namespace StegoPlusPlus.Views
                 MSG_picker_count_message.Text = count_msg.Length.ToString();
             }
         }
+
         private void Page_Loading(FrameworkElement sender, object args)
         {
             Init_Transition();
@@ -39,86 +36,6 @@ namespace StegoPlusPlus.Views
             Init_Tips();
         }
 
-        #region Initializing Result
-        private void Init_CoverImage_NEW(string section)
-        {
-            switch(section)
-            {
-                case "FILE":
-                    F_picker_status_cover.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
-                    F_picker_path_cover.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
-                    F_picker_size_cover.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
-                    F_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", Process.GetData.Picker[Data.Misc.Dimensions].ToString(), Process.GetData.Picker[Data.Misc.BitDepth].ToString(), Process.GetData.Picker[Data.Misc.Pixel].ToString());
-                    F_picker_eta_cover.Text = String.Format("± {0} bytes", Process.GetData.Picker[Data.Misc.Eta].ToString());
-                    F_picker_ico_cover.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
-                    F_picker_ico_cover.Visibility = Visibility.Visible;
-                    break;
-                case "MESSAGE":
-                    MSG_picker_status_cover.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
-                    MSG_picker_path_cover.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
-                    MSG_picker_size_cover.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
-                    MSG_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", Process.GetData.Picker[Data.Misc.Dimensions].ToString(), Process.GetData.Picker[Data.Misc.BitDepth].ToString(), Process.GetData.Picker[Data.Misc.Pixel].ToString());
-                    MSG_picker_eta_cover.Text = String.Format("± {0} character", Process.GetData.Picker[Data.Misc.Eta].ToString());
-                    MSG_picker_ico_cover.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
-                    MSG_picker_ico_cover.Visibility = Visibility.Visible;
-                    break;
-            }
-        }
-        private void Init_PickerSecret_NEW(string section)
-        {
-            switch(section)
-            {
-                case "FILE":
-                    F_picker_status_file.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
-                    F_picker_path_file.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
-                    F_picker_size_file.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
-                    F_picker_type_file.Text = Process.GetData.Picker[Data.Misc.Type].ToString();
-                    F_picker_ico_file.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
-                    F_picker_ico_file.Visibility = Visibility.Visible;
-                    break;
-                case "MESSAGE":
-                    MSG_picker_status_message.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
-                    MSG_picker_path_message.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
-                    MSG_picker_size_message.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
-                    MSG_picker_type_message.Text = Process.GetData.Picker[Data.Misc.Type].ToString();
-                    MSG_picker_ico_message.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
-                    MSG_picker_ico_message.Visibility = Visibility.Visible;                    
-                    MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Text].ToString());
-                    MSG_richeditbox_message.IsReadOnly = true;
-                    MSG_picker_count_message.Text = (Process.GetData.Picker[Data.Misc.Text].ToString()).Length.ToString();
-                    break;
-            }
-        }
-        private void Init_Text_NEW(string type, string section)
-        {
-            if (type == "PASSWD")
-            {
-                switch (section)
-                {
-                    case "FILE":
-                        F_textbox_passwd.Text = Process.GetData.Picker[Data.Misc.Text].ToString();
-                        F_textbox_passwd.Header = Data.Prop_Passwd.head_save;
-                        F_textbox_passwd.IsReadOnly = true;
-                        F_btn_save_passwd.IsEnabled = false;
-                        break;
-                    case "MESSAGE":
-                        MSG_textbox_passwd.Text = Process.GetData.Picker[Data.Misc.Text].ToString();
-                        MSG_textbox_passwd.Header = Data.Prop_Passwd.head_save;
-                        MSG_textbox_passwd.IsReadOnly = true;
-                        MSG_btn_save_passwd.IsEnabled = false;
-                        break;
-                }
-            }
-            else
-            {
-                MSG_richeditbox_message.IsReadOnly = false;
-                MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Text].ToString());
-                MSG_richeditbox_message.IsReadOnly = true;
-                MSG_richeditbox_message.Header = Data.Prop_Secret_Message.head_save;
-                MSG_btn_save_message.IsEnabled = false;
-            }
-        }
-        #endregion
         #region Initializing Property
         private void Init_Page()
         {
@@ -129,11 +46,11 @@ namespace StegoPlusPlus.Views
             Init_MSG_Message();
             Init_MSG_Passwd();
 
-            HeaderInfo.Text = HeaderPage.EmbedPage;
-            MSG_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
-            MSG_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
-            F_btn_ClearAll_FooterMenu.Label = DataText_prop.Button.ClearAll;
-            F_btn_Execute_FooterMenu.Label = DataText_prop.Button.Execute;
+            HeaderInfo.Text = Data.Prop_Page.EmbedPage;
+            MSG_btn_ClearAll_FooterMenu.Label = Data.Prop_Button.ClearAll;
+            MSG_btn_Execute_FooterMenu.Label = Data.Prop_Button.Execute;
+            F_btn_ClearAll_FooterMenu.Label = Data.Prop_Button.ClearAll;
+            F_btn_Execute_FooterMenu.Label = Data.Prop_Button.Execute;
         }
         private void Init_MSG_CoverImage()
         {
@@ -262,20 +179,98 @@ namespace StegoPlusPlus.Views
             }
         }
         #endregion
-        #region Embed File
-        //(Embed File -> Cover Image)
+        #region Initializing Result
+        private void Init_CoverImage_NEW(string section)
+        {
+            switch(section)
+            {
+                case "FILE":
+                    F_picker_status_cover.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
+                    F_picker_path_cover.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
+                    F_picker_size_cover.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
+                    F_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", Process.GetData.Picker[Data.Misc.Dimensions].ToString(), Process.GetData.Picker[Data.Misc.BitDepth].ToString(), Process.GetData.Picker[Data.Misc.Pixel].ToString());
+                    F_picker_eta_cover.Text = String.Format("± {0} bytes", Process.GetData.Picker[Data.Misc.Eta].ToString());
+                    F_picker_ico_cover.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
+                    F_picker_ico_cover.Visibility = Visibility.Visible;
+                    break;
+                case "MESSAGE":
+                    MSG_picker_status_cover.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
+                    MSG_picker_path_cover.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
+                    MSG_picker_size_cover.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
+                    MSG_picker_dimension_cover.Text = String.Format("{0} / ({1} BitDepth | {2} Pixel)", Process.GetData.Picker[Data.Misc.Dimensions].ToString(), Process.GetData.Picker[Data.Misc.BitDepth].ToString(), Process.GetData.Picker[Data.Misc.Pixel].ToString());
+                    MSG_picker_eta_cover.Text = String.Format("± {0} character", Process.GetData.Picker[Data.Misc.Eta].ToString());
+                    MSG_picker_ico_cover.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
+                    MSG_picker_ico_cover.Visibility = Visibility.Visible;
+                    break;
+            }
+        }
+        private void Init_PickerSecret_NEW(string section)
+        {
+            switch(section)
+            {
+                case "FILE":
+                    F_picker_status_file.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
+                    F_picker_path_file.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
+                    F_picker_size_file.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
+                    F_picker_type_file.Text = Process.GetData.Picker[Data.Misc.Type].ToString();
+                    F_picker_ico_file.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
+                    F_picker_ico_file.Visibility = Visibility.Visible;
+                    break;
+                case "MESSAGE":
+                    MSG_picker_status_message.Text = Process.GetData.Picker[Data.Misc.Name].ToString();
+                    MSG_picker_path_message.Text = Process.GetData.Picker[Data.Misc.Path].ToString();
+                    MSG_picker_size_message.Text = String.Format("{0} bytes", Process.GetData.Picker[Data.Misc.Size].ToString());
+                    MSG_picker_type_message.Text = Process.GetData.Picker[Data.Misc.Type].ToString();
+                    MSG_picker_ico_message.Source = (BitmapImage)Process.GetData.Picker[Data.Misc.Icon];
+                    MSG_picker_ico_message.Visibility = Visibility.Visible;                    
+                    MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Text].ToString());
+                    MSG_richeditbox_message.IsReadOnly = true;
+                    MSG_picker_count_message.Text = (Process.GetData.Picker[Data.Misc.Text].ToString()).Length.ToString();
+                    break;
+            }
+        }
+        private void Init_Text_NEW(string type, string section)
+        {
+            if (type == "PASSWD")
+            {
+                switch (section)
+                {
+                    case "FILE":
+                        F_textbox_passwd.Text = Process.GetData.Picker[Data.Misc.Text].ToString();
+                        F_textbox_passwd.Header = Data.Prop_Passwd.head_save;
+                        F_textbox_passwd.IsReadOnly = true;
+                        F_btn_save_passwd.IsEnabled = false;
+                        break;
+                    case "MESSAGE":
+                        MSG_textbox_passwd.Text = Process.GetData.Picker[Data.Misc.Text].ToString();
+                        MSG_textbox_passwd.Header = Data.Prop_Passwd.head_save;
+                        MSG_textbox_passwd.IsReadOnly = true;
+                        MSG_btn_save_passwd.IsEnabled = false;
+                        break;
+                }
+            }
+            else
+            {
+                MSG_richeditbox_message.IsReadOnly = false;
+                MSG_richeditbox_message.Document.SetText(TextSetOptions.None, Process.GetData.Picker[Data.Misc.Text].ToString());
+                MSG_richeditbox_message.IsReadOnly = true;
+                MSG_richeditbox_message.Header = Data.Prop_Secret_Message.head_save;
+                MSG_btn_save_message.IsEnabled = false;
+            }
+        }
+        #endregion
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+        #region Trigger (Embed File)
         private async void F_btn_input_cover_CLICK(object sender, RoutedEventArgs e)
         {
             if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("FILE"); else Init_F_CoverImage();
         }
-
-        //(Embed File -> Hiding File)
         private async void F_btn_input_file_CLICK(object sender, RoutedEventArgs e)
         {
             if (await Process.Picker.Embed(Data.File_Extensions.All, "File") == true) Init_PickerSecret_NEW("FILE"); else Init_F_File();
         }
-
-        //(Embed File -> Insert Password -> Save)
         private async void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
         {
             if (F_textbox_passwd.Text != String.Empty)
@@ -295,8 +290,6 @@ namespace StegoPlusPlus.Views
                 await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
             }
         }       
-
-        //(Embed File -> Insert Password -> Clear)
         private async void btn_Clear_Password_file_Click(object sender, RoutedEventArgs e)
         {
             if (F_textbox_passwd.Text != String.Empty)
@@ -306,8 +299,6 @@ namespace StegoPlusPlus.Views
                 await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
-
-        //(Embed File -> Footer Menu -> Clear)
         private async void btn_Clear_FooterMenuEmbedFile_Click(object sender, RoutedEventArgs e)
         {
             Init_Page();
@@ -315,20 +306,19 @@ namespace StegoPlusPlus.Views
             Process.GetData.Reset_Data("Embed","All");
             await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Clear_All, Icon.Smile);
         }
-
-        //(Embed File -> Footer Menu -> Exec)
         private void btn_Exec_FooterMenuEmbedFile_Click(object sender, RoutedEventArgs e)
         {
             Exec("File");
         }
         #endregion
-        #region Embed Message
-        //(Embed Message -> Choose Image)
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+        #region Trigger (Embed Message)
         private async void MSG_btn_input_cover_CLICK(object sender, RoutedEventArgs e)
         {
             if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("MESSAGE"); else Init_MSG_CoverImage();
         }
-
         private async void MSG_btn_input_message_CLICK(object sender, RoutedEventArgs e)
         {
             if (MSG_btn_save_message.IsEnabled == true)
@@ -341,8 +331,6 @@ namespace StegoPlusPlus.Views
                 await PopupDialog.Show(Status.Err, Detail.Insert_Message, Err.Replace_Message, Icon.Sad);
             }
         }
-
-        //(Embed Message -> Insert Text/Message -> Save)
         private async void btn_Save_Message_Click(object sender, RoutedEventArgs e)
         {
             string text;
@@ -364,8 +352,6 @@ namespace StegoPlusPlus.Views
                 await PopupDialog.Show(Status.Err, Detail.Insert_Message, Err.Input_Empty_Message, Icon.Sad);
             }
         }
-
-        //(Embed Message -> Insert Text/Message -> Clear)
         private async void btn_Clear_Message_Click(object sender, RoutedEventArgs e)
         {
             string result;
@@ -373,13 +359,11 @@ namespace StegoPlusPlus.Views
             if (result.Length > 0)
             {
                 Process.GetData.Picker.Clear();
-                Process.GetData.Reset_Data("Embed","File");
+                Process.GetData.Reset_Data("Embed", "File");
                 Init_MSG_Message();
                 await PopupDialog.Show(Status.Success, Detail.Insert_Message, Complete.Clear_Input_Message, Icon.Smile);
             }
         }
-
-        //(Embed Message -> Insert Password -> Save)
         private async void btn_Save_Password_msg_Click(object sender, RoutedEventArgs e)
         {
             if (MSG_textbox_passwd.Text != String.Empty)
@@ -399,34 +383,31 @@ namespace StegoPlusPlus.Views
                 await PopupDialog.Show(Status.Err, Detail.Insert_Password, Err.Input_Empty_Passwd, Icon.Sad);
             }
         }
-
-        //(Embed Message -> Insert Password -> Clear)
         private async void btn_Clear_Password_msg_Click(object sender, RoutedEventArgs e)
         {
             if (MSG_textbox_passwd.Text != String.Empty)
             {
                 Init_MSG_Passwd();
-                Process.GetData.Reset_Data("Embed","Passwd");
+                Process.GetData.Reset_Data("Embed", "Passwd");
                 await PopupDialog.Show(Status.Success, Detail.Insert_Password, Complete.Clear_Input_Passwd, Icon.Smile);
             }
         }
-
-        //(Embed Message -> Footer Menu -> Clear)
         private async void btn_Clear_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
         {
             Init_Page();
             Process.GetData.Picker.Clear();
-            Process.GetData.Reset_Data("Embed","All");
+            Process.GetData.Reset_Data("Embed", "All");
             await PopupDialog.Show(Status.Success, Detail.Embed_Message, Complete.Clear_All, Icon.Smile);
         }
-
-        //(Embed Message -> Footer Menu -> Save)
         private void btn_Exec_FooterMenuEmbedMessage_Click(object sender, RoutedEventArgs e)
         {
             Exec("Message");
         }
         #endregion
-        #region Controlling
+
+        //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+
+        #region Function Controlling
         private async void Exec(string type)
         {
             switch (type)

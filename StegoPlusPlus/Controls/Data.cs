@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StegoPlusPlus
+namespace StegoPlusPlus.Controls
 {
     class Data
     {
@@ -96,7 +96,7 @@ namespace StegoPlusPlus
             public static readonly string HomePage = "WELCOME";
             public static readonly string EmbedPage = "Menu yang berfungsi untuk menjalankan fungsi Embed untuk penyisipan File (Embed File) beserta Embed untuk penyisipan Pesan Rahasia (Embed Message)";
             public static readonly string ExtractPage = "Menu yang berfungsi untuk menjalankan fungsi Ekstrak untuk File / Pesan Rahasia (Extract File / Message) beserta untuk pengecekan File Stego yang masih baik / bisa digunakan (Check Stego Healthy)";
-            public static readonly string SettingsPage = "Menu yang berfungsi untuk mengganti Warna Latar Belakang (Change Background / Theme) beserta mengganti Efek Transisi Halaman (Change Transition Effect)";
+            public static readonly string SettingsPage = "Menu yang berfungsi untuk mengganti Warna Latar Belakang (Change Background) beserta mengganti Efek Transisi Halaman (Change Transition Effect)";
             public static readonly string AboutPage = "Menu yang berisi tentang Detail Aplikasi (App Detail) beserta Info tentang Creator (About Me)";
         }
         #endregion
@@ -184,7 +184,7 @@ namespace StegoPlusPlus
         public static class Prop_Image_Stego
         {
             public static readonly string title = "Choose Image Stego";
-            public static readonly string subtitle = "(Pilih Image Stego yang telah ter-Embed didalamnya)";
+            public static readonly string subtitle = "(Format ekstensi file gambar yang didukung *.png)";
             public static readonly string button = "Choose Image";
             public static readonly string head_default = "";
             public static readonly string head_save = "";

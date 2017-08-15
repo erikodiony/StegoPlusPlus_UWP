@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using StegoPlusPlus.Views.Popup;
-using static StegoPlusPlus.Data;
 
-namespace StegoPlusPlus
+namespace StegoPlusPlus.Controls
 {
     class PopupDialog
     {
@@ -17,7 +13,7 @@ namespace StegoPlusPlus
             Notification cbox = new Notification()
             {
                 Title = String.Format("{0} | {1}", status, title),
-                PrimaryButtonText = Prop_Button.OK,
+                PrimaryButtonText = Data.Prop_Button.OK,
                 Detail = msg,
                 Icon = ico
             };
@@ -28,8 +24,8 @@ namespace StegoPlusPlus
             Notification cbox = new Notification()
             {
                 Title = String.Format("{0} | {1}", status, title),
-                PrimaryButtonText = Prop_Button.OK,
-                SecondaryButtonText = Prop_Button.Cancel,
+                PrimaryButtonText = Data.Prop_Button.OK,
+                SecondaryButtonText = Data.Prop_Button.Cancel,
                 Detail = msg,
                 Icon = ico
             };

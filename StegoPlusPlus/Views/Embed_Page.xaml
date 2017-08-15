@@ -22,8 +22,6 @@
                         <AdaptiveTrigger MinWindowWidth="850" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <!--<Setter Target="sc.HorizontalScrollMode" Value="Enabled"/>
-                        <Setter Target="sc.HorizontalScrollBarVisibility" Value="Enabled"/>-->
                         <Setter Target="stack_embed_file.Orientation" Value="Horizontal"/>
                         <Setter Target="stack_embed_message.Orientation" Value="Horizontal"/>
                     </VisualState.Setters>
@@ -120,7 +118,7 @@
                                     <Run x:Name="F_lbl_subtitle_cover" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="F_btn_input_cover"/>
+                                    <Button Margin="0,15,0,0" x:Name="F_btn_input_cover" Click="F_btn_input_cover_CLICK"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="F_picker_status_cover" FontStyle="Italic"/>
                                     </TextBlock>
@@ -169,7 +167,7 @@
                                     <Run x:Name="F_lbl_subtitle_file" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="F_btn_input_file"/>
+                                    <Button Margin="0,15,0,0" x:Name="F_btn_input_file" Click="F_btn_input_file_CLICK"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="F_picker_status_file" FontStyle="Italic"/>
                                     </TextBlock>
@@ -240,7 +238,7 @@
                                     <Run x:Name="MSG_lbl_subtitle_cover" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="MSG_btn_input_cover"/>
+                                    <Button Margin="0,15,0,0" x:Name="MSG_btn_input_cover" Click="MSG_btn_input_cover_CLICK"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="MSG_picker_status_cover" FontStyle="Italic"/>
                                     </TextBlock>
@@ -294,7 +292,7 @@
                                 </TextBlock>
 
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="MSG_btn_input_message"/>
+                                    <Button Margin="0,15,0,0" x:Name="MSG_btn_input_message" Click="MSG_btn_input_message_CLICK"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="MSG_picker_status_message" FontStyle="Italic"/>
                                     </TextBlock>

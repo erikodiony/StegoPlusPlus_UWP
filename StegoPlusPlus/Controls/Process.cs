@@ -10,13 +10,12 @@ using Windows.Storage;
 using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
-using static StegoPlusPlus.Data.Prop_Popup;
-using static StegoPlusPlus.Data.Prop_Popup.Title;
+using static StegoPlusPlus.Controls.Data.Prop_Popup;
+using static StegoPlusPlus.Controls.Data.Prop_Popup.Title;
 
-namespace StegoPlusPlus
+namespace StegoPlusPlus.Controls
 {
     class Process
     {
@@ -67,6 +66,31 @@ namespace StegoPlusPlus
                 return collector;
             }
             #endregion
+
+            #region SetTransition Status
+            public static string SetTransitionStatus(string getTransition)
+            {
+                string result = String.Empty;
+                if (getTransition == "Continuum")
+                {
+                    result = "Effect 1";
+                }
+                else if (getTransition == "Common")
+                {
+                    result = "Effect 2";
+                }
+                else if (getTransition == "Slide")
+                {
+                    result = "Effect 3";
+                }
+                else
+                {
+                    result = "None";
+                }
+                return result;
+            }
+            #endregion
+
             #region SetTransition to Storage
             public static void SetTransition(string value)
             {

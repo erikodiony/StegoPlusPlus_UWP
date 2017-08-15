@@ -24,7 +24,6 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="stack_extract_file.Orientation" Value="Horizontal"/>
-                        <!--<Setter Target="stack_check_steg.Orientation" Value="Horizontal"/>-->
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState>
@@ -34,10 +33,7 @@
                     <VisualState.Setters>
                         <Setter Target="sc_extract_file.HorizontalScrollMode" Value="Disabled"/>
                         <Setter Target="sc_extract_file.HorizontalScrollBarVisibility" Value="Disabled"/>
-                        <!--<Setter Target="sc_check_steg.HorizontalScrollMode" Value="Disabled"/>
-                        <Setter Target="sc_check_steg.HorizontalScrollBarVisibility" Value="Disabled"/>-->
                         <Setter Target="stack_extract_file.Orientation" Value="Vertical"/>
-                        <!--<Setter Target="stack_check_steg.Orientation" Value="Vertical"/>-->
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -120,7 +116,7 @@
                                     <Run x:Name="STEG_lbl_subtitle_stego" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="STEG_btn_input_stego"/>
+                                    <Button Margin="0,15,0,0" x:Name="STEG_btn_input_stego" Click="STEG_btn_input_stego_Click"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="STEG_picker_status_stego" FontStyle="Italic"/>
                                     </TextBlock>
@@ -215,7 +211,7 @@
                                     <Run x:Name="CHK_lbl_subtitle_stego" FontStyle="Italic" FontSize="14"/>
                                 </TextBlock>
                                 <Grid Grid.Row="1">
-                                    <Button Margin="0,15,0,0" x:Name="CHK_btn_input_stego"/>
+                                    <Button Margin="0,15,0,0" x:Name="CHK_btn_input_stego" Click="CHK_btn_input_stego_Click"/>
                                     <TextBlock Style="{StaticResource BaseTextBlockStyle}" Margin="130,20,0,0">
                                         <Run x:Name="CHK_picker_status_stego" FontStyle="Italic"/>
                                     </TextBlock>
