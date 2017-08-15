@@ -75,6 +75,25 @@ namespace StegoPlusPlus
             #endregion
         }
         #endregion
+        #region Process ShowTips
+        public class Tips
+        {
+            #region GetTheme from Storage
+            public static bool GetTips(string getTips)
+            {
+                bool value = (getTips == "False") ? false : true;
+                return value;
+            }
+            #endregion
+            #region SetTheme to Storage
+            public static void SetTips(string value)
+            {
+                ApplicationData.Current.LocalSettings.Values["Tips_set"] = value;
+            }
+            #endregion
+        }
+        #endregion
+        #region Process Picker
         public class Picker
         {
             public static async Task<bool> Embed(string[] extension, string type)
@@ -301,7 +320,7 @@ namespace StegoPlusPlus
                 }
             }
         }
-
+        #endregion
         public class GetData
         {
             public static BitmapDecoder Decoder;

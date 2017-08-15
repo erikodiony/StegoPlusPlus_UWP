@@ -5,7 +5,8 @@
     xmlns:local="using:StegoPlusPlus"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -110,5 +111,15 @@
             </Border>
             <TextBlock x:Name="Header" Foreground="Black" FontWeight="SemiBold" FontFamily="Arial" VerticalAlignment="Center" Margin="16,0,0,0" />
         </StackPanel>
+        <RelativePanel Margin="0,3,0,0" Grid.Row="0" x:Name="Info_Page" Visibility="Collapsed">
+            <Grid RelativePanel.AlignRightWithPanel="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Grid.Column="0" Margin="0,-3,15,0" Width="2" Height="48" Fill="Black" Opacity="0.25"/>
+                <ToggleSwitch Grid.Column="1" Margin="0,0,-40,0" x:Name="Toggle_Tips" OffContent="Hide" OnContent="Show" RequestedTheme="Light" Toggled="Toggle_Tips_Toggled"/>
+            </Grid>
+        </RelativePanel>
     </Grid>
 </Page>

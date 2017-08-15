@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -32,7 +33,7 @@ namespace StegoPlusPlus
                 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.MyFrame.Navigate(typeof(Views.Home_Page));
+            MyFrame.Navigate(typeof(Views.Home_Page));
             Header.Text = "Home";
             Header.FontSize = 17;
             HomeRadioBtn.IsChecked = true;
@@ -47,19 +48,24 @@ namespace StegoPlusPlus
                 switch (button.Content.ToString())
                 {
                     case "Home":
-                        this.MyFrame.Navigate(typeof(Views.Home_Page));
+                        Info_Page.Visibility = Visibility.Collapsed;
+                        MyFrame.Navigate(typeof(Views.Home_Page));
                         break;
                     case "Embed":
-                        this.MyFrame.Navigate(typeof(Views.Embed_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.Embed_Page));
                         break;
                     case "Extract":
-                        this.MyFrame.Navigate(typeof(Views.Extract_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.Extract_Page));
                         break;
                     case "About":
-                        this.MyFrame.Navigate(typeof(Views.About_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.About_Page));
                         break;
                     case "Settings":
-                        this.MyFrame.Navigate(typeof(Views.Settings_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.Settings_Page));
                         break;
                 }
                 Header.Text = button.Content.ToString();
@@ -88,6 +94,28 @@ namespace StegoPlusPlus
                 statusbar.BackgroundOpacity = 1;
                 statusbar.ForegroundColor = Windows.UI.Colors.Black;
             }
+        }
+
+        #region Initializing Tips
+        private void Init_Tips()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Tips_set"];
+            var setTips = Process.Tips.GetTips(value) == false ? Toggle_Tips.IsOn = false : Toggle_Tips.IsOn = true;
+            Process.Tips.SetTips(setTips.ToString());
+        }
+        #endregion
+
+        private void Toggle_Tips_Toggled(object sender, RoutedEventArgs e)
+        {
+            string value = String.Empty;
+            if (Toggle_Tips.IsOn == true) value = "True"; else value = "False";
+            Process.Tips.SetTips(value);
+            MyFrame.Navigate(MyFrame.SourcePageType);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Init_Tips();
         }
     }
 }

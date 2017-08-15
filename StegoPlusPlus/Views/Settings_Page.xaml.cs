@@ -30,7 +30,27 @@ namespace StegoPlusPlus.Views
             check_transition_effect_status();
             check_toggle_status();
             InitializingPage();
+            Init_Tips();
         }
+
+        #region Initializing Tips
+        private void Init_Tips()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Tips_set"];
+            if (value == "True")
+            {
+                Tips_Prop.Visibility = Visibility.Visible;
+                Tips_Prop2.Visibility = Visibility.Visible;
+                Tips_Prop3.Margin = new Thickness(0, 0, 0, 0);
+            }
+            else
+            {
+                Tips_Prop.Visibility = Visibility.Collapsed;
+                Tips_Prop2.Visibility = Visibility.Collapsed;
+                Tips_Prop3.Margin = new Thickness(0, -5, 0, 0);
+            }
+        }
+        #endregion
 
         //Trigger Toggled
         private void Toggle_BG_Toggled(object sender, RoutedEventArgs e)

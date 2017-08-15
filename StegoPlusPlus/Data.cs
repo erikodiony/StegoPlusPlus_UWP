@@ -195,6 +195,32 @@ namespace StegoPlusPlus
         }
         #endregion
 
+        #region Property About
+        public static class Prop_AppDetail
+        {
+            public static readonly string title = "Stego++ with Password";
+            public static readonly string version = "Version 1.1 (Build 201708)";
+            public static readonly string source_code = "Source Code (Github)";
+            public static readonly string source_code_link = "http://github.com/Erikodiony/StegoPlusPlus";
+            public static readonly string bug_support = "Bug / Support (Twitter)";
+            public static readonly string bug_support_link = "https://twitter.com/erikodiony";
+        }
+        public static class Prop_AboutMe
+        {
+            public static readonly string title = "''Make your dreams come true with working hardly and tawakkal''";
+            public static readonly string head1 = "Biodata";
+            public static readonly string name = "Erikodiony Ariessa Wahyudi";
+            public static readonly string birth = "Balikpapan, 24 September 1994";
+            public static readonly string domicile = "Kertosono, Nganjuk";
+            public static readonly string head2 = "Riwayat Pendidikan";
+            public static readonly string school_tk = "TK Pertiwi Kudu";
+            public static readonly string school_sd = "SD Negeri 1 Kudu";
+            public static readonly string school_smp = "SMP Negeri 1 Kertosono";
+            public static readonly string school_smk = "SMK Negeri 1 Kertosono (Teknik Otomasi Industri)";
+            public static readonly string university = "Universitas Nusantara PGRI Kediri (Teknik Informatika)";
+        }
+        #endregion
+
         #region Property Misc
         public static class Misc
         {
