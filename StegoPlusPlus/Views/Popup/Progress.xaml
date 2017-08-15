@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Margin="0,10,0,10">
-            <ProgressRing IsActive="true" Width="75" Height="75" MinWidth="75" MinHeight="75" Foreground="{ThemeResource SystemControlForegroundAccentBrush}"/>
+            <ProgressRing x:Name="p_ring" IsActive="true" Width="75" Height="75" MinWidth="75" MinHeight="75"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Margin="0,10,0,10" HorizontalAlignment="Center">
             <TextBlock x:Name="lbl_msg" Style="{StaticResource TitleTextBlockStyle}"/>

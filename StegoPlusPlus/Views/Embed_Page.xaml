@@ -82,7 +82,7 @@
                     <!--Pivot 1 Footer Menu Embed File-->
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="F_FooterMenu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
+                            <CommandBar RequestedTheme="Dark" Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
                                 <AppBarButton x:Name="F_btn_ClearAll_FooterMenu" Icon="Cancel" Click="btn_Clear_FooterMenuEmbedFile_Click"/>
                                 <AppBarButton x:Name="F_btn_Execute_FooterMenu" Icon="Play" Click="btn_Exec_FooterMenuEmbedFile_Click"/>
                             </CommandBar>
@@ -202,7 +202,7 @@
                     <!--Pivot 2 Footer Menu Embed Message-->
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="MSG_FooterMenu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
+                            <CommandBar RequestedTheme="Dark" Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
                                 <AppBarButton x:Name="MSG_btn_ClearAll_FooterMenu" Icon="Cancel" Click="btn_Clear_FooterMenuEmbedMessage_Click"/>
                                 <AppBarButton x:Name="MSG_btn_Execute_FooterMenu" Icon="Play" Click="btn_Exec_FooterMenuEmbedMessage_Click"/>
                             </CommandBar>

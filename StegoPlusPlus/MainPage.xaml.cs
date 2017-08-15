@@ -6,7 +6,9 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Foundation.Metadata;
 using Windows.Storage;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,6 +32,8 @@ namespace StegoPlusPlus
         {
             InitializeComponent();
             ShowStatusBar();
+            Init_Theme();
+            Init_Transition();
         }
                 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -83,19 +87,28 @@ namespace StegoPlusPlus
         }
 
         // show the StatusBar
-        private async void ShowStatusBar()
+        private void ShowStatusBar()
         {
-            // turn on SystemTray for mobile
-            // don't forget to add a Reference to Windows Mobile Extensions For The UWP
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                var statusbar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                await statusbar.ShowAsync();
-                statusbar.BackgroundColor = Windows.UI.Colors.Transparent;
-                statusbar.BackgroundOpacity = 1;
-                statusbar.ForegroundColor = Windows.UI.Colors.Black;
+                StatusBar.GetForCurrentView();
             }
         }
+
+        #region Initializing Animation
+        private void Init_Transition()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+            Transitions = Process.Transition.GetTransition(value);
+            Process.Transition.SetTransition(value);
+        }
+        private void Init_Theme()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            Process.Theme.SetTheme(setTheme.ToString());
+        }
+        #endregion
 
         #region Initializing Tips
         private void Init_Tips()

@@ -83,7 +83,7 @@
                     <!--Pivot 1 Footer Menu Extract File/Message-->
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="extract_file_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
+                            <CommandBar RequestedTheme="Dark" Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
                                 <AppBarButton x:Name="STEG_btn_ClearAll_FooterMenu" Icon="Cancel" Click="STEG_btn_ClearAll_FooterMenu_Click"/>
                                 <AppBarButton x:Name="STEG_btn_Execute_FooterMenu" Icon="Play" Click="STEG_btn_Execute_FooterMenu_Click"/>
                             </CommandBar>
@@ -178,7 +178,7 @@
                     <!--Pivot 2 Footer Menu Check Healthy-->
                     <RelativePanel Grid.ColumnSpan="3">
                         <Grid x:Name="check_steg_footer_menu" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignLeftWithPanel="True">
-                            <CommandBar Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
+                            <CommandBar RequestedTheme="Dark" Background="{ThemeResource SystemControlForegroundAccentBrush}" IsOpen="False">
                                 <AppBarButton x:Name="CHK_btn_ClearAll_FooterMenu" Icon="Cancel" Click="CHK_btn_ClearAll_FooterMenu_Click"/>
                                 <AppBarButton x:Name="CHK_btn_Execute_FooterMenu" Icon="Play" Click="CHK_btn_Execute_FooterMenu_Click"/>
                             </CommandBar>
