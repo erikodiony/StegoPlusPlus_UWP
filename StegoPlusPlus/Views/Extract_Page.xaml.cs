@@ -142,7 +142,7 @@ namespace StegoPlusPlus.Views
         #region Trigger (Extract File / Message)
         private async void STEG_btn_input_stego_Click(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Embed(Data.File_Extensions.Png, "Stego") == true) Init_StegoImage_NEW("STEG"); else Init_STEG_StegoImage();
+            if (await Process.Picker.Execute(Data.File_Extensions.Png, "Stego") == true) Init_StegoImage_NEW("STEG"); else Init_STEG_StegoImage();
         }
         private async void STEG_btn_clear_passwd_Click(object sender, RoutedEventArgs e)
         {
@@ -190,7 +190,7 @@ namespace StegoPlusPlus.Views
         #region Trigger (Check Stego Info)
         private async void CHK_btn_input_stego_Click(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Embed(Data.File_Extensions.Png, "Stego") == true) Init_StegoImage_NEW("CHK"); else Init_CHK_StegoImage();
+            if (await Process.Picker.Execute(Data.File_Extensions.Png, "Stego") == true) Init_StegoImage_NEW("CHK"); else Init_CHK_StegoImage();
         }
         private async void CHK_btn_ClearAll_FooterMenu_Click(object sender, RoutedEventArgs e)
         {

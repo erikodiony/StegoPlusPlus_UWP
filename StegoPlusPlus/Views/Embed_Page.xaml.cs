@@ -265,11 +265,11 @@ namespace StegoPlusPlus.Views
         #region Trigger (Embed File)
         private async void F_btn_input_cover_CLICK(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("FILE"); else Init_F_CoverImage();
+            if (await Process.Picker.Execute(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("FILE"); else Init_F_CoverImage();
         }
         private async void F_btn_input_file_CLICK(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Embed(Data.File_Extensions.All, "File") == true) Init_PickerSecret_NEW("FILE"); else Init_F_File();
+            if (await Process.Picker.Execute(Data.File_Extensions.All, "File") == true) Init_PickerSecret_NEW("FILE"); else Init_F_File();
         }
         private async void btn_Save_Password_file_Click(object sender, RoutedEventArgs e)
         {
@@ -317,14 +317,14 @@ namespace StegoPlusPlus.Views
         #region Trigger (Embed Message)
         private async void MSG_btn_input_cover_CLICK(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Embed(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("MESSAGE"); else Init_MSG_CoverImage();
+            if (await Process.Picker.Execute(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("MESSAGE"); else Init_MSG_CoverImage();
         }
         private async void MSG_btn_input_message_CLICK(object sender, RoutedEventArgs e)
         {
             if (MSG_btn_save_message.IsEnabled == true)
             {
                 MSG_richeditbox_message.IsReadOnly = false;
-                if (await Process.Picker.Embed(Data.File_Extensions.Txt, "Message") == true) Init_PickerSecret_NEW("MESSAGE"); else Init_MSG_Message();
+                if (await Process.Picker.Execute(Data.File_Extensions.Txt, "Message") == true) Init_PickerSecret_NEW("MESSAGE"); else Init_MSG_Message();
             }
             else
             {

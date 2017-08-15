@@ -120,7 +120,7 @@ namespace StegoPlusPlus.Controls
         #region Process Picker
         public class Picker
         {
-            public static async Task<bool> Embed(string[] extension, string type)
+            public static async Task<bool> Execute(string[] extension, string type)
             {
                 FileOpenPicker picker = new FileOpenPicker();
                 PopupDialog.Loading pl = new PopupDialog.Loading();
@@ -136,51 +136,52 @@ namespace StegoPlusPlus.Controls
                     switch (type)
                     {
                         case "Image":
-                            switch (await Picker_Property.GetPicker(file, type))
+                            if (await Picker_Property.GetPicker(file, type) == true)
                             {
-                                case true:
-                                    await Conversion.Image(file, "Cover");
-                                    return true;
-                                case false:
-                                    return false;
+                                await Conversion.Image(file, "Cover");
+                                return true;
                             }
-                            break;
+                            else
+                            {
+                                return false;
+                            }
                         case "File":
-                            switch (await Picker_Property.GetPicker(file, type))
+                            if (await Picker_Property.GetPicker(file, type) == true)
                             {
-                                case true:
-                                    Task x = Task.Run(() => Conversion.File(file));
-                                    pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
-                                    await x;
-                                    if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);
-                                    return true;
-                                case false:
-                                    return false;
+                                Task x = Task.Run(() => Conversion.File(file));
+                                pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
+                                await x;
+                                if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);
+                                return true;
                             }
-                            break;
+                            else
+                            {
+                                return false;
+                            }
                         case "Message":
-                            switch(await Picker_Property.GetPicker(file, type))
+                            if (await Picker_Property.GetPicker(file, type))
                             {
-                                case true:
-                                    await Conversion.Message(file);
-                                    return true;
-                                case false:
-                                    return false;
+                                await Conversion.Message(file);
+                                return true;
                             }
-                            break;
+                            else
+                            {
+                                return false;
+                            }
                         case "Stego":
-                            switch(await Picker_Property.GetPicker(file, type))
+                            if (await Picker_Property.GetPicker(file, type))
                             {
-                                case true:
-                                    await Conversion.Image(file, type);
-                                    await Validate.SecretData(file);
-                                    return true;
-                                case false:
-                                    return false;
+                                await Conversion.Image(file, type);
+                                await Validate.SecretData(file);
+                                return true;
                             }
-                            break;
+                            else
+                            {
+                                return false;
+                            }
+                        default:
+                            return false;
                     }
-                    return false;
                 }
                 else
                 {
@@ -345,6 +346,7 @@ namespace StegoPlusPlus.Controls
             }
         }
         #endregion
+        #region Data Storage
         public class GetData
         {
             public static BitmapDecoder Decoder;
@@ -401,7 +403,8 @@ namespace StegoPlusPlus.Controls
                 }
             }
         }
-
+        #endregion
+        #region Function Conversion
         public class Conversion
         {
             public static async Task Image(StorageFile file, string type)
@@ -466,7 +469,8 @@ namespace StegoPlusPlus.Controls
                 return result.ToCharArray();
             }
         }
-
+        #endregion
+        #region Function Encrypt & Decrypt
         public class Bifid_Cipher
         {
             public static async Task<string> Execute(string exec, string value, string type)
@@ -613,7 +617,7 @@ namespace StegoPlusPlus.Controls
                 return result;
             }
         }
-
+        #endregion
         public class Validate
         {
             public static bool Input(string value)
