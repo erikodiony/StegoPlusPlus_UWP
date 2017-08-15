@@ -1,11 +1,11 @@
-﻿using StegoPlusPlus.Controls;
-using System;
+﻿using System;
 using Windows.Storage;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Imaging;
+using StegoPlusPlus.Controls;
 using static StegoPlusPlus.Controls.Data.Prop_Popup;
 using static StegoPlusPlus.Controls.Data.Prop_Popup.Title;
 
