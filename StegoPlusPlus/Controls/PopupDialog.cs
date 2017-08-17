@@ -7,7 +7,6 @@ namespace StegoPlusPlus.Controls
 {
     class PopupDialog
     {
-        //public static ContentDialogResult result = new ContentDialogResult();
         public static async Task Show(string status, string title, string msg, string ico)
         {
             Notification cbox = new Notification()
@@ -51,6 +50,21 @@ namespace StegoPlusPlus.Controls
                     Title = "Secret Text / Message"
                 };                
                 await sm.ShowAsync();
+            }
+        }
+        public class File
+        {
+
+        }
+        public class Info
+        {
+            public async void Show()
+            {
+                Secret_Passwd sp = new Secret_Passwd()
+                {
+                    Title = "Stego Info"
+                };
+                await sp.ShowAsync();
             }
         }
 

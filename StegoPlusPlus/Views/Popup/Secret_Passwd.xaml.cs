@@ -14,12 +14,12 @@ namespace StegoPlusPlus.Views.Popup
         public Secret_Passwd()
         {
             InitializeComponent();
-            Init_Theme();
         }
 
         private void ContentDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            lbl_detail.Text = Detail;
+            Init_Theme();
+            //lbl_detail.Text = Detail;
         }
 
         #region Initializing Animation

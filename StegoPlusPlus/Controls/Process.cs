@@ -618,6 +618,7 @@ namespace StegoPlusPlus.Controls
             }
         }
         #endregion
+        #region Function Validate Input
         public class Validate
         {
             public static bool Input(string value)
@@ -682,7 +683,8 @@ namespace StegoPlusPlus.Controls
                 return result;
             }
         }
-
+        #endregion
+        #region Function Embed
         public class Embed
         {
             public static async void Starting(string type)
@@ -847,7 +849,8 @@ namespace StegoPlusPlus.Controls
                 }
             }
         }
-
+        #endregion
+        #region Function Extract
         public class Extract
         {
             public static async void Starting(string type, string passwd)
@@ -915,21 +918,19 @@ namespace StegoPlusPlus.Controls
             }
             public static async Task Run(string type, string passwd)
             {
-                if(Validate.Password(passwd) == false)
+                if(Validate.Password(passwd) == true || passwd == String.Empty)
                 {
-                    await PopupDialog.Show(Status.Err, Detail.Extract_FileMessage, Err.Invalid_Passwd, Icon.Sad);
-                }
-                else
-                {
-                    if(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataType]).ToArray()) == "1")
+                    if (Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataType]).ToArray()) == "1")
                     {
-                        switch(type)
+                        switch (type)
                         {
                             case "STEG":
                                 PopupDialog.Message pm = new PopupDialog.Message();
                                 pm.Show();
                                 break;
                             case "CHK":
+                                PopupDialog.Info info = new PopupDialog.Info();
+                                info.Show();
                                 break;
                         }
                     }
@@ -941,9 +942,15 @@ namespace StegoPlusPlus.Controls
                                 await Save("File");
                                 break;
                             case "CHK":
+                                PopupDialog.Info info = new PopupDialog.Info();
+                                info.Show();
                                 break;
                         }
                     }
+                }
+                else
+                {
+                    await PopupDialog.Show(Status.Err, Detail.Extract_FileMessage, Err.Invalid_Passwd, Icon.Sad);
                 }
             }
             public static async Task Save(string type)
@@ -973,5 +980,6 @@ namespace StegoPlusPlus.Controls
                 }
             }
         }
+        #endregion
     }
 }

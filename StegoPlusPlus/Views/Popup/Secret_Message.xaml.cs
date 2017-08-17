@@ -99,8 +99,18 @@ namespace StegoPlusPlus.Views.Popup
 
         private async void btn_SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
+            Hide();
             await Process.Extract.Save("Message");
+        }
+
+        private void ContentDialog_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            richeditbox_Data.Height = grid_CDialog.ActualHeight - 120;
+        }
+
+        private void ContentDialog_Loaded(object sender, RoutedEventArgs e)
+        {
+            richeditbox_Data.Height = grid_CDialog.ActualHeight - 120;
         }
     }
 }
