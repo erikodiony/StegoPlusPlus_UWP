@@ -2,11 +2,10 @@
     x:Class="StegoPlusPlus.Views.Home_Page"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StegoPlusPlus.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d"
-    Loading="Page_Loading"
-    SizeChanged="Page_SizeChanged">
+    mc:Ignorable="d">
 
     <!--Define Main Row-->
     <Grid Background="#808080">
@@ -18,8 +17,9 @@
 
         <!--Header Menu--><!--Main Row 1-->
         <StackPanel Grid.Row="0" Margin="18,15,15,15">
-            <Grid Background="Transparent" x:Name="HeaderBanner">
+            <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -28,7 +28,8 @@
                     <TextBlock Text="&#xE99A;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 </StackPanel>
                 <Rectangle Grid.Column="1" Margin="15,0,15,0" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                <Image Grid.Column="2" Width="Auto" Height="Auto" Margin="0,-5,0,0" Source="../Assets/Header-StegoPlusPlus-150.png" Stretch="Fill" HorizontalAlignment="Stretch"/>
+                <TextBlock x:Name="HeaderInfo" Grid.Column="2" Margin="5,0,5,0" Style="{StaticResource BodyTextBlockStyle}" TextAlignment="Center" FontSize="17" Width="16" TextWrapping="Wrap"/>
+                <Image Grid.Column="3" Width="Auto" Height="Auto" Margin="15,0,0,0" Source="../Assets/Header-StegoPlusPlus-150.png" Stretch="Fill" HorizontalAlignment="Stretch"/>
             </Grid>
         </StackPanel>
         <!--Header Menu--><!--Main Row 1-->

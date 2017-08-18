@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using StegoPlusPlus.Views.Popup;
-using static StegoPlusPlus.Controls.Data.Prop_Popup;
 
 namespace StegoPlusPlus.Controls
 {
@@ -48,7 +47,7 @@ namespace StegoPlusPlus.Controls
             {
                 Secret_Message sm = new Secret_Message()
                 {
-                    Title = String.Format("{0} | {1}", Title.Status.Result, "Secret Text/Message")
+                    Title = "Secret Text / Message"
                 };                
                 await sm.ShowAsync();
             }
@@ -63,10 +62,12 @@ namespace StegoPlusPlus.Controls
             {
                 Secret_Passwd sp = new Secret_Passwd()
                 {
-                    Title = String.Format("{0} | {1}", Title.Status.Result, "Check Stego Info")
+                    Title = "Stego Info"
                 };
                 await sp.ShowAsync();
             }
         }
+
+
     }
 }

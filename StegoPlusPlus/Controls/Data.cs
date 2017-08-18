@@ -31,7 +31,6 @@ namespace StegoPlusPlus.Controls
                     public static readonly string Success = "SUCCESS";
                     public static readonly string Err = "ERROR";
                     public static readonly string Confirm = "CONFIRMATION";
-                    public static readonly string Result = "RESULT";
                 }
                 public static class Detail
                 {

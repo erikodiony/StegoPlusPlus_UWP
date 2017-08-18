@@ -18,11 +18,10 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>StegoPlusPlus.pfx</PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>E76F4C2C8082B2F2D237BA5651B084C54BEAE027</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>C1855A845BFC9A7E23634031AD41B69B5AB1041F</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -104,15 +103,19 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\Data.cs" />
+    <Compile Include="DataProcess.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PopupDialog.cs" />
-    <Compile Include="Controls\Process.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\About_Page.xaml.cs">
       <DependentUpon>About_Page.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CInfoStego.xaml.cs">
+      <DependentUpon>CInfoStego.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CSecretMessage.xaml.cs">
+      <DependentUpon>CSecretMessage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Embed_Page.xaml.cs">
       <DependentUpon>Embed_Page.xaml</DependentUpon>
@@ -122,18 +125,6 @@
     </Compile>
     <Compile Include="Views\Home_Page.xaml.cs">
       <DependentUpon>Home_Page.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popup\Notification.xaml.cs">
-      <DependentUpon>Notification.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popup\Progress.xaml.cs">
-      <DependentUpon>Progress.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popup\Secret_Message.xaml.cs">
-      <DependentUpon>Secret_Message.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Popup\Secret_Passwd.xaml.cs">
-      <DependentUpon>Secret_Passwd.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings_Page.xaml.cs">
       <DependentUpon>Settings_Page.xaml</DependentUpon>
@@ -211,6 +202,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CInfoStego.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CSecretMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Embed_Page.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -223,22 +222,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Popup\Notification.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Popup\Progress.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Popup\Secret_Message.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Popup\Secret_Passwd.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Settings_Page.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -246,13 +229,12 @@
   </ItemGroup>
   <ItemGroup>
     <SDKReference Include="WindowsDesktop, Version=10.0.15063.0">
-      <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.15063.0%29</Name>
+      <Name>Windows Desktop Extensions for the UWP</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
-      <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.15063.0%29</Name>
+      <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
@@ -260,8 +242,7 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>StegoPlusPlus.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <DelaySign>false</DelaySign>

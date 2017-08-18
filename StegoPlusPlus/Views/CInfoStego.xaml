@@ -1,0 +1,48 @@
+﻿<ContentDialog
+    x:Class="StegoPlusPlus.Views.CInfoStego"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:StegoPlusPlus.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    PrimaryButtonText="Close">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,15">
+            <TextBlock Text="Info File Stego" Style="{StaticResource TitleTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5,0,5">
+            <TextBlock Text="Tipe Embedding " Style="{StaticResource BaseTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,5">
+            <TextBlock x:Name="txt_StegoType" Style="{StaticResource BaseTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,5,0,5">
+            <TextBlock Text="Tipe Ekstensi Secret File " Style="{StaticResource BaseTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,5,0,5">
+            <TextBlock x:Name="txt_DataExtension" Style="{StaticResource BaseTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,5,0,5">
+            <TextBlock Text="Password " Style="{StaticResource BaseTextBlockStyle}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,5,0,5">
+            <TextBox x:Name="tbox_DataPasswd" IsReadOnly="True"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" Margin="0,5,0,5">
+            <ToggleSwitch x:Name="toggle_Data" Header="View Mode" OffContent="Encrypt" OnContent="Decrypt" IsOn="False" Toggled="toggle_Data_Toggled"/>
+        </StackPanel>
+    </Grid>
+</ContentDialog>

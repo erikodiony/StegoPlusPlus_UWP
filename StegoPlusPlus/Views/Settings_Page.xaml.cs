@@ -1,7 +1,19 @@
-﻿using Windows.Storage;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Foundation;
+using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using StegoPlusPlus.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -14,62 +26,79 @@ namespace StegoPlusPlus.Views
     {   
         public Settings_Page()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            check_transition_effect_status();
+            check_toggle_status();
+            InitializingPage();
         }
 
-        private void Page_Loading(FrameworkElement sender, object args)
+        //Trigger Toggled
+        private void Toggle_BG_Toggled(object sender, RoutedEventArgs e)
         {
-            Init_Page();
-            Init_Tips();
-            Init_Theme();
-            Init_Transition();
+            change_toggle();
         }
 
-        #region Initializing Tips
-        private void Init_Tips()
+        //Function Check Effect Transition
+        TransitionCollection collection = new TransitionCollection();
+        NavigationThemeTransition theme = new NavigationThemeTransition();
+
+        private void check_transition_effect_status()
         {
-            string value = (string)ApplicationData.Current.LocalSettings.Values["Tips_set"];
-            if (value == "True")
+            if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Continuum")
             {
-                Tips_Prop.Visibility = Visibility.Visible;
-                Tips_Prop2.Visibility = Visibility.Visible;
-                Tips_Prop3.Margin = new Thickness(0, 0, 0, 0);
+                var info = new ContinuumNavigationTransitionInfo();
+                theme.DefaultNavigationTransitionInfo = info;
+                collection.Add(theme);
+                Transitions = collection;
+                cb_effect.SelectedValue = "Effect 1";
+            }
+
+            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Common")
+            {
+                var info = new CommonNavigationTransitionInfo();
+                theme.DefaultNavigationTransitionInfo = info;
+                collection.Add(theme);
+                Transitions = collection;
+                cb_effect.SelectedValue = "Effect 2";
+            }
+
+            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Slide")
+            {
+                var info = new SlideNavigationTransitionInfo();
+                theme.DefaultNavigationTransitionInfo = info;
+                collection.Add(theme);
+                Transitions = collection;
+                cb_effect.SelectedValue = "Effect 3";
+            }
+
+            else
+            {
+                var info = new SuppressNavigationTransitionInfo();
+                theme.DefaultNavigationTransitionInfo = info;
+                collection.Add(theme);
+                Transitions = collection;
+                cb_effect.SelectedValue = "None";
+            }
+
+        }
+
+        //Function Check Toggle From Default Theme
+        private void check_toggle_status()
+        {
+            if ((string)ApplicationData.Current.LocalSettings.Values["BG_set"] == "Dark")
+            {
+                Toggle_BG.IsOn = true;
+                RequestedTheme = ElementTheme.Dark;
             }
             else
             {
-                Tips_Prop.Visibility = Visibility.Collapsed;
-                Tips_Prop2.Visibility = Visibility.Collapsed;
-                Tips_Prop3.Margin = new Thickness(0, -5, 0, 0);
+                Toggle_BG.IsOn = false;
+                RequestedTheme = ElementTheme.Light;
             }
         }
-        #endregion
-        #region Initializing Property
-        private void Init_Page()
-        {
-            HeaderInfo.Text = Data.Prop_Page.SettingsPage;
-        }
-        #endregion
-        #region Initializing Animation
-        private void Init_Transition()
-        {
-            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
-            Transitions = Process.Transition.GetTransition(value);
-            cb_effect.SelectedValue = Process.Transition.SetTransitionStatus(value);
-            Process.Transition.SetTransition(value);
 
-        }
-        private void Init_Theme()
-        {
-            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
-            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
-            if (RequestedTheme == ElementTheme.Light) Toggle_BG.IsOn = false; else Toggle_BG.IsOn = true;
-            Process.Theme.SetTheme(setTheme.ToString());
-        }
-        #endregion
-
-
-        #region Trigger Toggle Switch
-        private void Toggle_BG_Toggled(object sender, RoutedEventArgs e)
+        //Function Change Toggle Theme
+        public void change_toggle()
         {
             if (Toggle_BG.IsOn == true)
             {
@@ -82,8 +111,8 @@ namespace StegoPlusPlus.Views
                 RequestedTheme = ElementTheme.Light;
             }
         }
-        #endregion
-        #region Trigger ComboBox
+
+        //Function Change ComboBox Transition Effect
         private void cb_effect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cb_effect.SelectedValue.ToString() == "Effect 1")
@@ -103,7 +132,12 @@ namespace StegoPlusPlus.Views
                 ApplicationData.Current.LocalSettings.Values["Effect_set"] = "Off";
             }
         }
-        #endregion
+
+        //Initial Text
+        private void InitializingPage()
+        {
+            HeaderInfo.Text = HeaderPage.SettingsPage;
+        }
 
     }
 }
