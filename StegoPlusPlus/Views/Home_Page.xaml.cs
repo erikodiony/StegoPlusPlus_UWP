@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.Storage;
-using Windows.Storage.FileProperties;
+﻿using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Media.Imaging;
-using Windows.UI.Xaml.Navigation;
+using StegoPlusPlus.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -30,69 +15,33 @@ namespace StegoPlusPlus.Views
 
         public Home_Page()
         {
-            this.InitializeComponent();
-            check_transition_effect_status();
-            check_theme_status();
-            InitializingPage();
+            InitializeComponent();
         }
 
-        //Function Check Effect Transition
-        TransitionCollection collection = new TransitionCollection();
-        NavigationThemeTransition theme = new NavigationThemeTransition();
-        
-        private void check_transition_effect_status()
+        private void Page_Loading(FrameworkElement sender, object args)
         {
-            if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Continuum")
-            {
-                var info = new ContinuumNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                this.Transitions = collection;
-            }
-
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Common")
-            {
-                var info = new CommonNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                this.Transitions = collection;
-            }
-
-            else if ((string)ApplicationData.Current.LocalSettings.Values["Effect_set"] == "Slide")
-            {
-                var info = new SlideNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                this.Transitions = collection;
-            }
-
-            else
-            {
-                var info = new SuppressNavigationTransitionInfo();
-                theme.DefaultNavigationTransitionInfo = info;
-                collection.Add(theme);
-                this.Transitions = collection;
-            }
-
+            Init_Theme();
+            Init_Transition();
         }
 
-        //Function Check Theme Status
-        private void check_theme_status()
+        #region Initializing Animation
+        private void Init_Transition()
         {
-            if ((string)ApplicationData.Current.LocalSettings.Values["BG_set"] == "Dark")
-            {
-                this.RequestedTheme = ElementTheme.Dark;
-            }
-            else
-            {
-                this.RequestedTheme = ElementTheme.Light;
-            }
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+            Transitions = Process.Transition.GetTransition(value);
+            Process.Transition.SetTransition(value);
         }
-
-        //Initial Text
-        private void InitializingPage()
+        private void Init_Theme()
         {
-            HeaderInfo.Text = HeaderPage.HomePage;
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            Process.Theme.SetTheme(setTheme.ToString());
+        }
+        #endregion
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            HeaderBanner.MaxHeight = this.ActualHeight / 4;
         }
     }
 }

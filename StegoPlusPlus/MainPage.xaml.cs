@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Foundation.Metadata;
+using Windows.Storage;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using StegoPlusPlus.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -28,11 +21,13 @@ namespace StegoPlusPlus
         {
             InitializeComponent();
             ShowStatusBar();
+            Init_Theme();
+            Init_Transition();
         }
                 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            this.MyFrame.Navigate(typeof(Views.Home_Page));
+            MyFrame.Navigate(typeof(Views.Home_Page));
             Header.Text = "Home";
             Header.FontSize = 17;
             HomeRadioBtn.IsChecked = true;
@@ -47,19 +42,24 @@ namespace StegoPlusPlus
                 switch (button.Content.ToString())
                 {
                     case "Home":
-                        this.MyFrame.Navigate(typeof(Views.Home_Page));
+                        Info_Page.Visibility = Visibility.Collapsed;
+                        MyFrame.Navigate(typeof(Views.Home_Page));
                         break;
                     case "Embed":
-                        this.MyFrame.Navigate(typeof(Views.Embed_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.Embed_Page));
                         break;
                     case "Extract":
-                        this.MyFrame.Navigate(typeof(Views.Extract_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.Extract_Page));
                         break;
                     case "About":
-                        this.MyFrame.Navigate(typeof(Views.About_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.About_Page));
                         break;
                     case "Settings":
-                        this.MyFrame.Navigate(typeof(Views.Settings_Page));
+                        Info_Page.Visibility = Visibility.Visible;
+                        MyFrame.Navigate(typeof(Views.Settings_Page));
                         break;
                 }
                 Header.Text = button.Content.ToString();
@@ -76,18 +76,49 @@ namespace StegoPlusPlus
         }
 
         // show the StatusBar
-        private async void ShowStatusBar()
+        private void ShowStatusBar()
         {
-            // turn on SystemTray for mobile
-            // don't forget to add a Reference to Windows Mobile Extensions For The UWP
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
-                var statusbar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                await statusbar.ShowAsync();
-                statusbar.BackgroundColor = Windows.UI.Colors.Transparent;
-                statusbar.BackgroundOpacity = 1;
-                statusbar.ForegroundColor = Windows.UI.Colors.Black;
+                StatusBar.GetForCurrentView();
             }
+        }
+
+        #region Initializing Animation
+        private void Init_Transition()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Effect_set"];
+            Transitions = Process.Transition.GetTransition(value);
+            Process.Transition.SetTransition(value);
+        }
+        private void Init_Theme()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
+            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            Process.Theme.SetTheme(setTheme.ToString());
+        }
+        #endregion
+
+        #region Initializing Tips
+        private void Init_Tips()
+        {
+            string value = (string)ApplicationData.Current.LocalSettings.Values["Tips_set"];
+            var setTips = Process.Tips.GetTips(value) == false ? Toggle_Tips.IsOn = false : Toggle_Tips.IsOn = true;
+            Process.Tips.SetTips(setTips.ToString());
+        }
+        #endregion
+
+        private void Toggle_Tips_Toggled(object sender, RoutedEventArgs e)
+        {
+            string value = String.Empty;
+            if (Toggle_Tips.IsOn == true) value = "True"; else value = "False";
+            Process.Tips.SetTips(value);
+            MyFrame.Navigate(MyFrame.SourcePageType);
+        }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            Init_Tips();
         }
     }
 }
