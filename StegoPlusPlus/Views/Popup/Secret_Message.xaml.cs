@@ -37,9 +37,8 @@ namespace StegoPlusPlus.Views.Popup
 
             loading_Data.IsIndeterminate = true;
 
-            if (exec == "Encrypt") x = Task.Run(() => Encrypt()); else x = Task.Run(() => Decrypt());
-            result = await x;
-
+            await Task.Delay(2500);
+            if (exec == "Encrypt") result = (await (x = Task.Run(() => Encrypt()))); else result = await (x = Decrypt());
             if (x.IsCompleted == true) loading_Data.IsIndeterminate = false;
             return result;
         }
