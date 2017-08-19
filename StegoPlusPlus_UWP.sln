@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.3
+VisualStudioVersion = 15.0.26730.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StegoPlusPlus", "StegoPlusPlus\StegoPlusPlus.csproj", "{6AE08D57-A49D-463D-A000-4E56F7E79ABA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StegoPlusPlus_UWP", "StegoPlusPlus_UWP\StegoPlusPlus_UWP.csproj", "{6AE08D57-A49D-463D-A000-4E56F7E79ABA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +38,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F253536B-45FA-458F-8E3F-3CC9F1FC2639}
+		SolutionGuid = {621002CD-14C8-4BB0-B28F-4029E4CF527D}
 	EndGlobalSection
 EndGlobal
