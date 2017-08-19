@@ -1,4 +1,4 @@
-# StegoPlusPlus
+# Stego++ with Password
 
 Merupakan aplikasi untuk menyisipkan file ke dalam Citra Digital dengan format *.png (32Bit),.
 
