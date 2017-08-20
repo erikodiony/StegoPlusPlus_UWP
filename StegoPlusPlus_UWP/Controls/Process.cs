@@ -354,6 +354,7 @@ namespace StegoPlusPlus.Controls
             public static Dictionary<string, object> Embed = new Dictionary<string, object>();
             public static Dictionary<string, object> Extract = new Dictionary<string, object>();
             public static Dictionary<string, object> SecretData = new Dictionary<string, object>();
+            public static Dictionary<string, StorageFile> ToastData = new Dictionary<string, StorageFile>();
             public static void Reset_Data(string type, string type2)
             {
                 switch(type)
@@ -806,9 +807,9 @@ namespace StegoPlusPlus.Controls
                 {
                     using (IRandomAccessStream ram = await sf.OpenAsync(FileAccessMode.ReadWrite))
                     {
-                        //BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, ram);
-                        var memStream = new InMemoryRandomAccessStream();
-                        BitmapEncoder encoder = await BitmapEncoder.CreateForTranscodingAsync(memStream, GetData.Decoder);
+                        BitmapEncoder encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, ram);
+                        //var memStream = new InMemoryRandomAccessStream();
+                        //BitmapEncoder encoder = await BitmapEncoder.CreateForTranscodingAsync(memStream, GetData.Decoder);
                         encoder.SetPixelData(GetData.Decoder.BitmapPixelFormat, GetData.Decoder.BitmapAlphaMode, (uint)GetData.Decoder.PixelWidth, (uint)GetData.Decoder.PixelHeight, GetData.Decoder.DpiX, GetData.Decoder.DpiY, (byte[])value[Data.Misc.DataPixel]);
                         var prop = new List<KeyValuePair<string, BitmapTypedValue>>();
 
@@ -818,18 +819,20 @@ namespace StegoPlusPlus.Controls
                         await encoder.BitmapProperties.SetPropertiesAsync(prop);
                         await encoder.FlushAsync();
 
-                        memStream.Seek(0);
-                        ram.Seek(0);
-                        ram.Size = 0;
-                        await RandomAccessStream.CopyAsync(memStream, ram);
-                        memStream.Dispose();
+                        //memStream.Seek(0);
+                        //ram.Seek(0);
+                        //ram.Size = 0;
+                        //await RandomAccessStream.CopyAsync(memStream, ram);
+                        //memStream.Dispose();
                     }
                     switch (type)
                     {
                         case "File":
+                            ToastDialog.Show(sf, "Image Files", "Stego Image", Detail.Embed_File);
                             await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Saved_StegoImage, Icon.Smile);
                             break;
                         case "Message":
+                            ToastDialog.Show(sf, "Image Files", "Stego Image", Detail.Embed_Message);
                             await PopupDialog.Show(Status.Success, Detail.Embed_Message, Complete.Saved_StegoImage, Icon.Smile);
                             break;
                     }
@@ -959,8 +962,7 @@ namespace StegoPlusPlus.Controls
                 string ext = Bifid_Cipher.Decrypt(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataExtension]).ToArray()));
                 fs.FileTypeChoices.Add(Validate.IsType(ext), new List<string>() { ext });
                 fs.SuggestedFileName = Bifid_Cipher.Decrypt(Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataNameFile]).ToArray()));
-                IStorageFile sf = await fs.PickSaveFileAsync();
-
+                StorageFile sf = await fs.PickSaveFileAsync();
                 if (sf != null)
                 {
                     switch (type)
@@ -972,6 +974,7 @@ namespace StegoPlusPlus.Controls
                             await FileIO.WriteTextAsync(sf, await Bifid_Cipher.Execute("Extract", Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataSecret]).ToArray()), String.Empty));
                             break;
                     }
+                    ToastDialog.Show(sf, Validate.IsType(ext), "Embedded File", Detail.Extract_FileMessage);
                     await PopupDialog.Show(Status.Success, Detail.Extract_FileMessage, Complete.Saved_SecretFile, Icon.Smile);
                 }
                 else

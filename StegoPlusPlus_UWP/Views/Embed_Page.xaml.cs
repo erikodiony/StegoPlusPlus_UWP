@@ -8,6 +8,9 @@ using Windows.UI.Xaml.Media.Imaging;
 using StegoPlusPlus.Controls;
 using static StegoPlusPlus.Controls.Data.Prop_Popup;
 using static StegoPlusPlus.Controls.Data.Prop_Popup.Title;
+using Windows.UI.Notifications;
+using Windows.Data.Xml.Dom;
+using Windows.ApplicationModel.Activation;
 
 namespace StegoPlusPlus.Views
 {

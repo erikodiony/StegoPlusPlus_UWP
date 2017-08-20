@@ -105,6 +105,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Data.cs" />
+    <Compile Include="Controls\ToastDialog.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -150,6 +151,9 @@
     <Content Include="Assets\BadgeLogo.scale-150.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\Button\Dismiss.png" />
+    <Content Include="Assets\Button\File.png" />
+    <Content Include="Assets\Button\Picture.png" />
     <Content Include="Assets\Header-StegoPlusPlus-150.png" />
     <Content Include="Assets\MyLogo.png" />
     <Content Include="Assets\MyPicture.jpg" />

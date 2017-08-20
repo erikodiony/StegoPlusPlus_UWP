@@ -1,10 +1,16 @@
-﻿using System;
+﻿using StegoPlusPlus.Controls;
+using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Storage;
+using Windows.System;
+using Windows.UI.Notifications;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using static StegoPlusPlus.Controls.Process;
 
 namespace StegoPlusPlus
 {
@@ -19,8 +25,8 @@ namespace StegoPlusPlus
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
                         
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
             Object val = localSettings.Values["BG_set"];
@@ -42,13 +48,6 @@ namespace StegoPlusPlus
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = false;
-            }
-#endif
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -102,10 +101,29 @@ namespace StegoPlusPlus
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+            ToastNotificationManager.History.Clear();
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
+
+        //Handle Toast Notification
+        protected override async void OnActivated(IActivatedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+
+            if (e is ToastNotificationActivatedEventArgs)
+            {
+                var toastActivationArgs = e as ToastNotificationActivatedEventArgs;
+                string args = toastActivationArgs.Argument;
+                if (args == "Open")
+                {
+                    await Launcher.LaunchFileAsync(GetData.ToastData[Data.Misc.ToastData]);
+                }
+            }
+            Window.Current.Activate();
+        }
+
 
     }
 }
