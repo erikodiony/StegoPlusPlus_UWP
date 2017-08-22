@@ -151,9 +151,6 @@
     <Content Include="Assets\BadgeLogo.scale-150.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
-    <Content Include="Assets\Button\Dismiss.png" />
-    <Content Include="Assets\Button\File.png" />
-    <Content Include="Assets\Button\Picture.png" />
     <Content Include="Assets\Header-StegoPlusPlus-150.png" />
     <Content Include="Assets\MyLogo.png" />
     <Content Include="Assets\MyPicture.jpg" />
@@ -251,9 +248,6 @@
   <ItemGroup>
     <SDKReference Include="WindowsDesktop, Version=10.0.15063.0">
       <Name>Windows Desktop Extensions for the UWP %28WindowsDesktop, Version=10.0.15063.0%29</Name>
-    </SDKReference>
-    <SDKReference Include="WindowsIoT, Version=10.0.15063.0">
-      <Name>Windows IoT Extensions for the UWP</Name>
     </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
       <Name>Windows Mobile Extensions for the UWP %28WindowsMobile, Version=10.0.15063.0%29</Name>

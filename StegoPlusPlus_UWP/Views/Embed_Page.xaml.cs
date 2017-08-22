@@ -8,9 +8,6 @@ using Windows.UI.Xaml.Media.Imaging;
 using StegoPlusPlus.Controls;
 using static StegoPlusPlus.Controls.Data.Prop_Popup;
 using static StegoPlusPlus.Controls.Data.Prop_Popup.Title;
-using Windows.UI.Notifications;
-using Windows.Data.Xml.Dom;
-using Windows.ApplicationModel.Activation;
 
 namespace StegoPlusPlus.Views
 {
@@ -264,11 +261,11 @@ namespace StegoPlusPlus.Views
         #endregion
 
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
-
+            
         #region Trigger (Embed File)
         private async void F_btn_input_cover_CLICK(object sender, RoutedEventArgs e)
         {
-            if (await Process.Picker.Execute(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("FILE"); else Init_F_CoverImage();
+            if (await Process.Picker.Execute(Data.File_Extensions.Png, "Image") == true) Init_CoverImage_NEW("FILE"); else Init_F_CoverImage();           
         }
         private async void F_btn_input_file_CLICK(object sender, RoutedEventArgs e)
         {
