@@ -13,7 +13,7 @@ namespace StegoPlusPlus.Controls
             string header = String.Format("{0} was saved", processOf1);
             string title = String.Format("File {0} was saved successfully !", file.Name);
 
-            ToastNotificationManager.History.Clear();
+            ToastNotificationManager.History.RemoveGroup(Data.Misc.ToastGroupA);
             PassData(file, processOf1);
 
             var Content = new ToastContent()
@@ -56,14 +56,58 @@ namespace StegoPlusPlus.Controls
                 },
             };
 
-            var toastNotif = new ToastNotification(Content.GetXml());
-            ToastNotificationManager.CreateToastNotifier().Show(toastNotif);
+            var toastNotify = new ToastNotification(Content.GetXml())
+            {
+                Group = Data.Misc.ToastGroupA
+            };
+            ToastNotificationManager.CreateToastNotifier().Show(toastNotify);
         }
 
         public static void PassData(StorageFile file, string type)
         {
             if (GetData.ToastData.ContainsKey(Data.Misc.ToastData) == true) GetData.ToastData.Remove(Data.Misc.ToastData);
             GetData.ToastData.Add(Data.Misc.ToastData, file);
+        }
+
+        public static void Notify(string value, string type)
+        {            
+            string header = String.Format("{0} data was successfully", type);
+            string title = String.Format("{0} was complete on {1}ms !", type, value);
+
+            ToastNotificationManager.History.Remove(type, Data.Misc.ToastGroupB);
+
+            var Content = new ToastContent()
+            {
+                ActivationType = ToastActivationType.Background,
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                        {
+                            new AdaptiveText()
+                            {
+                                Text = header
+                            },
+                            new AdaptiveText()
+                            {
+                                Text = title
+                            }
+                        },
+                        Attribution = new ToastGenericAttributionText()
+                        {
+                            Text = type
+                        },
+                    }
+                }
+            };
+
+            var toastNotify = new ToastNotification(Content.GetXml())
+            {
+                Group = Data.Misc.ToastGroupB,
+                Tag = type
+            };
+            ToastNotificationManager.CreateToastNotifier().Show(toastNotify);
         }
 
     }

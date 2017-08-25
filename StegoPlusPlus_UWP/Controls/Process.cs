@@ -435,6 +435,8 @@ namespace StegoPlusPlus.Controls
             public static async Task File(StorageFile file)
             {
                 byte[] bin;
+                Timer t = new Timer();
+                t.Run(true, String.Empty);
                 using (Stream st = await file.OpenStreamForReadAsync())
                 {
                     using (BinaryReader binaryReader = new BinaryReader(st))
@@ -443,6 +445,7 @@ namespace StegoPlusPlus.Controls
                         GetData.Embed.Add(Data.Misc.DataSecret, ToBinary(bin, "File/Cipher"));
                     }
                 }
+                t.Run(false, Data.Misc.T_ConvertBinary);
             }
             public static async Task Message(StorageFile file)
             {
@@ -476,8 +479,10 @@ namespace StegoPlusPlus.Controls
         {
             public static async Task<string> Execute(string exec, string value, string type)
             {
+                Timer t = new Timer();
                 if (exec == "Embed")
                 {
+                    if (type == "Message") t.Run(true, String.Empty); //TIMER START
                     PopupDialog.Loading pl = new PopupDialog.Loading();
                     if (value.Length > 1000) pl.Show(true, Data.Misc.PleaseWait, Data.Misc.PleaseWaitDetail);
 
@@ -486,12 +491,21 @@ namespace StegoPlusPlus.Controls
                     var x = Task.Run(() => Encrypt(value, type));
                     var result = await x;
 
-                    if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);                    
+                    if (x.IsCompleted == true) pl.Show(false, String.Empty, String.Empty);
+                    if (type == "Message")
+                    {
+                        t.Run(false, Data.Misc.T_Encrypt); //TIMER STOP
+                    }
                     return result;
                 }
                 else
                 {
+                    if (type == "Message") t.Run(true, String.Empty); //TIMER START
                     var result = await Task.Run(() => Decrypt(value));
+                    if (type == "Message")
+                    {
+                        t.Run(false, Data.Misc.T_Decrypt); //TIMER STOP
+                    }
                     return result;
                 }
             }
@@ -741,6 +755,9 @@ namespace StegoPlusPlus.Controls
             {
                 Dictionary<string, object> result = new Dictionary<string, object>();
 
+                Timer t = new Timer(); //INITIALIZE TIMER
+                t.Run(true, String.Empty); //TIMER START
+
                 var dataPixel = (byte[])GetData.Embed[Data.Misc.DataPixel];
 
                 var dataPasswd = (char[])GetData.Embed[Data.Misc.DataPassword];
@@ -786,6 +803,8 @@ namespace StegoPlusPlus.Controls
                         dataPixel[i] = dataPixel[i];
                     }
                 }
+
+                t.Run(false, Data.Misc.T_Embed); //TIMER STOP
 
                 await Task.Delay(6000);
 
@@ -889,6 +908,9 @@ namespace StegoPlusPlus.Controls
             }
             public static async Task GetValue()
             {
+                Timer t = new Timer(); //INITIALIZE TIMER
+                t.Run(true, String.Empty); //TIMER START
+
                 string dataPixel_str;
                 List<byte> dataLSB = new List<byte>();
                 List<char> dataPixel_char = new List<char>();
@@ -917,7 +939,9 @@ namespace StegoPlusPlus.Controls
                 GetData.Extract.Add(Data.Misc.DataExtension, dataLSB.GetRange(l_passwd + l_type + l_name, l_ext));
                 GetData.Extract.Add(Data.Misc.DataSecret, dataLSB.GetRange(l_passwd + l_type + l_name + l_ext, l_data));
 
-                await Task.Delay(6000);
+                t.Run(false, Data.Misc.T_Extract);
+
+                await Task.Delay(6000);                
             }
             public static async Task Run(string type, string passwd)
             {

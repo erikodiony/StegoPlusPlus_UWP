@@ -28,7 +28,7 @@
                     <TextBlock Text="&#xE99A;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 </StackPanel>
                 <Rectangle Grid.Column="1" Margin="15,0,15,0" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
-                <Image Grid.Column="2" Width="Auto" Height="Auto" Margin="0,-5,0,0" Source="../Assets/Header-StegoPlusPlus-150.png" Stretch="Fill" HorizontalAlignment="Stretch"/>
+                <Image Grid.Column="2" Width="Auto" Height="Auto" Margin="0,-5,0,0" Source="ms-appx:///Assets/Header-StegoPlusPlus-150.png" Stretch="Fill" HorizontalAlignment="Stretch"/>
             </Grid>
         </StackPanel>
         <!--Header Menu--><!--Main Row 1-->

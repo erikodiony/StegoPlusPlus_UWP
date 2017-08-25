@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using StegoPlusPlus.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
+using static StegoPlusPlus.Controls.Process;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,9 +26,9 @@ namespace StegoPlusPlus.Views.Popup
         private void Init_Theme()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
-            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            var setTheme = Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
             if (setTheme == ElementTheme.Dark) loading_Data.Foreground = new SolidColorBrush(Colors.White); else loading_Data.Foreground = new SolidColorBrush(Colors.Black);
-            Process.Theme.SetTheme(setTheme.ToString());
+            Theme.SetTheme(setTheme.ToString());
         }
 
         public async Task<string> Execute(string exec)
@@ -80,26 +81,32 @@ namespace StegoPlusPlus.Views.Popup
 
         private string Encrypt()
         {
+            Timer t = new Timer();
+            t.Run(true, String.Empty);
+
             string result = String.Empty;
-            foreach (var x in (List<byte>)Process.GetData.Extract[Data.Misc.DataSecret])
+            foreach (var x in (List<byte>)GetData.Extract[Data.Misc.DataSecret])
             {
                 result += x + " ";
             }
+
+            t.Run(false, Data.Misc.T_Encrypt);
+
             return result;
         }
-
+        
         private async Task<string> Decrypt()
         {
             string result = String.Empty;
-            string x = Encoding.ASCII.GetString(((List<byte>)Process.GetData.Extract[Data.Misc.DataSecret]).ToArray());
-            result = await Process.Bifid_Cipher.Execute("Decrypt", x, String.Empty);
+            string x = Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataSecret]).ToArray());
+            result = await Bifid_Cipher.Execute("Decrypt", x, "Message");
             return result;
         }
 
         private async void btn_SaveAs_Click(object sender, RoutedEventArgs e)
         {
             Hide();
-            await Process.Extract.Save("Message");
+            await Extract.Save("Message");
         }
 
         private void ContentDialog_SizeChanged(object sender, SizeChangedEventArgs e)

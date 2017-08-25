@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
+using static StegoPlusPlus.Controls.Process;
 
 // The Content Dialog item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -26,9 +27,9 @@ namespace StegoPlusPlus.Views.Popup
         private void Init_Theme()
         {
             string value = (string)ApplicationData.Current.LocalSettings.Values["BG_set"];
-            var setTheme = Process.Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
+            var setTheme = Theme.GetTheme(value) == true ? RequestedTheme = ElementTheme.Light : RequestedTheme = ElementTheme.Dark;
             if (setTheme == ElementTheme.Dark) loading_Bar.Foreground = new SolidColorBrush(Colors.White); else loading_Bar.Foreground = new SolidColorBrush(Colors.Black);
-            Process.Theme.SetTheme(setTheme.ToString());
+            Theme.SetTheme(setTheme.ToString());
         }
         #endregion
 
@@ -46,17 +47,21 @@ namespace StegoPlusPlus.Views.Popup
         {
             string result = String.Empty;
             string x = Encoding.ASCII.GetString(list_value.ToArray());
-            result = await Process.Bifid_Cipher.Execute("Decrypt", x, String.Empty);
+            result = await Bifid_Cipher.Execute("Decrypt", x, String.Empty);
             return result;
         }
 
         private async Task SetEncrypt()
         {
             await Task.Delay(2500);
-            tbox_type.Text = Encrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataType]);
-            tbox_name_file.Text = Encrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataNameFile]);
-            tbox_ext_file.Text = Encrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataExtension]);
-            tbox_passwd_stego.Text = Encrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataPassword]);
+
+            Timer t = new Timer();
+            t.Run(true, String.Empty);
+
+            tbox_type.Text = Encrypt((List<byte>)GetData.Extract[Data.Misc.DataType]);
+            tbox_name_file.Text = Encrypt((List<byte>)GetData.Extract[Data.Misc.DataNameFile]);
+            tbox_ext_file.Text = Encrypt((List<byte>)GetData.Extract[Data.Misc.DataExtension]);
+            tbox_passwd_stego.Text = Encrypt((List<byte>)GetData.Extract[Data.Misc.DataPassword]);
 
             if (tbox_type.Text == "49 ")
             {
@@ -75,21 +80,30 @@ namespace StegoPlusPlus.Views.Popup
             {
                 tbox_type.Text = "File";
             }
+
+            t.Run(false, Data.Misc.T_Encrypt);
         }
 
         private async Task SetDecrypt()
         {
             await Task.Delay(2500);
+
+            Timer t = new Timer();
+            t.Run(true, String.Empty);
+
             if (tbox_type.Text == "Text / Message (Input Manual)")
             {
-                tbox_passwd_stego.Text = await Decrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataPassword]);
+                tbox_passwd_stego.Text = await Decrypt((List<byte>)GetData.Extract[Data.Misc.DataPassword]);
             }
             else
             {
-                tbox_name_file.Text = await Decrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataNameFile]);
-                tbox_ext_file.Text = await Decrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataExtension]);
-                tbox_passwd_stego.Text = await Decrypt((List<byte>)Process.GetData.Extract[Data.Misc.DataPassword]);
+                tbox_name_file.Text = await Decrypt((List<byte>)GetData.Extract[Data.Misc.DataNameFile]);
+                tbox_ext_file.Text = await Decrypt((List<byte>)GetData.Extract[Data.Misc.DataExtension]);
+                tbox_passwd_stego.Text = await Decrypt((List<byte>)GetData.Extract[Data.Misc.DataPassword]);
             }
+
+            t.Run(false, Data.Misc.T_Decrypt);
+
         }
 
         private void SetTbox(bool type)
