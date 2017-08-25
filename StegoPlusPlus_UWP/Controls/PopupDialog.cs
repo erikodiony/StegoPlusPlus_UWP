@@ -53,10 +53,6 @@ namespace StegoPlusPlus.Controls
                 await sm.ShowAsync();
             }
         }
-        public class File
-        {
-
-        }
         public class Info
         {
             public async void Show()

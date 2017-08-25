@@ -71,7 +71,7 @@ namespace StegoPlusPlus.Controls
                 public static readonly string Input_Empty_Passwd = "Field ''Input Password'' is empty !\nCan't Saving Password...";
                 public static readonly string Input_Empty_Message = "Field ''Input Text/Message'' is empty !\nCan't Saving Text/Message...";
                 public static readonly string Invalid_Stego = "Invalid Image Stego !\nCan't Extract File / Message...";
-                public static readonly string Invalid_Passwd = "Password Incorrect !\nCan't Extract File / Message...";
+                public static readonly string Invalid_Passwd = "Password Incorrect !\nCan't View Extracted File / Message...";
                 public static readonly string Invalid_32bitDepth = "Only Image Cover 32BitDepth was supported !\nPlease check again...";
                 public static readonly string Overload_Size = "Overload size quota of File !\nPlease check again...";
                 public static readonly string Null_Size = "Field ''Choose Image Cover'' must be filled !\nPlease check again...";
@@ -237,7 +237,7 @@ namespace StegoPlusPlus.Controls
             public static readonly string Text = "Text";
 
             public static readonly string PleaseWait = "Please Wait...";
-            public static readonly string PleaseWaitDetail = "This process might take a while or several minutes...";
+            public static readonly string PleaseWaitDetail = "This process might take a while...";
             public static readonly string WorkingOnIt = "Working on it...";
 
             public static readonly string DataPixel = "DataPixel";
