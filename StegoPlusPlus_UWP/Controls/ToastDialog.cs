@@ -8,7 +8,8 @@ namespace StegoPlusPlus.Controls
 {
     class ToastDialog
     {
-        public static void Show(StorageFile file, string typeToast, string processOf1, string processOf2)
+        #region Notify Result
+        public static void ShowData(StorageFile file, string typeToast, string processOf1, string processOf2)
         {
             string header = String.Format("{0} was saved", processOf1);
             string title = String.Format("File {0} was saved successfully !", file.Name);
@@ -60,19 +61,27 @@ namespace StegoPlusPlus.Controls
             {
                 Group = Data.Misc.ToastGroupA
             };
-            ToastNotificationManager.CreateToastNotifier().Show(toastNotify);
-        }
 
+            if (Process.Notify.GetStatus("Result") == true) ToastNotificationManager.CreateToastNotifier().Show(toastNotify); else ToastNotificationManager.History.RemoveGroup(Data.Misc.ToastGroupA);
+
+        }
+        #endregion
+        #region Notify Data Passing
         public static void PassData(StorageFile file, string type)
         {
             if (GetData.ToastData.ContainsKey(Data.Misc.ToastData) == true) GetData.ToastData.Remove(Data.Misc.ToastData);
             GetData.ToastData.Add(Data.Misc.ToastData, file);
         }
-
+        #endregion
+        #region Notify Timer
         public static void Notify(string value, string type)
-        {            
+        {
             string header = String.Format("{0} data was successfully", type);
             string title = String.Format("{0} was complete on {1}ms !", type, value);
+
+            //FIX Ukuran TAG yang kena limit di versi 10240 - 14393
+            if (type == Data.Misc.T_ConvertBinary) ToastNotificationManager.History.Remove("Converting", Data.Misc.ToastGroupB);
+            //END FIX
 
             ToastNotificationManager.History.Remove(type, Data.Misc.ToastGroupB);
 
@@ -102,13 +111,19 @@ namespace StegoPlusPlus.Controls
                 }
             };
 
+            //FIX Ukuran TAG yang kena limit di versi 10240 - 14393
+            if (type == Data.Misc.T_ConvertBinary) type = "Converting";
+            //END FIX
+
             var toastNotify = new ToastNotification(Content.GetXml())
             {
                 Group = Data.Misc.ToastGroupB,
                 Tag = type
             };
-            ToastNotificationManager.CreateToastNotifier().Show(toastNotify);
-        }
 
+            if (Process.Notify.GetStatus("Timer") == true) ToastNotificationManager.CreateToastNotifier().Show(toastNotify); else ToastNotificationManager.History.RemoveGroup(Data.Misc.ToastGroupB);
+
+        }
+        #endregion
     }
 }

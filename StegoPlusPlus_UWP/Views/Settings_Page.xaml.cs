@@ -2,6 +2,7 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using StegoPlusPlus.Controls;
+using Windows.UI.Notifications;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -23,6 +24,7 @@ namespace StegoPlusPlus.Views
             Init_Tips();
             Init_Theme();
             Init_Transition();
+            Init_Notify();
         }
 
         #region Initializing Tips
@@ -66,24 +68,15 @@ namespace StegoPlusPlus.Views
             Process.Theme.SetTheme(setTheme.ToString());
         }
         #endregion
-
-
-        #region Trigger Toggle Switch
-        private void Toggle_BG_Toggled(object sender, RoutedEventArgs e)
+        #region Initializing Notification
+        private void Init_Notify()
         {
-            if (Toggle_BG.IsOn == true)
-            {
-                ApplicationData.Current.LocalSettings.Values["BG_set"] = "Dark";
-                RequestedTheme = ElementTheme.Dark;
-            }
-            else
-            {
-                ApplicationData.Current.LocalSettings.Values["BG_set"] = "Light";
-                RequestedTheme = ElementTheme.Light;
-            }
+            Toggle_Notif_Timer.IsOn = Process.Notify.GetStatus("Timer");
+            Toggle_Notif_ShowData.IsOn = Process.Notify.GetStatus("Result");
         }
         #endregion
-        #region Trigger ComboBox
+
+        #region Trigger ComboBox Transition Effect
         private void cb_effect_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cb_effect.SelectedValue.ToString() == "Effect 1")
@@ -104,6 +97,32 @@ namespace StegoPlusPlus.Views
             }
         }
         #endregion
-
+        #region Trigger Toggle Background
+        private void Toggle_BG_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (Toggle_BG.IsOn == true)
+            {
+                ApplicationData.Current.LocalSettings.Values["BG_set"] = "Dark";
+                RequestedTheme = ElementTheme.Dark;
+            }
+            else
+            {
+                ApplicationData.Current.LocalSettings.Values["BG_set"] = "Light";
+                RequestedTheme = ElementTheme.Light;
+            }
+        }
+        #endregion
+        #region Trigger Toggle Notify Result
+        private void Toggle_Notif_ShowData_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (Toggle_Notif_ShowData.IsOn == true) ApplicationData.Current.LocalSettings.Values["Notify_Result_set"] = "On"; else ApplicationData.Current.LocalSettings.Values["Notify_Result_set"] = "Off";
+        }
+        #endregion        
+        #region Trigger Toggle Notify Timer
+        private void Toggle_Notif_Timer_Toggled(object sender, RoutedEventArgs e)
+        {
+            if (Toggle_Notif_Timer.IsOn == true) ApplicationData.Current.LocalSettings.Values["Notify_Timer_set"] = "On"; else ApplicationData.Current.LocalSettings.Values["Notify_Timer_set"] = "Off";
+        }
+        #endregion
     }
 }

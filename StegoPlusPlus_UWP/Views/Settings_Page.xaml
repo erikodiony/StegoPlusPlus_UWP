@@ -23,7 +23,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="&#xEA80;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <TextBlock Text="&#xEA80;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 </StackPanel>
                 <Rectangle Grid.Column="1" Margin="15,0,15,0" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                 <TextBlock x:Name="HeaderInfo" Grid.Column="2" Margin="5,0,5,0" Style="{StaticResource BaseTextBlockStyle}" FontStretch="SemiCondensed"/>
@@ -52,7 +52,7 @@
 
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
-                        <TextBlock Text="&#xE771;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                        <TextBlock Text="&#xE771;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     </StackPanel>
                     <!--Pivot 1 Column 1-->
 
@@ -90,7 +90,7 @@
 
                     <!--Pivot 2 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
-                        <TextBlock Text="&#xE1E4;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                        <TextBlock Text="&#xE1E4;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     </StackPanel>
                     <!--Pivot 2 Column 1-->
 
@@ -124,6 +124,49 @@
                 </Grid>
             </PivotItem>
             <!--Pivot 2-->
+
+            <!--Pivot 3-->
+            <PivotItem Header="Change Notification" Margin="0,0,0,0">
+                <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Pivot 3 Column 1-->
+                    <StackPanel Grid.Column="0" Margin="15,20,0,0">
+                        <TextBlock Text="&#xE8F2;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    </StackPanel>
+                    <!--Pivot 3 Column 1-->
+
+                    <!--Pivot 3 Column 2-->
+                    <Rectangle Grid.Column="1" Margin="15,20,0,20" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
+                    <!--Pivot 3 Column 2-->
+
+                    <!--Pivot 3 Column 3-->
+                    <ScrollViewer Grid.Column="2" Margin="15,20,0,20" ScrollViewer.VerticalScrollMode="Enabled" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ToggleSwitch Grid.Row="0" Grid.Column="0" x:Name="Toggle_Notif_Timer" Header="Timer Elapsed Event" OffContent="Off" OnContent="On" Toggled="Toggle_Notif_Timer_Toggled"/>
+                            <ToggleSwitch Grid.Row="1" Grid.Column="0" x:Name="Toggle_Notif_ShowData" Header="Data Result Event" OffContent="Off" OnContent="On" Toggled="Toggle_Notif_ShowData_Toggled"/>
+                        </Grid>
+                    </ScrollViewer>
+                    <!--Pivot 3 Column 3-->
+                </Grid>
+            </PivotItem>
+            <!--Pivot 3-->
+
+
+
         </Pivot>
         <!--Pivot Menu--><!--Main Row 3-->
     </Grid>

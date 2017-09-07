@@ -117,6 +117,26 @@ namespace StegoPlusPlus.Controls
             #endregion
         }
         #endregion
+        #region Process ShowNotify
+        public class Notify
+        {
+            #region GetStatusNotify from Storage
+            public static bool GetStatus(string type)
+            {
+                bool result;
+                if (type == "Result")
+                {
+                    result = ((string)ApplicationData.Current.LocalSettings.Values["Notify_Result_set"] == "Off") ? false : true;
+                }
+                else
+                {
+                    result = ((string)ApplicationData.Current.LocalSettings.Values["Notify_Timer_set"] == "On") ? true : false;
+                }
+                return result;
+            }
+            #endregion
+        }
+        #endregion
         #region Process Picker
         public class Picker
         {
@@ -847,11 +867,11 @@ namespace StegoPlusPlus.Controls
                     switch (type)
                     {
                         case "File":
-                            ToastDialog.Show(sf, "Image Files", "Stego Image", Detail.Embed_File);
+                            ToastDialog.ShowData(sf, "Image Files", "Stego Image", Detail.Embed_File);
                             await PopupDialog.Show(Status.Success, Detail.Embed_File, Complete.Saved_StegoImage, Icon.Smile);
                             break;
                         case "Message":
-                            ToastDialog.Show(sf, "Image Files", "Stego Image", Detail.Embed_Message);
+                            ToastDialog.ShowData(sf, "Image Files", "Stego Image", Detail.Embed_Message);
                             await PopupDialog.Show(Status.Success, Detail.Embed_Message, Complete.Saved_StegoImage, Icon.Smile);
                             break;
                     }
@@ -998,7 +1018,7 @@ namespace StegoPlusPlus.Controls
                             await FileIO.WriteTextAsync(sf, await Bifid_Cipher.Execute("Extract", Encoding.ASCII.GetString(((List<byte>)GetData.Extract[Data.Misc.DataSecret]).ToArray()), String.Empty));
                             break;
                     }
-                    ToastDialog.Show(sf, Validate.IsType(ext), "Embedded File", Detail.Extract_FileMessage);
+                    ToastDialog.ShowData(sf, Validate.IsType(ext), "Embedded File", Detail.Extract_FileMessage);
                     await PopupDialog.Show(Status.Success, Detail.Extract_FileMessage, Complete.Saved_SecretFile, Icon.Smile);
                 }
                 else

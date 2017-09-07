@@ -24,7 +24,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="&#xEA80;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <TextBlock Text="&#xEA80;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 </StackPanel>
                 <Rectangle Grid.Column="1" Margin="15,0,15,0" Width="2" Height="Auto" Fill="{ThemeResource SystemControlForegroundAccentBrush}"/>
                 <TextBlock x:Name="HeaderInfo" Grid.Column="2" Margin="5,0,5,0" Style="{StaticResource BaseTextBlockStyle}" FontStretch="SemiCondensed"/>
@@ -53,7 +53,7 @@
 
                     <!--Pivot 1 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
-                        <TextBlock Text="&#xEA86;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                        <TextBlock Text="&#xEA86;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     </StackPanel>
                     <!--Pivot 1 Column 1-->
 
@@ -105,7 +105,7 @@
 
                     <!--Pivot 2 Column 1-->
                     <StackPanel Grid.Column="0" Margin="15,20,0,0">
-                        <TextBlock Text="&#xEE57;" FontFamily="Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                        <TextBlock Text="&#xEE57;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets" FontWeight="Normal" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     </StackPanel>
                     <!--Pivot 2 Column 1-->
 
@@ -134,7 +134,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Style="{StaticResource TitleTextBlockStyle}">
-                                    <Run Text="&#xE13D;" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="&#xE13D;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets"/>
                                     <Run x:Name="lbl_Head1_AboutMe"/>
                                 </TextBlock>
                             </Grid>
@@ -153,7 +153,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="0" Style="{StaticResource TitleTextBlockStyle}">
-                                    <Run Text="&#xE7BE;" FontFamily="Segoe MDL2 Assets"/>
+                                    <Run Text="&#xE7BE;" FontFamily="ms-appx:///Assets/Fonts/segoemdl2.ttf#Segoe MDL2 Assets"/>
                                     <Run x:Name="lbl_Head2_AboutMe"/>
                                 </TextBlock>
                             </Grid>

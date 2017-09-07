@@ -97,7 +97,7 @@ namespace StegoPlusPlus.Controls
             public static readonly string HomePage = "WELCOME";
             public static readonly string EmbedPage = "Menu yang berfungsi untuk menjalankan fungsi Embed untuk penyisipan File (Embed File) beserta Embed untuk penyisipan Pesan Rahasia (Embed Message)";
             public static readonly string ExtractPage = "Menu yang berfungsi untuk menjalankan fungsi Ekstrak untuk File / Pesan Rahasia (Extract File / Message) beserta untuk pengecekan File Stego yang masih baik / bisa digunakan (Check Stego Healthy)";
-            public static readonly string SettingsPage = "Menu yang berfungsi untuk mengganti Warna Latar Belakang (Change Background) beserta mengganti Efek Transisi Halaman (Change Transition Effect)";
+            public static readonly string SettingsPage = "Menu yang berfungsi untuk mengganti Warna Latar Belakang (Change Background), Efek Transisi Halaman (Change Transition Effect) beserta mengatur Notifikasi Aplikasi (Change Notification)";
             public static readonly string AboutPage = "Menu yang berisi tentang Detail Aplikasi (App Detail) beserta Info tentang Creator (About Me)";
         }
         #endregion
@@ -202,7 +202,7 @@ namespace StegoPlusPlus.Controls
             public static readonly string title = "Stego++ with Password";
             public static readonly string version = "Version 1.1 (Build 201708)";
             public static readonly string source_code = "Source Code (Github)";
-            public static readonly string source_code_link = "http://github.com/Erikodiony/StegoPlusPlus";
+            public static readonly string source_code_link = "http://github.com/Erikodiony/StegoPlusPlus_UWP";
             public static readonly string bug_support = "Bug / Support (Twitter)";
             public static readonly string bug_support_link = "https://twitter.com/erikodiony";
         }

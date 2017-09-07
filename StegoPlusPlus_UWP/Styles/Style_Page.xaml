@@ -13,7 +13,7 @@
     <Style TargetType="SplitView">
         <Setter Property="OpenPaneLength" Value="230" />
         <Setter Property="CompactPaneLength" Value="48" />
-        <Setter Property="PaneBackground" Value="{ThemeResource SystemControlBackgroundAltMediumBrush}"/>
+        <Setter Property="PaneBackground" Value="{ThemeResource SystemControlBackgroundAltMediumLowBrush}"/>
         <Setter Property="Opacity" Value="0.95" />
     </Style>
 
@@ -125,9 +125,9 @@
 
                             <!-- background -->
                             <Grid x:Name="NotCheckedBackground" Grid.ColumnSpan="4">
-                                <Rectangle Height="48" VerticalAlignment="Center" HorizontalAlignment="Left" Width="230" x:Name="PressedBackground" Visibility="Collapsed" Fill="{ThemeResource GridViewItemBackgroundPressed}" Opacity="1"/>
-                                <Rectangle Height="48" VerticalAlignment="Center" HorizontalAlignment="Left" Width="230" x:Name="HoverBackground" Visibility="Collapsed" Fill="{ThemeResource GridViewItemBackgroundPressed}" Opacity="0.3"/>
-                                <Grid x:Name="CheckedBackground" VerticalAlignment="Center" HorizontalAlignment="Left" Width="230" Height="48" Visibility="Collapsed" Background="{ThemeResource SystemControlBackgroundAltMediumBrush}" Opacity="0.7"/>
+                                <Rectangle Height="48" VerticalAlignment="Center" HorizontalAlignment="Left" Width="230" x:Name="PressedBackground" Visibility="Collapsed" Fill="White" Opacity="0.5"/>
+                                <Rectangle Height="48" VerticalAlignment="Center" HorizontalAlignment="Left" Width="230" x:Name="HoverBackground" Visibility="Collapsed" Fill="White" Opacity="0.15"/>
+                                <Grid x:Name="CheckedBackground" VerticalAlignment="Center" HorizontalAlignment="Left" Width="230" Height="48" Visibility="Collapsed" Background="{ThemeResource SystemControlBackgroundAltMediumLowBrush}" Opacity="0.7"/>
                                 <Grid x:Name="SelectedPipe" VerticalAlignment="Center" HorizontalAlignment="Left" Width="4" Height="48" Visibility="Collapsed" Background="#FFFFFF" Opacity="1"/>
                             </Grid>
                             <!-- focus -->

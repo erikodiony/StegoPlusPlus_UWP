@@ -28,16 +28,16 @@ namespace StegoPlusPlus
             InitializeComponent();
             Suspending += OnSuspending;
                         
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            Object val = localSettings.Values["BG_set"];
-            if ((string)val == "Dark")
-            {
-                RequestedTheme = ApplicationTheme.Dark;
-            }
-            else
-            {
-                RequestedTheme = ApplicationTheme.Light;
-            }           
+            //var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            //Object val = localSettings.Values["BG_set"];
+            //if ((string)val == "Dark")
+            //{
+            //    RequestedTheme = ApplicationTheme.Dark;
+            //}
+            //else
+            //{
+            //    RequestedTheme = ApplicationTheme.Light;
+            //}           
                         
         }
 
