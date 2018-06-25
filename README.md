@@ -9,3 +9,9 @@ Merupakan aplikasi untuk menyisipkan file ke dalam Citra Digital (LSB Algorithm)
 ./Merupakan Program Skripsi, Teknik Informatika,.
 
 ./Dibangun menggunakan C# + XAML = UWP (Universal Windows Platform),.
+
+# Desktop View (Windows 10) :
+![ScreenShot](https://github.com/erikodiony/StegoPlusPlus_UWP/raw/master/File_Image/Desktop.png "SS_Desktop") 
+
+# Mobile View (Windows 10) :
+![ScreenShot](https://github.com/erikodiony/StegoPlusPlus_UWP/raw/master/File_Image/Mobile.png "SS_Mobile")
